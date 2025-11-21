@@ -1,0 +1,1022 @@
+[
+  {
+    "title": "Leadership Excellence: From Manager to Leader",
+    "description": "Transform your management style and become an inspiring leader. This comprehensive course covers emotional intelligence, strategic thinking, team motivation, and change management. Through case studies and interactive exercises, you'll develop the skills to lead high-performing teams and drive organizational success. Perfect for new managers and experienced professionals seeking to enhance their leadership impact.",
+    "difficulty": "intermediate",
+    "duration": 35,
+    "tags": [
+      "leadership",
+      "management",
+      "soft skills",
+      "team building",
+      "strategy"
+    ],
+    "skills_covered": [
+      "Emotional intelligence",
+      "Strategic planning",
+      "Team motivation",
+      "Change management",
+      "Conflict resolution"
+    ],
+    "contents": "Module 1: Leadership Foundations - Understanding leadership styles, self-assessment, and personal leadership philosophy. Module 2: Emotional Intelligence - Self-awareness, empathy, social skills, and managing emotions in the workplace. Module 3: Strategic Thinking - Vision development, goal setting, and aligning teams with organizational objectives. Module 4: Team Building and Motivation - Creating psychological safety, recognition strategies, and fostering collaboration. Module 5: Communication Excellence - Active listening, difficult conversations, and presentation skills. Module 6: Change Leadership - Leading through uncertainty, managing resistance, and creating buy-in. Module 7: Conflict Resolution - Mediation techniques, negotiation skills, and turning conflict into opportunity. Module 8: Leadership in Action - Personal action plan, 360-degree feedback implementation, and continuous improvement."
+  },
+  {
+    "title": "Introduction to Python Programming",
+    "description": "Master the fundamentals of Python programming from scratch. This comprehensive course covers variables, data types, control structures, functions, and object-oriented programming. You'll build practical projects including a weather app, task manager, and data analyzer. Perfect for absolute beginners who want to start their programming journey with one of the most versatile languages in the industry.",
+    "difficulty": "beginner",
+    "duration": 40,
+    "tags": [
+      "python",
+      "programming",
+      "beginner",
+      "fundamentals",
+      "technical"
+    ],
+    "skills_covered": [
+      "Python syntax",
+      "Variables and data types",
+      "Functions",
+      "OOP basics",
+      "File handling"
+    ],
+    "contents": "Module 1: Python Basics - Installing Python, understanding the interpreter, writing your first program. Module 2: Data Types and Variables - Numbers, strings, lists, dictionaries, and type conversion. Module 3: Control Flow - If statements, loops, and logical operators. Module 4: Functions - Creating reusable code blocks, parameters, return values, and scope. Module 5: Object-Oriented Programming - Classes, objects, inheritance, and encapsulation. Module 6: File Operations - Reading from and writing to files, handling CSV and JSON data. Module 7: Error Handling - Try-except blocks, debugging techniques, and best practices. Module 8: Final Project - Build a complete task management application using all concepts learned."
+  },
+  {
+    "title": "Effective Business Communication",
+    "description": "Master the art of professional communication in the modern workplace. This course covers written communication, presentation skills, cross-cultural communication, and virtual meeting effectiveness. You'll learn to craft compelling emails, deliver impactful presentations, and navigate difficult conversations. Essential for professionals at all levels seeking to enhance their communication effectiveness.",
+    "difficulty": "beginner",
+    "duration": 25,
+    "tags": [
+      "communication",
+      "soft skills",
+      "business writing",
+      "presentation",
+      "professional development"
+    ],
+    "skills_covered": [
+      "Business writing",
+      "Presentation skills",
+      "Active listening",
+      "Nonverbal communication",
+      "Virtual communication"
+    ],
+    "contents": "Module 1: Communication Fundamentals - Types of communication, barriers, and the communication process. Module 2: Business Writing Excellence - Email etiquette, report writing, and executive summaries. Module 3: Presentation Mastery - Structure, visual aids, and engaging your audience. Module 4: Interpersonal Communication - Active listening, feedback, and building rapport. Module 5: Virtual Communication - Video conferencing best practices, digital collaboration tools. Module 6: Cross-Cultural Communication - Cultural awareness, avoiding misunderstandings, global business etiquette. Module 7: Difficult Conversations - Delivering bad news, handling criticism, and assertive communication. Module 8: Personal Communication Plan - Self-assessment, improvement strategies, and ongoing development."
+  },
+  {
+    "title": "Strategic Human Resources Management",
+    "description": "Develop expertise in modern HR practices and strategic workforce management. This comprehensive course covers talent acquisition, performance management, employee engagement, and HR analytics. You'll learn to align HR strategies with business objectives and create policies that foster organizational success. Ideal for HR professionals and managers responsible for people management.",
+    "difficulty": "intermediate",
+    "duration": 45,
+    "tags": [
+      "hr",
+      "human resources",
+      "talent management",
+      "recruitment",
+      "employee engagement"
+    ],
+    "skills_covered": [
+      "Talent acquisition",
+      "Performance management",
+      "HR analytics",
+      "Employee engagement",
+      "Labor law basics"
+    ],
+    "contents": "Module 1: Strategic HR Foundations - HR's role in business strategy, workforce planning, and organizational design. Module 2: Talent Acquisition - Recruitment strategies, interviewing techniques, and onboarding best practices. Module 3: Performance Management - Goal setting, continuous feedback, performance reviews, and development plans. Module 4: Employee Engagement - Motivation theories, engagement surveys, and retention strategies. Module 5: Compensation and Benefits - Pay structures, benefits design, and total rewards strategy. Module 6: HR Analytics - Key metrics, data-driven decisions, and predictive analytics. Module 7: Employment Law - Legal compliance, documentation, and risk management. Module 8: Future of HR - Digital transformation, remote work policies, and emerging trends."
+  },
+  {
+    "title": "Modern Web Development with React",
+    "description": "Build dynamic, responsive web applications using React and modern JavaScript. This course covers React fundamentals, state management with Redux, API integration, and deployment strategies. You'll create a full-featured e-commerce site, learning industry best practices and performance optimization techniques along the way. Ideal for developers with basic JavaScript knowledge ready to level up their frontend skills.",
+    "difficulty": "intermediate",
+    "duration": 60,
+    "tags": [
+      "react",
+      "javascript",
+      "frontend",
+      "web development",
+      "technical"
+    ],
+    "skills_covered": [
+      "React components",
+      "State management",
+      "Hooks",
+      "Redux",
+      "API integration",
+      "Testing"
+    ],
+    "contents": "Module 1: React Fundamentals - JSX, components, props, and the virtual DOM. Module 2: State and Lifecycle - Managing component state, lifecycle methods, and hooks. Module 3: Advanced Hooks - useEffect, useContext, custom hooks, and performance optimization. Module 4: State Management - Redux principles, actions, reducers, and Redux Toolkit. Module 5: Routing and Navigation - React Router, protected routes, and dynamic routing. Module 6: API Integration - Fetch API, Axios, handling async operations, and error boundaries. Module 7: Testing React Apps - Unit testing with Jest, integration testing with React Testing Library. Module 8: Deployment - Building for production, environment variables, deploying to Vercel/Netlify."
+  },
+  {
+    "title": "Project Management Professional (PMP) Prep",
+    "description": "Prepare for PMP certification while mastering project management best practices. This course covers PMBOK framework, agile methodologies, risk management, and stakeholder engagement. Through real-world case studies and exam prep materials, you'll gain the knowledge and confidence to lead successful projects and pass the PMP exam.",
+    "difficulty": "advanced",
+    "duration": 50,
+    "tags": [
+      "project management",
+      "pmp",
+      "certification",
+      "agile",
+      "leadership"
+    ],
+    "skills_covered": [
+      "PMBOK framework",
+      "Agile/Scrum",
+      "Risk management",
+      "Stakeholder management",
+      "Budget control"
+    ],
+    "contents": "Module 1: Project Management Framework - PMBOK guide, project lifecycle, and process groups. Module 2: Project Integration Management - Charter development, project plans, and change control. Module 3: Scope and Schedule Management - WBS creation, activity sequencing, and critical path method. Module 4: Cost and Quality Management - Budget estimation, earned value, and quality assurance. Module 5: Resource and Communications - Team development, conflict resolution, and communication planning. Module 6: Risk Management - Risk identification, analysis, response planning, and monitoring. Module 7: Agile and Hybrid Approaches - Scrum framework, Kanban, and adaptive project management. Module 8: PMP Exam Preparation - Practice questions, exam strategies, and final review."
+  },
+  {
+    "title": "Finance for Non-Financial Managers",
+    "description": "Demystify financial concepts and gain confidence in financial decision-making. This practical course covers financial statements, budgeting, cost analysis, and investment evaluation. You'll learn to interpret financial data, contribute to budget discussions, and make data-driven business decisions. Perfect for managers and professionals without formal finance training.",
+    "difficulty": "beginner",
+    "duration": 30,
+    "tags": [
+      "finance",
+      "accounting",
+      "budgeting",
+      "business",
+      "management"
+    ],
+    "skills_covered": [
+      "Financial statements",
+      "Budgeting",
+      "Cost analysis",
+      "ROI calculation",
+      "Financial planning"
+    ],
+    "contents": "Module 1: Financial Fundamentals - Money, time value, and basic accounting principles. Module 2: Understanding Financial Statements - Balance sheet, income statement, and cash flow analysis. Module 3: Financial Analysis - Ratio analysis, trend analysis, and benchmarking. Module 4: Budgeting and Forecasting - Budget creation, variance analysis, and rolling forecasts. Module 5: Cost Management - Fixed vs variable costs, break-even analysis, and cost reduction strategies. Module 6: Investment Decisions - NPV, IRR, payback period, and capital budgeting. Module 7: Working Capital Management - Cash management, inventory, and receivables. Module 8: Financial Planning - Strategic planning, KPIs, and dashboard creation."
+  },
+  {
+    "title": "Data Science with Python and Pandas",
+    "description": "Dive into data science using Python's powerful ecosystem. Learn data manipulation with Pandas, visualization with Matplotlib and Seaborn, and machine learning basics with scikit-learn. Through hands-on projects analyzing real-world datasets, you'll gain practical skills in data cleaning, exploratory data analysis, and predictive modeling. Perfect for analysts and developers looking to enter the data science field.",
+    "difficulty": "intermediate",
+    "duration": 55,
+    "tags": [
+      "data science",
+      "python",
+      "pandas",
+      "machine learning",
+      "analytics",
+      "technical"
+    ],
+    "skills_covered": [
+      "Pandas",
+      "NumPy",
+      "Data visualization",
+      "Statistical analysis",
+      "Machine learning basics"
+    ],
+    "contents": "Module 1: NumPy Foundations - Arrays, broadcasting, and mathematical operations. Module 2: Pandas Essentials - DataFrames, Series, data loading, and basic operations. Module 3: Data Cleaning - Handling missing data, duplicates, and data type conversions. Module 4: Data Manipulation - Grouping, merging, pivoting, and advanced filtering. Module 5: Data Visualization - Matplotlib basics, Seaborn for statistical plots, interactive visualizations. Module 6: Exploratory Data Analysis - Statistical summaries, correlation analysis, feature engineering. Module 7: Introduction to Machine Learning - Supervised learning, model training, and evaluation. Module 8: Real-World Project - Complete analysis of a business dataset from cleaning to insights."
+  },
+  {
+    "title": "Advanced Negotiation Skills",
+    "description": "Master the art and science of negotiation for business success. This course covers negotiation theory, tactics, cross-cultural negotiations, and conflict resolution. Through role-playing exercises and case studies, you'll develop skills to negotiate effectively in various business contexts, from salary negotiations to complex business deals.",
+    "difficulty": "intermediate",
+    "duration": 25,
+    "tags": [
+      "negotiation",
+      "soft skills",
+      "business",
+      "conflict resolution",
+      "communication"
+    ],
+    "skills_covered": [
+      "Negotiation tactics",
+      "BATNA",
+      "Cultural awareness",
+      "Conflict resolution",
+      "Persuasion"
+    ],
+    "contents": "Module 1: Negotiation Fundamentals - Types of negotiation, preparation strategies, and BATNA. Module 2: The Negotiation Process - Opening, exploring, bargaining, and closing techniques. Module 3: Communication in Negotiation - Active listening, questioning techniques, and reading body language. Module 4: Negotiation Tactics - Common tactics, countering manipulation, and ethical considerations. Module 5: Cross-Cultural Negotiation - Cultural dimensions, adaptation strategies, and international business. Module 6: Difficult Negotiations - Dealing with difficult people, breaking deadlocks, and managing emotions. Module 7: Team Negotiations - Roles, coordination, and multi-party negotiations. Module 8: Practice and Application - Role-play scenarios, personal negotiation plan, and continuous improvement."
+  },
+  {
+    "title": "AWS Solutions Architect Certification Prep",
+    "description": "Prepare for the AWS Solutions Architect Associate certification while gaining practical cloud architecture skills. This comprehensive course covers all AWS core services, designing resilient architectures, cost optimization, and security best practices. Through hands-on labs and real-world scenarios, you'll learn to design and deploy scalable, highly available applications on AWS.",
+    "difficulty": "advanced",
+    "duration": 80,
+    "tags": [
+      "aws",
+      "cloud",
+      "certification",
+      "architecture",
+      "devops",
+      "technical"
+    ],
+    "skills_covered": [
+      "AWS services",
+      "Cloud architecture",
+      "Security",
+      "Cost optimization",
+      "High availability"
+    ],
+    "contents": "Module 1: AWS Fundamentals - Global infrastructure, IAM, and the shared responsibility model. Module 2: Compute Services - EC2, Lambda, ECS, and choosing the right compute option. Module 3: Storage Solutions - S3, EBS, EFS, and data lifecycle management. Module 4: Networking - VPC design, subnets, routing, and hybrid connectivity. Module 5: Database Services - RDS, DynamoDB, Aurora, and database migration strategies. Module 6: Security and Compliance - IAM policies, encryption, compliance frameworks, and security tools. Module 7: High Availability - Multi-AZ deployments, disaster recovery, and backup strategies. Module 8: Cost Optimization - Reserved instances, spot instances, and AWS cost management tools."
+  },
+  {
+    "title": "Time Management and Productivity Mastery",
+    "description": "Transform your productivity and achieve more with less stress. This practical course covers time management principles, priority setting, digital productivity tools, and work-life balance strategies. You'll learn proven techniques like GTD, Pomodoro, and time-blocking to maximize your effectiveness and reduce overwhelm.",
+    "difficulty": "beginner",
+    "duration": 20,
+    "tags": [
+      "time management",
+      "productivity",
+      "soft skills",
+      "organization",
+      "work-life balance"
+    ],
+    "skills_covered": [
+      "Priority setting",
+      "Task management",
+      "Digital tools",
+      "Focus techniques",
+      "Delegation"
+    ],
+    "contents": "Module 1: Time Management Principles - Time audit, understanding time wasters, and productivity myths. Module 2: Goal Setting and Prioritization - SMART goals, Eisenhower matrix, and priority management. Module 3: Planning Systems - Daily, weekly, monthly planning, and choosing the right system. Module 4: Productivity Methodologies - GTD, Pomodoro Technique, time-blocking, and batching. Module 5: Digital Productivity - Task management apps, calendar optimization, and automation. Module 6: Focus and Concentration - Managing distractions, deep work, and energy management. Module 7: Delegation and Saying No - Effective delegation, setting boundaries, and managing commitments. Module 8: Work-Life Integration - Sustainable productivity, avoiding burnout, and personal productivity plan."
+  },
+  {
+    "title": "Strategic Sales Excellence",
+    "description": "Elevate your sales performance with modern selling techniques and strategies. This course covers consultative selling, social selling, sales psychology, and CRM best practices. You'll learn to build lasting customer relationships, navigate complex sales cycles, and consistently exceed targets. Ideal for sales professionals and business developers.",
+    "difficulty": "intermediate",
+    "duration": 35,
+    "tags": [
+      "sales",
+      "business development",
+      "crm",
+      "negotiation",
+      "customer relations"
+    ],
+    "skills_covered": [
+      "Consultative selling",
+      "Pipeline management",
+      "Social selling",
+      "Objection handling",
+      "Account management"
+    ],
+    "contents": "Module 1: Modern Sales Foundations - Sales evolution, buyer psychology, and trust-building. Module 2: Consultative Selling - Needs discovery, solution selling, and value proposition development. Module 3: Sales Process Mastery - Prospecting, qualification, presentation, and closing techniques. Module 4: Social Selling - LinkedIn strategies, content creation, and digital networking. Module 5: Objection Handling - Common objections, reframing techniques, and turning no to yes. Module 6: CRM and Sales Technology - CRM best practices, sales automation, and data-driven selling. Module 7: Account Management - Upselling, cross-selling, and customer success strategies. Module 8: Sales Leadership - Team motivation, coaching, and building a high-performance sales culture."
+  },
+  {
+    "title": "Deep Learning with TensorFlow and Keras",
+    "description": "Master deep learning concepts and build neural networks using TensorFlow and Keras. This advanced course covers CNNs for computer vision, RNNs for sequence data, and transformer architectures. You'll work on projects including image classification, natural language processing, and generative models. Designed for data scientists and engineers ready to tackle complex AI challenges.",
+    "difficulty": "advanced",
+    "duration": 90,
+    "tags": [
+      "deep learning",
+      "tensorflow",
+      "keras",
+      "neural networks",
+      "ai",
+      "technical"
+    ],
+    "skills_covered": [
+      "Neural networks",
+      "CNNs",
+      "RNNs",
+      "Transfer learning",
+      "Model deployment"
+    ],
+    "contents": "Module 1: Neural Network Fundamentals - Perceptrons, backpropagation, and activation functions. Module 2: TensorFlow and Keras Basics - Tensors, graphs, and the Keras API. Module 3: Convolutional Neural Networks - Image processing, convolutions, and popular architectures. Module 4: Recurrent Neural Networks - Sequence modeling, LSTM, GRU, and time series. Module 5: Natural Language Processing - Word embeddings, attention mechanisms, and transformers. Module 6: Generative Models - Autoencoders, VAEs, and introduction to GANs. Module 7: Transfer Learning - Using pre-trained models, fine-tuning, and domain adaptation. Module 8: Production Deployment - Model optimization, TensorFlow Serving, and edge deployment."
+  },
+  {
+    "title": "Diversity, Equity, and Inclusion in the Workplace",
+    "description": "Create inclusive workplace cultures that leverage diversity for innovation and success. This course covers unconscious bias, inclusive leadership, cultural competence, and DEI program implementation. Through interactive workshops and real-world scenarios, you'll develop skills to champion diversity and foster belonging in your organization.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "diversity",
+      "inclusion",
+      "equity",
+      "hr",
+      "leadership",
+      "culture"
+    ],
+    "skills_covered": [
+      "Unconscious bias",
+      "Inclusive leadership",
+      "Cultural competence",
+      "Allyship",
+      "DEI metrics"
+    ],
+    "contents": "Module 1: DEI Foundations - Definitions, business case for diversity, and current landscape. Module 2: Understanding Bias - Types of bias, unconscious bias, and mitigation strategies. Module 3: Inclusive Leadership - Creating psychological safety, inclusive communication, and team dynamics. Module 4: Cultural Competence - Cultural dimensions, cross-cultural communication, and global mindset. Module 5: Building Inclusive Systems - Inclusive recruitment, promotion practices, and policy review. Module 6: Allyship and Advocacy - Being an effective ally, speaking up, and supporting underrepresented groups. Module 7: DEI Program Implementation - Assessment, strategy development, and change management. Module 8: Measuring Progress - DEI metrics, accountability, and continuous improvement."
+  },
+  {
+    "title": "Customer Experience Excellence",
+    "description": "Design and deliver exceptional customer experiences that drive loyalty and growth. This course covers customer journey mapping, service design, feedback systems, and CX metrics. You'll learn to create customer-centric cultures and implement strategies that differentiate your organization in competitive markets.",
+    "difficulty": "intermediate",
+    "duration": 35,
+    "tags": [
+      "customer experience",
+      "cx",
+      "service design",
+      "customer service",
+      "business strategy"
+    ],
+    "skills_covered": [
+      "Journey mapping",
+      "Service design",
+      "CX metrics",
+      "Voice of customer",
+      "Experience strategy"
+    ],
+    "contents": "Module 1: CX Fundamentals - Evolution of CX, customer expectations, and competitive advantage. Module 2: Understanding Customers - Personas, research methods, and empathy mapping. Module 3: Customer Journey Mapping - Touchpoint analysis, pain points, and moments of truth. Module 4: Service Design - Service blueprints, experience design principles, and prototyping. Module 5: CX Metrics and Analytics - NPS, CSAT, CES, and customer lifetime value. Module 6: Digital Customer Experience - Omnichannel strategies, digital touchpoints, and personalization. Module 7: Building CX Culture - Employee engagement, training, and organizational alignment. Module 8: CX Strategy Implementation - Roadmap development, quick wins, and transformation management."
+  },
+  {
+    "title": "Cybersecurity Fundamentals and Ethical Hacking",
+    "description": "Learn to think like a hacker to better defend against cyber threats. This comprehensive security course covers network security, web application vulnerabilities, penetration testing methodologies, and defensive strategies. Through hands-on labs in isolated environments, you'll practice ethical hacking techniques and learn to secure systems.",
+    "difficulty": "intermediate",
+    "duration": 70,
+    "tags": [
+      "security",
+      "ethical hacking",
+      "penetration testing",
+      "cybersecurity",
+      "technical"
+    ],
+    "skills_covered": [
+      "Network security",
+      "Web vulnerabilities",
+      "Penetration testing",
+      "Security tools",
+      "Risk assessment"
+    ],
+    "contents": "Module 1: Security Fundamentals - CIA triad, threat modeling, and security frameworks. Module 2: Network Security - TCP/IP vulnerabilities, firewalls, and network scanning. Module 3: Web Application Security - OWASP Top 10, SQL injection, XSS, and CSRF. Module 4: Cryptography - Encryption algorithms, hashing, digital signatures, and PKI. Module 5: Penetration Testing - Methodology, reconnaissance, and exploitation techniques. Module 6: Security Tools - Nmap, Metasploit, Burp Suite, and Wireshark. Module 7: Incident Response - Detection, containment, and forensics basics. Module 8: Compliance and Best Practices - Security policies, awareness training, and regulatory requirements."
+  },
+  {
+    "title": "Digital Marketing Strategy and Analytics",
+    "description": "Master digital marketing in the modern business landscape. This comprehensive course covers SEO, SEM, social media marketing, content strategy, and marketing analytics. You'll learn to create integrated campaigns, measure ROI, and leverage data for marketing decisions. Perfect for marketers adapting to digital transformation.",
+    "difficulty": "intermediate",
+    "duration": 40,
+    "tags": [
+      "digital marketing",
+      "seo",
+      "social media",
+      "analytics",
+      "content marketing"
+    ],
+    "skills_covered": [
+      "SEO/SEM",
+      "Social media marketing",
+      "Content strategy",
+      "Google Analytics",
+      "Marketing automation"
+    ],
+    "contents": "Module 1: Digital Marketing Landscape - Channels, customer journey, and integrated strategies. Module 2: Search Engine Optimization - On-page, off-page, technical SEO, and keyword research. Module 3: Paid Advertising - Google Ads, Facebook Ads, display advertising, and budgeting. Module 4: Social Media Marketing - Platform strategies, content creation, and community management. Module 5: Content Marketing - Strategy development, storytelling, and content distribution. Module 6: Email Marketing - List building, segmentation, automation, and deliverability. Module 7: Analytics and Measurement - Google Analytics, conversion tracking, and attribution models. Module 8: Marketing Technology - CRM integration, marketing automation, and martech stack."
+  },
+  {
+    "title": "Executive Presence and Personal Branding",
+    "description": "Develop the executive presence and personal brand that accelerates your career. This course covers leadership communication, professional image, networking strategies, and online presence management. You'll learn to project confidence, build influence, and position yourself for senior leadership roles.",
+    "difficulty": "advanced",
+    "duration": 30,
+    "tags": [
+      "executive presence",
+      "personal branding",
+      "leadership",
+      "soft skills",
+      "career development"
+    ],
+    "skills_covered": [
+      "Executive communication",
+      "Personal branding",
+      "Networking",
+      "Public speaking",
+      "Image management"
+    ],
+    "contents": "Module 1: Executive Presence Fundamentals - Components of presence, self-assessment, and perception management. Module 2: Leadership Communication - Executive speaking, storytelling, and commanding attention. Module 3: Professional Image - Appearance, body language, and first impressions. Module 4: Personal Brand Development - Brand positioning, unique value proposition, and consistency. Module 5: Strategic Networking - Building influential relationships, networking events, and follow-up. Module 6: Digital Presence - LinkedIn optimization, thought leadership, and online reputation. Module 7: Media and Public Speaking - Media training, conference speaking, and panel discussions. Module 8: Sustaining Your Brand - Authenticity, continuous development, and legacy building."
+  },
+  {
+    "title": "Advanced SQL and Database Design",
+    "description": "Master advanced SQL techniques and database design principles for high-performance applications. This course covers query optimization, indexing strategies, stored procedures, and NoSQL integration. You'll work with multiple database systems including PostgreSQL, MySQL, and MongoDB. Essential for backend developers and data engineers.",
+    "difficulty": "advanced",
+    "duration": 50,
+    "tags": [
+      "sql",
+      "database",
+      "postgresql",
+      "mysql",
+      "performance",
+      "technical"
+    ],
+    "skills_covered": [
+      "Query optimization",
+      "Index design",
+      "Stored procedures",
+      "Database design",
+      "Performance tuning"
+    ],
+    "contents": "Module 1: Advanced SQL Queries - Window functions, CTEs, and recursive queries. Module 2: Database Design Patterns - Normalization, denormalization, and design patterns. Module 3: Indexing Strategies - B-trees, hash indexes, and covering indexes. Module 4: Query Optimization - Execution plans, statistics, and query hints. Module 5: Stored Procedures and Functions - Procedural SQL, triggers, and events. Module 6: Transactions and Concurrency - ACID properties, isolation levels, and deadlock handling. Module 7: Performance Tuning - Monitoring tools, slow query analysis, and optimization techniques. Module 8: NoSQL Integration - Polyglot persistence, JSON in SQL databases, and hybrid approaches."
+  },
+  {
+    "title": "Mentoring and Coaching Skills",
+    "description": "Become an effective mentor and coach to develop talent in your organization. This course covers coaching models, active listening, feedback techniques, and career development conversations. You'll learn to guide others' growth while developing your own leadership capabilities. Essential for managers and senior professionals.",
+    "difficulty": "intermediate",
+    "duration": 25,
+    "tags": [
+      "mentoring",
+      "coaching",
+      "leadership",
+      "talent development",
+      "soft skills"
+    ],
+    "skills_covered": [
+      "Coaching models",
+      "Active listening",
+      "Feedback delivery",
+      "Goal setting",
+      "Career guidance"
+    ],
+    "contents": "Module 1: Mentoring vs Coaching - Definitions, roles, and when to use each approach. Module 2: Coaching Fundamentals - GROW model, powerful questions, and creating awareness. Module 3: Building Trust - Psychological safety, confidentiality, and authentic relationships. Module 4: Active Listening - Deep listening, empathy, and understanding perspectives. Module 5: Feedback Excellence - Giving and receiving feedback, difficult conversations. Module 6: Goal Setting and Accountability - SMART goals, action planning, and follow-through. Module 7: Career Development - Career conversations, skill assessment, and growth planning. Module 8: Building a Culture - Implementing mentoring programs, measuring impact, and sustainability."
+  },
+  {
+    "title": "DevOps Engineering with Kubernetes",
+    "description": "Become a DevOps engineer by mastering containerization and orchestration with Kubernetes. This course covers Docker, Kubernetes architecture, CI/CD pipelines, and infrastructure as code. You'll deploy microservices, implement monitoring, and manage production clusters. Ideal for developers and sys admins transitioning to modern cloud-native operations.",
+    "difficulty": "advanced",
+    "duration": 75,
+    "tags": [
+      "devops",
+      "kubernetes",
+      "docker",
+      "ci/cd",
+      "cloud-native",
+      "technical"
+    ],
+    "skills_covered": [
+      "Kubernetes",
+      "Docker",
+      "CI/CD",
+      "Helm",
+      "Monitoring",
+      "GitOps"
+    ],
+    "contents": "Module 1: Container Fundamentals - Docker deep dive, image optimization, and security. Module 2: Kubernetes Architecture - Pods, services, deployments, and the control plane. Module 3: Kubernetes Networking - Service discovery, ingress controllers, and network policies. Module 4: Storage and StatefulSets - Persistent volumes, storage classes, and stateful applications. Module 5: CI/CD Pipelines - Jenkins, GitLab CI, GitHub Actions, and ArgoCD. Module 6: Helm and Package Management - Charts, repositories, and managing releases. Module 7: Monitoring and Logging - Prometheus, Grafana, ELK stack, and distributed tracing. Module 8: Production Best Practices - Security, disaster recovery, and cost optimization."
+  },
+  {
+    "title": "Enterprise Risk Management",
+    "description": "Develop expertise in identifying, assessing, and mitigating organizational risks. This course covers risk frameworks, assessment methodologies, compliance requirements, and crisis management. You'll learn to build risk-aware cultures and implement enterprise-wide risk management programs. Critical for executives and risk professionals.",
+    "difficulty": "advanced",
+    "duration": 40,
+    "tags": [
+      "risk management",
+      "compliance",
+      "governance",
+      "crisis management",
+      "strategy"
+    ],
+    "skills_covered": [
+      "Risk assessment",
+      "Compliance",
+      "Crisis management",
+      "Risk frameworks",
+      "Governance"
+    ],
+    "contents": "Module 1: Risk Management Fundamentals - Types of risk, risk appetite, and ERM frameworks. Module 2: Risk Identification and Assessment - Risk mapping, probability/impact analysis, and risk registers. Module 3: Risk Mitigation Strategies - Avoidance, reduction, transfer, and acceptance strategies. Module 4: Compliance and Regulatory Risk - Regulatory landscape, compliance programs, and audit preparation. Module 5: Operational Risk - Process risks, technology risks, and business continuity planning. Module 6: Financial Risk Management - Market risk, credit risk, and financial controls. Module 7: Crisis Management - Crisis response plans, communication strategies, and recovery. Module 8: Building Risk Culture - Governance structures, risk committees, and organizational awareness."
+  },
+  {
+    "title": "Agile Leadership and Transformation",
+    "description": "Lead successful agile transformations in your organization. This course covers agile principles, Scrum mastery, scaling frameworks, and change leadership. You'll learn to create agile cultures, coach teams, and deliver value faster. Essential for leaders driving organizational agility and innovation.",
+    "difficulty": "intermediate",
+    "duration": 35,
+    "tags": [
+      "agile",
+      "scrum",
+      "leadership",
+      "transformation",
+      "project management"
+    ],
+    "skills_covered": [
+      "Agile principles",
+      "Scrum",
+      "SAFe",
+      "Change management",
+      "Team coaching"
+    ],
+    "contents": "Module 1: Agile Fundamentals - Manifesto, principles, and mindset shift. Module 2: Scrum Deep Dive - Roles, events, artifacts, and facilitation techniques. Module 3: Kanban and Flow - Visualizing work, WIP limits, and continuous flow. Module 4: Scaling Agile - SAFe, LeSS, and choosing the right framework. Module 5: Agile Leadership - Servant leadership, empowerment, and removing impediments. Module 6: Team Dynamics - High-performing teams, psychological safety, and collaboration. Module 7: Metrics and Improvement - Velocity, cycle time, and continuous improvement. Module 8: Transformation Strategy - Change management, resistance handling, and sustaining agility."
+  },
+  {
+    "title": "JavaScript: From ES6 to ES2024",
+    "description": "Stay current with modern JavaScript features and best practices. This course covers all major updates from ES6 through ES2024, including async/await, modules, decorators, and more. You'll refactor legacy code, build modern applications, and understand the JavaScript ecosystem deeply. Perfect for developers wanting to write clean, efficient JavaScript.",
+    "difficulty": "intermediate",
+    "duration": 45,
+    "tags": [
+      "javascript",
+      "es6",
+      "modern javascript",
+      "frontend",
+      "backend",
+      "technical"
+    ],
+    "skills_covered": [
+      "ES6+ features",
+      "Async programming",
+      "Modules",
+      "Modern syntax",
+      "Best practices"
+    ],
+    "contents": "Module 1: ES6 Essentials - Arrow functions, destructuring, template literals, and classes. Module 2: Async JavaScript - Promises, async/await, and handling asynchronous operations. Module 3: Modules and Bundling - ES modules, CommonJS, and modern build tools. Module 4: Advanced Features - Proxies, generators, symbols, and iterators. Module 5: Functional Programming - Higher-order functions, immutability, and composition. Module 6: Latest Features - Optional chaining, nullish coalescing, and ES2024 updates. Module 7: TypeScript Introduction - Type safety, interfaces, and migrating JavaScript projects. Module 8: Real-World Patterns - Design patterns, performance optimization, and code organization."
+  },
+  {
+    "title": "Emotional Intelligence in Leadership",
+    "description": "Enhance your leadership effectiveness through emotional intelligence. This course covers self-awareness, self-regulation, social awareness, and relationship management. You'll learn to navigate workplace emotions, build stronger teams, and make better decisions. Vital for leaders at all levels seeking authentic leadership.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "emotional intelligence",
+      "leadership",
+      "soft skills",
+      "self-awareness",
+      "team building"
+    ],
+    "skills_covered": [
+      "Self-awareness",
+      "Empathy",
+      "Social skills",
+      "Emotional regulation",
+      "Influence"
+    ],
+    "contents": "Module 1: EI Foundations - Understanding emotions, EI models, and leadership impact. Module 2: Self-Awareness - Emotional awareness, accurate self-assessment, and self-confidence. Module 3: Self-Management - Emotional control, adaptability, and positive outlook. Module 4: Social Awareness - Empathy, organizational awareness, and reading the room. Module 5: Relationship Management - Influence, conflict management, and team leadership. Module 6: EI in Decision Making - Balancing logic and emotion, avoiding emotional traps. Module 7: Building Emotionally Intelligent Teams - Team dynamics, psychological safety, and culture. Module 8: Developing Your EI - Assessment tools, practice exercises, and ongoing development."
+  },
+  {
+    "title": "Algorithms and Data Structures Mastery",
+    "description": "Build a strong foundation in computer science fundamentals with comprehensive coverage of algorithms and data structures. This course prepares you for technical interviews and improves your problem-solving skills. You'll implement classic algorithms, analyze complexity, and solve challenging problems. Essential for software engineers at any level.",
+    "difficulty": "intermediate",
+    "duration": 60,
+    "tags": [
+      "algorithms",
+      "data structures",
+      "computer science",
+      "interview prep",
+      "technical"
+    ],
+    "skills_covered": [
+      "Data structures",
+      "Algorithm design",
+      "Complexity analysis",
+      "Problem solving",
+      "Interview preparation"
+    ],
+    "contents": "Module 1: Complexity Analysis - Big O notation, time and space complexity, and analysis techniques. Module 2: Arrays and Strings - Two pointers, sliding window, and string manipulation. Module 3: Linked Lists and Stacks - Implementation, operations, and common problems. Module 4: Trees and Graphs - Traversals, BST operations, and graph algorithms. Module 5: Dynamic Programming - Memoization, tabulation, and classic DP problems. Module 6: Sorting and Searching - Quick sort, merge sort, binary search variations. Module 7: Advanced Topics - Tries, segment trees, and union-find. Module 8: Interview Practice - System design basics, behavioral questions, and mock interviews."
+  },
+  {
+    "title": "Workplace Wellness and Stress Management",
+    "description": "Create a healthier, more productive work life through evidence-based wellness strategies. This course covers stress management, mindfulness, work-life integration, and resilience building. You'll develop personal wellness plans and learn to foster well-being in your team. Essential for professionals seeking sustainable success.",
+    "difficulty": "beginner",
+    "duration": 20,
+    "tags": [
+      "wellness",
+      "stress management",
+      "mindfulness",
+      "work-life balance",
+      "health"
+    ],
+    "skills_covered": [
+      "Stress reduction",
+      "Mindfulness",
+      "Resilience",
+      "Energy management",
+      "Healthy habits"
+    ],
+    "contents": "Module 1: Understanding Stress - Types of stress, physiological effects, and workplace stressors. Module 2: Stress Management Techniques - Breathing exercises, progressive relaxation, and cognitive strategies. Module 3: Mindfulness at Work - Meditation basics, mindful communication, and present-moment awareness. Module 4: Physical Wellness - Exercise, nutrition, sleep optimization, and workspace ergonomics. Module 5: Mental Health Awareness - Recognizing burnout, seeking support, and mental health first aid. Module 6: Resilience Building - Growth mindset, adaptability, and bouncing back from setbacks. Module 7: Work-Life Integration - Boundaries, time management, and sustainable practices. Module 8: Creating Wellness Culture - Team wellness initiatives, leadership role, and organizational support."
+  },
+  {
+    "title": "Systems Programming with Rust",
+    "description": "Learn Rust, the language revolutionizing systems programming with memory safety and performance. This course covers ownership, borrowing, lifetimes, and concurrent programming. You'll build a web server, CLI tools, and contribute to open source projects. Ideal for developers seeking to write fast, reliable, and efficient system software.",
+    "difficulty": "advanced",
+    "duration": 65,
+    "tags": [
+      "rust",
+      "systems programming",
+      "performance",
+      "memory safety",
+      "technical"
+    ],
+    "skills_covered": [
+      "Rust syntax",
+      "Ownership",
+      "Concurrency",
+      "Error handling",
+      "Performance optimization"
+    ],
+    "contents": "Module 1: Rust Fundamentals - Syntax, ownership, borrowing, and lifetimes. Module 2: Error Handling - Result type, Option type, and error propagation. Module 3: Advanced Types - Traits, generics, and smart pointers. Module 4: Concurrent Programming - Threads, channels, and shared state. Module 5: Async Rust - Futures, async/await, and Tokio runtime. Module 6: Systems Programming - FFI, unsafe Rust, and low-level optimization. Module 7: Web Development - Building REST APIs with Actix-web or Rocket. Module 8: Real-World Projects - CLI tools, parsers, and contributing to Rust ecosystem."
+  },
+  {
+    "title": "Innovation and Design Thinking",
+    "description": "Foster innovation in your organization through design thinking methodologies. This course covers human-centered design, ideation techniques, prototyping, and innovation management. You'll learn to solve complex problems creatively and build cultures of innovation. Perfect for leaders driving organizational creativity.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "innovation",
+      "design thinking",
+      "creativity",
+      "problem solving",
+      "strategy"
+    ],
+    "skills_covered": [
+      "Design thinking",
+      "Ideation",
+      "Prototyping",
+      "User research",
+      "Innovation strategy"
+    ],
+    "contents": "Module 1: Innovation Fundamentals - Types of innovation, innovation myths, and organizational readiness. Module 2: Design Thinking Process - Empathize, define, ideate, prototype, and test phases. Module 3: User Research - Interviews, observations, journey mapping, and insight synthesis. Module 4: Ideation Techniques - Brainstorming, SCAMPER, mind mapping, and creative exercises. Module 5: Prototyping and Testing - Rapid prototyping, MVPs, and user testing methods. Module 6: Innovation Culture - Psychological safety, failure tolerance, and reward systems. Module 7: Innovation Strategy - Portfolio management, metrics, and resource allocation. Module 8: Scaling Innovation - From pilot to implementation, change management, and sustainability."
+  },
+  {
+    "title": "Go for Cloud Native Development",
+    "description": "Master Go programming for building scalable cloud-native applications. This course covers Go fundamentals, concurrent programming with goroutines, and building microservices. You'll create REST APIs, work with databases, and deploy to Kubernetes. Perfect for developers building high-performance backend services.",
+    "difficulty": "intermediate",
+    "duration": 55,
+    "tags": [
+      "go",
+      "golang",
+      "cloud-native",
+      "microservices",
+      "backend",
+      "technical"
+    ],
+    "skills_covered": [
+      "Go syntax",
+      "Goroutines",
+      "Channels",
+      "REST APIs",
+      "Microservices"
+    ],
+    "contents": "Module 1: Go Basics - Syntax, types, functions, and packages. Module 2: Advanced Go - Interfaces, structs, methods, and embedding. Module 3: Concurrent Programming - Goroutines, channels, and synchronization. Module 4: Error Handling - Error types, panic/recover, and best practices. Module 5: Building Web Services - HTTP servers, routing, and middleware. Module 6: Database Integration - SQL databases, ORMs, and connection pooling. Module 7: Testing and Benchmarking - Unit tests, integration tests, and performance testing. Module 8: Deployment - Docker containers, Kubernetes deployment, and monitoring."
+  },
+  {
+    "title": "Conflict Resolution and Mediation",
+    "description": "Master the art of resolving workplace conflicts and mediating disputes. This course covers conflict dynamics, mediation techniques, difficult conversations, and restorative practices. You'll learn to transform conflicts into opportunities for growth and strengthen team relationships. Essential for HR professionals and leaders.",
+    "difficulty": "intermediate",
+    "duration": 28,
+    "tags": [
+      "conflict resolution",
+      "mediation",
+      "communication",
+      "hr",
+      "leadership"
+    ],
+    "skills_covered": [
+      "Mediation",
+      "Active listening",
+      "Negotiation",
+      "De-escalation",
+      "Facilitation"
+    ],
+    "contents": "Module 1: Understanding Conflict - Types of conflict, conflict styles, and organizational impact. Module 2: Conflict Dynamics - Escalation patterns, triggers, and early intervention. Module 3: Mediation Process - Stages of mediation, ground rules, and neutrality. Module 4: Communication in Conflict - Active listening, reframing, and finding common ground. Module 5: Difficult Conversations - Preparation, delivery, and managing emotions. Module 6: Team Conflicts - Group dynamics, facilitation techniques, and consensus building. Module 7: Workplace Applications - HR interventions, grievance handling, and policy development. Module 8: Building Peace - Restorative practices, relationship repair, and prevention strategies."
+  },
+  {
+    "title": "Blockchain Fundamentals for Business",
+    "description": "Understand blockchain technology and its business applications without the technical complexity. This course covers blockchain basics, cryptocurrencies, smart contracts, and enterprise use cases. You'll learn to evaluate blockchain solutions and lead blockchain initiatives. Perfect for business leaders and consultants.",
+    "difficulty": "beginner",
+    "duration": 25,
+    "tags": [
+      "blockchain",
+      "cryptocurrency",
+      "business",
+      "innovation",
+      "technology"
+    ],
+    "skills_covered": [
+      "Blockchain concepts",
+      "Use case evaluation",
+      "Smart contracts",
+      "Risk assessment",
+      "Implementation strategy"
+    ],
+    "contents": "Module 1: Blockchain Basics - Distributed ledgers, consensus, and trust mechanisms. Module 2: Cryptocurrency Overview - Bitcoin, Ethereum, and digital assets. Module 3: Smart Contracts - Automation, use cases, and limitations. Module 4: Enterprise Blockchain - Permissioned blockchains, Hyperledger, and consortiums. Module 5: Industry Applications - Supply chain, finance, healthcare, and government. Module 6: Blockchain Strategy - Evaluation framework, ROI analysis, and pilot projects. Module 7: Risks and Challenges - Technical limitations, regulatory issues, and adoption barriers. Module 8: Future of Blockchain - Trends, emerging technologies, and strategic planning."
+  },
+  {
+    "title": "Vue.js 3 Complete Guide",
+    "description": "Build modern web applications with Vue.js 3 and the Composition API. This comprehensive course covers reactivity, components, routing, and state management with Pinia. You'll create a full-stack application using Vue, TypeScript, and modern tooling. Ideal for developers looking for a progressive, approachable frontend framework.",
+    "difficulty": "intermediate",
+    "duration": 50,
+    "tags": [
+      "vue",
+      "frontend",
+      "javascript",
+      "spa",
+      "composition api",
+      "technical"
+    ],
+    "skills_covered": [
+      "Vue 3",
+      "Composition API",
+      "Pinia",
+      "Vue Router",
+      "TypeScript integration"
+    ],
+    "contents": "Module 1: Vue Fundamentals - Reactivity, templates, and directives. Module 2: Components - Props, events, slots, and component communication. Module 3: Composition API - Setup function, composables, and reactivity in depth. Module 4: Routing - Vue Router, navigation guards, and lazy loading. Module 5: State Management - Pinia store, actions, and getters. Module 6: Forms and Validation - v-model, custom inputs, and validation libraries. Module 7: API Integration - Axios, error handling, and loading states. Module 8: Production Deployment - Build optimization, SSR with Nuxt, and best practices."
+  },
+  {
+    "title": "Sustainability and Corporate Social Responsibility",
+    "description": "Lead sustainable business practices and CSR initiatives in your organization. This course covers environmental sustainability, social impact, ESG reporting, and stakeholder engagement. You'll learn to develop sustainability strategies that create value for business and society. Essential for leaders driving responsible business.",
+    "difficulty": "intermediate",
+    "duration": 32,
+    "tags": [
+      "sustainability",
+      "csr",
+      "esg",
+      "environment",
+      "social responsibility"
+    ],
+    "skills_covered": [
+      "Sustainability strategy",
+      "ESG reporting",
+      "Stakeholder engagement",
+      "Impact measurement",
+      "Green initiatives"
+    ],
+    "contents": "Module 1: Sustainability Fundamentals - Triple bottom line, SDGs, and business case. Module 2: Environmental Management - Carbon footprint, resource efficiency, and circular economy. Module 3: Social Responsibility - Community engagement, human rights, and supply chain ethics. Module 4: ESG Framework - Environmental, social, governance factors and reporting standards. Module 5: Stakeholder Management - Mapping, engagement strategies, and partnership building. Module 6: Sustainability Strategy - Goal setting, implementation, and change management. Module 7: Measurement and Reporting - KPIs, impact assessment, and transparency. Module 8: Future Trends - Climate action, sustainable innovation, and policy landscape."
+  },
+  {
+    "title": "Crisis Communication and Management",
+    "description": "Prepare for and manage organizational crises with confidence. This course covers crisis planning, communication strategies, media relations, and reputation management. You'll learn to lead through uncertainty and protect organizational value during challenging times. Critical for executives and communication professionals.",
+    "difficulty": "advanced",
+    "duration": 30,
+    "tags": [
+      "crisis management",
+      "communication",
+      "pr",
+      "leadership",
+      "risk"
+    ],
+    "skills_covered": [
+      "Crisis planning",
+      "Media relations",
+      "Stakeholder communication",
+      "Reputation management",
+      "Team coordination"
+    ],
+    "contents": "Module 1: Crisis Management Framework - Types of crises, lifecycle, and preparedness assessment. Module 2: Crisis Communication Planning - Response teams, protocols, and communication channels. Module 3: Media Relations - Press releases, interviews, and social media management. Module 4: Internal Communication - Employee communication, leadership visibility, and morale. Module 5: Stakeholder Management - Customer communication, investor relations, and partner engagement. Module 6: Digital Crisis Management - Online reputation, social media crises, and cyber incidents. Module 7: Recovery and Learning - Post-crisis analysis, reputation rebuilding, and organizational learning. Module 8: Crisis Simulation - Tabletop exercises, scenario planning, and continuous improvement."
+  },
+  {
+    "title": "Enterprise Angular Development",
+    "description": "Master Angular for building large-scale enterprise applications. This course covers Angular architecture, RxJS, state management with NgRx, and enterprise patterns. You'll build a complex business application with authentication, lazy loading, and microfrontends. Designed for developers working on serious business applications.",
+    "difficulty": "advanced",
+    "duration": 70,
+    "tags": [
+      "angular",
+      "typescript",
+      "enterprise",
+      "frontend",
+      "rxjs",
+      "technical"
+    ],
+    "skills_covered": [
+      "Angular architecture",
+      "RxJS",
+      "NgRx",
+      "Testing",
+      "Performance optimization"
+    ],
+    "contents": "Module 1: Angular Architecture - Modules, dependency injection, and application structure. Module 2: Advanced Components - Content projection, dynamic components, and CDK. Module 3: RxJS Mastery - Observables, operators, and reactive patterns. Module 4: State Management - NgRx store, effects, and entity management. Module 5: Forms and Validation - Reactive forms, custom validators, and dynamic forms. Module 6: Testing Strategies - Unit testing, integration testing, and E2E with Cypress. Module 7: Performance Optimization - Change detection, lazy loading, and bundle optimization. Module 8: Enterprise Patterns - Microfrontends, design systems, and scalable architecture."
+  },
+  {
+    "title": "Employee Onboarding Excellence",
+    "description": "Design and implement world-class onboarding programs that accelerate time-to-productivity and increase retention. This course covers onboarding strategy, first-day experiences, cultural integration, and remote onboarding. You'll create comprehensive onboarding frameworks that set new hires up for success.",
+    "difficulty": "intermediate",
+    "duration": 25,
+    "tags": [
+      "onboarding",
+      "hr",
+      "employee experience",
+      "talent management",
+      "retention"
+    ],
+    "skills_covered": [
+      "Onboarding design",
+      "Cultural integration",
+      "Training plans",
+      "Buddy programs",
+      "Remote onboarding"
+    ],
+    "contents": "Module 1: Onboarding Strategy - Goals, metrics, and stakeholder alignment. Module 2: Pre-boarding Excellence - Offer to first day, paperwork, and preparation. Module 3: First Day Experience - Welcome activities, logistics, and making connections. Module 4: First Week Structure - Orientation, role clarity, and quick wins. Module 5: 30-60-90 Day Plans - Milestones, check-ins, and performance expectations. Module 6: Cultural Integration - Values alignment, social connections, and team integration. Module 7: Remote Onboarding - Virtual experiences, technology setup, and engagement. Module 8: Measuring Success - Feedback systems, retention metrics, and continuous improvement."
+  },
+  {
+    "title": "Performance Management Reimagined",
+    "description": "Transform traditional performance reviews into continuous performance development. This course covers modern performance management, continuous feedback, OKRs, and coaching conversations. You'll learn to create systems that drive performance while developing talent. Essential for HR leaders and managers.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "performance management",
+      "hr",
+      "feedback",
+      "okrs",
+      "talent development"
+    ],
+    "skills_covered": [
+      "Continuous feedback",
+      "Goal setting",
+      "Performance conversations",
+      "OKRs",
+      "Development planning"
+    ],
+    "contents": "Module 1: Modern Performance Management - Evolution, trends, and organizational impact. Module 2: Continuous Feedback Culture - Real-time feedback, recognition, and feedback tools. Module 3: Goal Setting Excellence - OKRs, SMART goals, and alignment strategies. Module 4: Performance Conversations - Check-ins, coaching approach, and difficult discussions. Module 5: Development Planning - Strengths-based development, career pathing, and skill building. Module 6: Performance Calibration - Fairness, bias reduction, and calibration sessions. Module 7: Technology and Tools - Performance platforms, analytics, and automation. Module 8: Implementation Strategy - Change management, pilot programs, and success metrics."
+  },
+  {
+    "title": "Compensation and Benefits Strategy",
+    "description": "Design competitive compensation and benefits programs that attract and retain top talent. This course covers pay philosophy, job evaluation, market pricing, and benefits design. You'll learn to balance competitiveness with budget constraints while ensuring internal equity. Critical for HR professionals and compensation specialists.",
+    "difficulty": "advanced",
+    "duration": 35,
+    "tags": [
+      "compensation",
+      "benefits",
+      "hr",
+      "total rewards",
+      "salary"
+    ],
+    "skills_covered": [
+      "Pay structures",
+      "Job evaluation",
+      "Market pricing",
+      "Benefits design",
+      "Total rewards"
+    ],
+    "contents": "Module 1: Compensation Philosophy - Strategy alignment, pay principles, and market positioning. Module 2: Job Analysis and Evaluation - Job descriptions, evaluation methods, and internal equity. Module 3: Market Pricing - Salary surveys, benchmarking, and competitive analysis. Module 4: Pay Structures - Grades, ranges, and progression strategies. Module 5: Variable Pay - Incentives, bonuses, and performance-based rewards. Module 6: Benefits Strategy - Health benefits, retirement, and work-life benefits. Module 7: Total Rewards Communication - Employee value proposition, statements, and education. Module 8: Legal Compliance - Pay equity, FLSA, and regulatory requirements."
+  },
+  {
+    "title": "Talent Acquisition and Recruitment Marketing",
+    "description": "Master modern talent acquisition strategies in a competitive market. This course covers employer branding, recruitment marketing, sourcing strategies, and candidate experience. You'll learn to build talent pipelines and attract top candidates using data-driven approaches. Essential for recruiters and talent acquisition leaders.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "recruitment",
+      "talent acquisition",
+      "employer branding",
+      "hr",
+      "sourcing"
+    ],
+    "skills_covered": [
+      "Employer branding",
+      "Sourcing strategies",
+      "Recruitment marketing",
+      "Candidate experience",
+      "Data analytics"
+    ],
+    "contents": "Module 1: Modern Talent Acquisition - Trends, challenges, and strategic approach. Module 2: Employer Brand Building - EVP development, storytelling, and brand activation. Module 3: Recruitment Marketing - Content strategy, social recruiting, and campaign management. Module 4: Sourcing Excellence - Boolean search, talent mapping, and passive candidate engagement. Module 5: Candidate Experience - Journey mapping, communication, and feedback systems. Module 6: Interview Excellence - Structured interviews, bias reduction, and assessment tools. Module 7: Data-Driven Recruiting - Metrics, analytics, and continuous improvement. Module 8: Building Talent Pipelines - Talent communities, nurture campaigns, and succession planning."
+  },
+  {
+    "title": "Lean Six Sigma Green Belt",
+    "description": "Drive process improvement and operational excellence with Lean Six Sigma methodologies. This course covers DMAIC process, statistical tools, waste elimination, and project management. You'll complete a real improvement project and prepare for Green Belt certification. Perfect for quality professionals and process improvement leaders.",
+    "difficulty": "intermediate",
+    "duration": 45,
+    "tags": [
+      "lean",
+      "six sigma",
+      "process improvement",
+      "quality",
+      "certification"
+    ],
+    "skills_covered": [
+      "DMAIC methodology",
+      "Statistical analysis",
+      "Process mapping",
+      "Root cause analysis",
+      "Project management"
+    ],
+    "contents": "Module 1: Lean Six Sigma Foundations - History, principles, and organizational deployment. Module 2: Define Phase - Project charter, VOC, and stakeholder analysis. Module 3: Measure Phase - Process mapping, data collection, and measurement systems. Module 4: Analyze Phase - Root cause analysis, hypothesis testing, and statistical tools. Module 5: Improve Phase - Solution generation, pilot testing, and implementation planning. Module 6: Control Phase - Control plans, SPC, and sustainability strategies. Module 7: Lean Tools - Value stream mapping, 5S, Kaizen, and waste elimination. Module 8: Project Completion - Documentation, knowledge transfer, and certification preparation."
+  },
+  {
+    "title": "Change Management Certification",
+    "description": "Lead successful organizational change initiatives with proven methodologies. This course covers change models, stakeholder engagement, resistance management, and communication strategies. You'll learn to guide organizations through transformation while maintaining productivity and morale. Essential for change agents and leaders.",
+    "difficulty": "intermediate",
+    "duration": 40,
+    "tags": [
+      "change management",
+      "transformation",
+      "leadership",
+      "organizational development",
+      "certification"
+    ],
+    "skills_covered": [
+      "Change models",
+      "Stakeholder analysis",
+      "Communication planning",
+      "Resistance management",
+      "Impact assessment"
+    ],
+    "contents": "Module 1: Change Management Foundations - Models (ADKAR, Kotter), and success factors. Module 2: Change Readiness - Assessment tools, organizational culture, and capacity building. Module 3: Stakeholder Engagement - Mapping, analysis, and engagement strategies. Module 4: Communication Excellence - Planning, channels, and feedback loops. Module 5: Resistance Management - Sources of resistance, mitigation strategies, and building buy-in. Module 6: Training and Support - Capability building, coaching, and reinforcement. Module 7: Measuring Change - KPIs, adoption metrics, and course correction. Module 8: Sustaining Change - Reinforcement, celebration, and continuous improvement."
+  },
+  {
+    "title": "Data Literacy for Business Professionals",
+    "description": "Become data-literate and make better business decisions. This course covers data fundamentals, analysis techniques, visualization best practices, and data-driven decision making. You'll learn to work with analysts, interpret reports, and avoid common data pitfalls. Essential for all business professionals in the digital age.",
+    "difficulty": "beginner",
+    "duration": 25,
+    "tags": [
+      "data literacy",
+      "analytics",
+      "business intelligence",
+      "decision making",
+      "visualization"
+    ],
+    "skills_covered": [
+      "Data interpretation",
+      "Basic analysis",
+      "Visualization",
+      "Statistical thinking",
+      "Data ethics"
+    ],
+    "contents": "Module 1: Data Fundamentals - Types of data, data quality, and common terms. Module 2: Statistical Thinking - Averages, distributions, correlation vs causation. Module 3: Data Analysis Basics - Asking the right questions, exploratory analysis. Module 4: Data Visualization - Chart types, best practices, and storytelling with data. Module 5: Business Metrics - KPIs, dashboards, and performance measurement. Module 6: Data Tools Overview - Excel, BI tools, and working with analysts. Module 7: Data-Driven Decisions - Avoiding bias, A/B testing, and decision frameworks. Module 8: Data Ethics - Privacy, security, and responsible data use."
+  },
+  {
+    "title": "Executive MBA Essentials",
+    "description": "Gain MBA-level business knowledge in a condensed format. This comprehensive course covers strategy, finance, marketing, operations, and leadership. You'll develop a holistic understanding of business management and strategic thinking. Perfect for executives and senior managers seeking comprehensive business education.",
+    "difficulty": "advanced",
+    "duration": 60,
+    "tags": [
+      "mba",
+      "executive education",
+      "strategy",
+      "leadership",
+      "business"
+    ],
+    "skills_covered": [
+      "Strategic thinking",
+      "Financial analysis",
+      "Marketing strategy",
+      "Operations management",
+      "Leadership"
+    ],
+    "contents": "Module 1: Strategic Management - Competitive advantage, strategic analysis, and planning. Module 2: Financial Management - Financial statements, valuation, and capital structure. Module 3: Marketing Excellence - Customer insights, branding, and go-to-market strategies. Module 4: Operations and Supply Chain - Process optimization, quality, and supply chain strategy. Module 5: Organizational Behavior - Culture, motivation, and organizational design. Module 6: Economics for Managers - Micro/macro economics, global markets, and decision making. Module 7: Innovation and Entrepreneurship - Intrapreneurship, business models, and growth strategies. Module 8: Integrated Business Simulation - Capstone project applying all concepts."
+  },
+  {
+    "title": "E-commerce and Digital Business",
+    "description": "Build and scale successful e-commerce businesses in the digital economy. This course covers online business models, digital marketing, conversion optimization, and fulfillment strategies. You'll learn to create compelling online experiences that drive sales and customer loyalty. Essential for entrepreneurs and digital business leaders.",
+    "difficulty": "intermediate",
+    "duration": 40,
+    "tags": [
+      "ecommerce",
+      "digital business",
+      "online marketing",
+      "entrepreneurship",
+      "conversion"
+    ],
+    "skills_covered": [
+      "E-commerce platforms",
+      "Digital marketing",
+      "Conversion optimization",
+      "Customer journey",
+      "Analytics"
+    ],
+    "contents": "Module 1: E-commerce Foundations - Business models, market analysis, and platform selection. Module 2: Building Online Stores - UX design, product pages, and checkout optimization. Module 3: Digital Marketing Channels - SEO, PPC, email, and social commerce. Module 4: Conversion Rate Optimization - A/B testing, analytics, and user experience. Module 5: Customer Experience - Personalization, customer service, and retention strategies. Module 6: Operations and Fulfillment - Inventory, shipping, and returns management. Module 7: Payment and Security - Payment gateways, fraud prevention, and compliance. Module 8: Scaling Strategies - International expansion, marketplaces, and omnichannel."
+  },
+  {
+    "title": "Public Speaking and Presentation Mastery",
+    "description": "Become a confident, compelling public speaker and presenter. This course covers speech preparation, delivery techniques, visual aid design, and handling Q&A sessions. You'll practice various speaking scenarios and receive personalized feedback. Perfect for professionals who present regularly or aspire to thought leadership.",
+    "difficulty": "intermediate",
+    "duration": 30,
+    "tags": [
+      "public speaking",
+      "presentation",
+      "communication",
+      "leadership",
+      "soft skills"
+    ],
+    "skills_covered": [
+      "Speech writing",
+      "Delivery techniques",
+      "Stage presence",
+      "Visual design",
+      "Audience engagement"
+    ],
+    "contents": "Module 1: Speaking Fundamentals - Overcoming fear, finding your voice, and authenticity. Module 2: Speech Preparation - Structure, storytelling, and memorable messages. Module 3: Delivery Excellence - Voice, body language, and stage presence. Module 4: Visual Aid Design - Slides, props, and multimedia effectiveness. Module 5: Audience Engagement - Reading the room, interaction, and maintaining attention. Module 6: Different Speaking Contexts - Conferences, meetings, panels, and virtual presentations. Module 7: Handling Challenges - Q&A sessions, difficult questions, and technical issues. Module 8: Building Your Platform - Personal brand, thought leadership, and speaking opportunities."
+  },
+  {
+    "title": "Strategic Business Networking",
+    "description": "Build powerful professional networks that accelerate your career and business success. This course covers networking strategies, relationship building, social capital, and network maintenance. You'll learn to network authentically and create mutually beneficial professional relationships. Essential for career advancement and business development.",
+    "difficulty": "intermediate",
+    "duration": 20,
+    "tags": [
+      "networking",
+      "relationships",
+      "career development",
+      "business development",
+      "soft skills"
+    ],
+    "skills_covered": [
+      "Networking strategies",
+      "Relationship building",
+      "Follow-up systems",
+      "Online networking",
+      "Network leverage"
+    ],
+    "contents": "Module 1: Networking Foundations - Value of networks, networking myths, and authentic approach. Module 2: Networking Strategy - Goals, target connections, and networking plan. Module 3: Making Connections - Conversation starters, elevator pitch, and first impressions. Module 4: Building Relationships - Follow-up, adding value, and deepening connections. Module 5: Online Networking - LinkedIn strategies, virtual events, and digital presence. Module 6: Networking Events - Preparation, working the room, and maximizing ROI. Module 7: Maintaining Your Network - CRM systems, regular touchpoints, and reciprocity. Module 8: Leveraging Your Network - Asking for help, making introductions, and creating opportunities."
+  },
+  {
+    "title": "Business Law Essentials",
+    "description": "Navigate the legal landscape of business with confidence. This course covers contracts, intellectual property, employment law, and regulatory compliance. You'll learn to identify legal risks and work effectively with legal counsel. Essential for entrepreneurs, managers, and business professionals.",
+    "difficulty": "intermediate",
+    "duration": 35,
+    "tags": [
+      "business law",
+      "legal",
+      "contracts",
+      "compliance",
+      "risk management"
+    ],
+    "skills_covered": [
+      "Contract basics",
+      "IP protection",
+      "Employment law",
+      "Compliance",
+      "Risk assessment"
+    ],
+    "contents": "Module 1: Legal Fundamentals - Legal systems, business structures, and liability. Module 2: Contract Law - Elements, negotiation, and common clauses. Module 3: Intellectual Property - Trademarks, copyrights, patents, and trade secrets. Module 4: Employment Law - Hiring, termination, discrimination, and workplace policies. Module 5: Regulatory Compliance - Industry regulations, data privacy, and consumer protection. Module 6: Business Transactions - M&A basics, partnerships, and joint ventures. Module 7: Dispute Resolution - Litigation, arbitration, and mediation. Module 8: Risk Management - Legal audits, insurance, and preventive strategies."
+  }
+]

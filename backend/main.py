@@ -4,12 +4,52 @@ AcmeLearn FastAPI Application Entry Point
 This is the main entry point for the AcmeLearn backend API.
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+
+from core.database import init_db, SessionLocal
+from scripts.seed_courses import seed_courses
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Application lifespan event handler.
+
+    Manages startup and shutdown events using modern context manager pattern.
+    Runs once when uvicorn starts (or reloads).
+    """
+    # Startup
+    print("Starting up AcmeLearn API...")
+
+    # Create tables
+    init_db()
+
+    # Seed courses (only if empty)
+    db = SessionLocal()
+    try:
+        seed_courses(db)
+    except Exception as e:
+        print(f"Error seeding database: {e}")
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+    print("Startup complete!")
+
+    yield  # Application runs here
+
+    # Shutdown (runs after yield when app stops)
+    print("Shutting down AcmeLearn API...")
+
 
 app = FastAPI(
     title="AcmeLearn API",
     description="AI-powered learning recommendation system",
-    version="0.1.0"
+    version="0.1.0",
+    lifespan=lifespan
 )
 
 

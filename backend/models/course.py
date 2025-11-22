@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import String, Text, Integer, Enum as SQLEnum, ForeignKey
+from sqlalchemy import String, Text, Integer, Enum as SQLEnum, ForeignKey, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, DifficultyLevel
@@ -25,13 +25,13 @@ class CourseTag(Base):
     """
     __tablename__ = "course_tags"
 
-    course_id: Mapped[str] = mapped_column(
-        String(36),
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         ForeignKey("courses.id", ondelete="CASCADE"),
         primary_key=True
     )
-    tag_id: Mapped[str] = mapped_column(
-        String(36),
+    tag_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         ForeignKey("tags.id", ondelete="CASCADE"),
         primary_key=True
     )
@@ -46,13 +46,13 @@ class CourseSkill(Base):
     """
     __tablename__ = "course_skills"
 
-    course_id: Mapped[str] = mapped_column(
-        String(36),
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         ForeignKey("courses.id", ondelete="CASCADE"),
         primary_key=True
     )
-    skill_id: Mapped[str] = mapped_column(
-        String(36),
+    skill_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         ForeignKey("skills.id", ondelete="CASCADE"),
         primary_key=True
     )
@@ -67,11 +67,11 @@ class Course(Base):
     """
     __tablename__ = "courses"
 
-    # Primary key - UUID stored as string (CHAR(36) in SQLite)
-    id: Mapped[str] = mapped_column(
-        String(36),
+    # Primary key - Native UUID type (16 bytes in PostgreSQL)
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         primary_key=True,
-        default=lambda: str(uuid.uuid4())
+        default=uuid.uuid4
     )
 
     # Required fields from courses.json
@@ -118,10 +118,10 @@ class Tag(Base):
     """
     __tablename__ = "tags"
 
-    id: Mapped[str] = mapped_column(
-        String(36),
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         primary_key=True,
-        default=lambda: str(uuid.uuid4())
+        default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(
         String(100),
@@ -154,10 +154,10 @@ class Skill(Base):
     """
     __tablename__ = "skills"
 
-    id: Mapped[str] = mapped_column(
-        String(36),
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
         primary_key=True,
-        default=lambda: str(uuid.uuid4())
+        default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(
         String(200),

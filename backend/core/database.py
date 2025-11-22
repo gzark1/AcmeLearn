@@ -14,12 +14,14 @@ from models.base import Base
 
 
 # Create SQLAlchemy engine
-# check_same_thread=False: Allow SQLite to be used with multiple threads (FastAPI)
 # echo=False: Set to True for SQL query logging during development
+# pool_pre_ping=True: Verify connections before using (prevents stale connections)
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {},
-    echo=False  # Set to True to see SQL queries
+    echo=False,  # Set to True to see SQL queries
+    pool_pre_ping=True,  # Verify connections before use
+    pool_size=10,        # Connection pool size
+    max_overflow=20      # Allow up to 30 total connections
 )
 
 # Session factory

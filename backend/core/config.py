@@ -10,18 +10,19 @@ class Settings(BaseSettings):
     """
     Application settings loaded from environment variables.
 
-    Defaults are suitable for local development.
+    All settings must be provided via .env file.
     """
     # Database
-    DATABASE_URL: str = "sqlite:///./acmelearn.db"
+    DATABASE_URL: str
 
     # API
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AcmeLearn API"
 
     class Config:
-        env_file = ".env"
+        env_file = "../.env"  # Load from project root
         case_sensitive = True
+        extra = "ignore"  # Ignore extra env vars (like POSTGRES_*)
 
 
 settings = Settings()

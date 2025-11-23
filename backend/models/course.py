@@ -140,6 +140,11 @@ class Tag(Base):
         secondary="course_tags",
         back_populates="tags"
     )
+    interested_users: Mapped[List["UserProfile"]] = relationship(
+        "UserProfile",
+        secondary="user_interests",
+        back_populates="interests"
+    )
 
     def __repr__(self) -> str:
         return f"<Tag(id={self.id}, name='{self.name}')>"

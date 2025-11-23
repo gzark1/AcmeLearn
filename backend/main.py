@@ -10,6 +10,7 @@ from fastapi import FastAPI
 
 from core.database import init_db, async_session_maker
 from scripts.seed_courses import seed_courses
+from api import auth, users, profiles, courses
 
 
 @asynccontextmanager
@@ -61,3 +62,10 @@ async def root():
 async def health():
     """Health check for monitoring"""
     return {"status": "healthy"}
+
+
+# Include API routers
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(profiles.router, prefix="/profiles", tags=["profiles"])
+app.include_router(courses.router, prefix="/api", tags=["courses"])

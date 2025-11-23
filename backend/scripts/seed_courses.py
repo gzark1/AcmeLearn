@@ -11,6 +11,8 @@ from typing import Dict, Set
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+# Import all models to ensure SQLAlchemy can resolve relationships
+import models  # noqa: F401
 from models.course import Course, Tag, Skill
 from models.base import DifficultyLevel
 

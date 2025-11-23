@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
 
+    # Authentication
+    SECRET_KEY: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
     # API
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AcmeLearn API"

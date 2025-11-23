@@ -1,22 +1,21 @@
 """
 Database engine and session management.
 
-This module provides the SQLAlchemy engine, session factory,
+This module provides the async SQLAlchemy engine, session factory,
 and FastAPI dependency injection for database sessions.
 """
-from typing import Generator
+from typing import AsyncGenerator
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from .config import settings
 from models.base import Base
 
 
-# Create SQLAlchemy engine
+# Create async SQLAlchemy engine
 # echo=False: Set to True for SQL query logging during development
 # pool_pre_ping=True: Verify connections before using (prevents stale connections)
-engine = create_engine(
+engine = create_async_engine(
     settings.DATABASE_URL,
     echo=False,  # Set to True to see SQL queries
     pool_pre_ping=True,  # Verify connections before use
@@ -24,42 +23,38 @@ engine = create_engine(
     max_overflow=20      # Allow up to 30 total connections
 )
 
-# Session factory
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
+# Async session factory
+async_session_maker = async_sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False
 )
 
 
-def init_db() -> None:
+async def init_db() -> None:
     """
-    Initialize database by creating all tables.
+    Initialize database by creating all tables asynchronously.
 
     Uses Base.metadata.create_all() - no Alembic migrations for MVP.
     This is idempotent - safe to call multiple times.
     """
-    Base.metadata.create_all(bind=engine)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
     print("Database tables created successfully")
 
 
-def get_db() -> Generator[Session, None, None]:
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     """
-    FastAPI dependency for database sessions.
+    FastAPI dependency for async database sessions.
 
-    Yields a SQLAlchemy session that is automatically closed
-    after the request completes. Rollback on exception.
+    Yields an async SQLAlchemy session that is automatically closed
+    after the request completes.
 
     Usage in FastAPI route:
         @app.get("/courses")
-        def get_courses(db: Session = Depends(get_db)):
-            return db.query(Course).all()
+        async def get_courses(db: AsyncSession = Depends(get_async_session)):
+            result = await db.execute(select(Course))
+            return result.scalars().all()
     """
-    db = SessionLocal()
-    try:
-        yield db
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    async with async_session_maker() as session:
+        yield session

@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from core.database import init_db, SessionLocal
+from core.database import init_db, async_session_maker
 from scripts.seed_courses import seed_courses
 
 
@@ -24,18 +24,16 @@ async def lifespan(app: FastAPI):
     print("Starting up AcmeLearn API...")
 
     # Create tables
-    init_db()
+    await init_db()
 
     # Seed courses (only if empty)
-    db = SessionLocal()
-    try:
-        seed_courses(db)
-    except Exception as e:
-        print(f"Error seeding database: {e}")
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    async with async_session_maker() as db:
+        try:
+            await seed_courses(db)
+        except Exception as e:
+            print(f"Error seeding database: {e}")
+            await db.rollback()
+            raise
 
     print("Startup complete!")
 

@@ -8,15 +8,16 @@ import json
 from pathlib import Path
 from typing import Dict, Set
 
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.course import Course, Tag, Skill
 from models.base import DifficultyLevel
 
 
-def seed_courses(db: Session) -> None:
+async def seed_courses(db: AsyncSession) -> None:
     """
-    Seed the database with courses from courses.json.
+    Seed the database with courses from courses.json asynchronously.
 
     Strategy:
     1. Check if courses already exist (skip if not empty)
@@ -25,10 +26,11 @@ def seed_courses(db: Session) -> None:
     4. Create Course records with relationships
 
     Args:
-        db: SQLAlchemy session
+        db: Async SQLAlchemy session
     """
     # Check if courses already exist
-    existing_count = db.query(Course).count()
+    result = await db.execute(select(Course))
+    existing_count = len(result.scalars().all())
     if existing_count > 0:
         print(f"Database already contains {existing_count} courses. Skipping seed.")
         return
@@ -58,7 +60,7 @@ def seed_courses(db: Session) -> None:
         db.add(tag)
         tag_map[tag_name] = tag
 
-    db.flush()  # Get IDs without committing
+    await db.flush()  # Get IDs without committing
     print(f"Created {len(tag_map)} tag records")
 
     # Step 3: Create Skill records
@@ -68,7 +70,7 @@ def seed_courses(db: Session) -> None:
         db.add(skill)
         skill_map[skill_name] = skill
 
-    db.flush()
+    await db.flush()
     print(f"Created {len(skill_map)} skill records")
 
     # Step 4: Create Course records with relationships
@@ -98,13 +100,16 @@ def seed_courses(db: Session) -> None:
         db.add(course)
 
     # Commit all changes atomically
-    db.commit()
+    await db.commit()
     print(f"Successfully seeded {len(courses_data)} courses")
 
     # Print summary
-    final_course_count = db.query(Course).count()
-    final_tag_count = db.query(Tag).count()
-    final_skill_count = db.query(Skill).count()
+    result = await db.execute(select(Course))
+    final_course_count = len(result.scalars().all())
+    result = await db.execute(select(Tag))
+    final_tag_count = len(result.scalars().all())
+    result = await db.execute(select(Skill))
+    final_skill_count = len(result.scalars().all())
 
     print("\n=== Seeding Summary ===")
     print(f"Courses: {final_course_count}")

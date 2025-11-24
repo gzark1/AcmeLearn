@@ -11,6 +11,7 @@ class TagResponse(BaseModel):
     """Tag reference in profile responses."""
     id: uuid.UUID
     name: str
+    category: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -26,7 +27,7 @@ class ProfileRead(BaseModel):
     user_id: uuid.UUID
     learning_goal: Optional[str] = None
     current_level: Optional[str] = None
-    time_commitment: Optional[int] = None  # hours per week
+    time_commitment: Optional[str] = None  # Time range: "1-5", "5-10", "10-20", "20+"
     version: int
     interests: List[TagResponse] = []
     created_at: datetime
@@ -44,7 +45,7 @@ class ProfileCreate(BaseModel):
     """
     learning_goal: Optional[str] = Field(None, max_length=1000)
     current_level: Optional[str] = Field(None, pattern="^(Beginner|Intermediate|Advanced)$")
-    time_commitment: Optional[int] = Field(None, ge=1, le=168)  # 1-168 hours/week
+    time_commitment: Optional[str] = Field(None, pattern="^(1-5|5-10|10-20|20\\+)$")
     interest_tag_ids: List[uuid.UUID] = Field(default_factory=list)
 
 
@@ -57,5 +58,5 @@ class ProfileUpdate(BaseModel):
     """
     learning_goal: Optional[str] = Field(None, max_length=1000)
     current_level: Optional[str] = Field(None, pattern="^(Beginner|Intermediate|Advanced)$")
-    time_commitment: Optional[int] = Field(None, ge=1, le=168)
+    time_commitment: Optional[str] = Field(None, pattern="^(1-5|5-10|10-20|20\\+)$")
     interest_tag_ids: Optional[List[uuid.UUID]] = None

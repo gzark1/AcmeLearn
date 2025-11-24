@@ -43,7 +43,7 @@ class UserProfileSnapshot(Base):
     # Snapshot of profile fields
     learning_goal: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     current_level: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    time_commitment: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    time_commitment: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
     # Interests snapshot (JSONB array of tag names)
     # Denormalized for historical accuracy - tags might be renamed/deleted

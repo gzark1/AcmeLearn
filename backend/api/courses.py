@@ -116,7 +116,7 @@ async def list_tags(
     db: AsyncSession = Depends(get_async_session),
 ):
     """
-    List all tags.
+    List all tags with categories.
 
     Authentication required.
 
@@ -125,12 +125,48 @@ async def list_tags(
         db: Database session
 
     Returns:
-        List of all tags
+        List of all tags (flat list with category field)
     """
     result = await db.execute(select(Tag).order_by(Tag.name))
     tags = result.scalars().all()
 
     return tags
+
+
+@router.get("/tag-categories")
+async def list_tag_categories(
+    user: User = Depends(current_active_user),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    List tags grouped by category.
+
+    Authentication required. Optimized for frontend multi-select UI.
+
+    Args:
+        user: Current authenticated user
+        db: Database session
+
+    Returns:
+        Dict of category → list of tags
+        Example: {"Programming": [{"id": "...", "name": "python"}, ...], ...}
+    """
+    result = await db.execute(select(Tag).order_by(Tag.category, Tag.name))
+    tags = result.scalars().all()
+
+    # Group tags by category
+    categories = {}
+    for tag in tags:
+        category = tag.category or "Other"
+        if category not in categories:
+            categories[category] = []
+        categories[category].append({
+            "id": str(tag.id),
+            "name": tag.name,
+            "category": tag.category
+        })
+
+    return categories
 
 
 @router.get("/skills")

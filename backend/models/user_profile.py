@@ -38,9 +38,9 @@ class UserProfile(Base):
     current_level: Mapped[Optional[DifficultyLevel]] = mapped_column(
         String, nullable=True
     )
-    time_commitment: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )  # Hours per week
+    time_commitment: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # Time range: "1-5", "5-10", "10-20", "20+"
 
     # Versioning for snapshot tracking
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)

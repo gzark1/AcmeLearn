@@ -55,15 +55,26 @@ async def seed_courses(db: AsyncSession) -> None:
     print(f"Found {len(unique_tags)} unique tags")
     print(f"Found {len(unique_skills)} unique skills")
 
-    # Step 2: Create Tag records
+    # Load tag categories from config file
+    tag_categories_file = Path(__file__).parent.parent / "config" / "tag_categories.json"
+    tag_categories: Dict[str, str] = {}
+    if tag_categories_file.exists():
+        with open(tag_categories_file, "r") as f:
+            tag_categories = json.load(f)
+        print(f"Loaded {len(tag_categories)} tag categories from config")
+    else:
+        print("Warning: tag_categories.json not found, tags will have no category")
+
+    # Step 2: Create Tag records with categories
     tag_map: Dict[str, Tag] = {}
     for tag_name in unique_tags:
-        tag = Tag(name=tag_name)
+        category = tag_categories.get(tag_name, "Other")
+        tag = Tag(name=tag_name, category=category)
         db.add(tag)
         tag_map[tag_name] = tag
 
     await db.flush()  # Get IDs without committing
-    print(f"Created {len(tag_map)} tag records")
+    print(f"Created {len(tag_map)} tag records with categories")
 
     # Step 3: Create Skill records
     skill_map: Dict[str, Skill] = {}

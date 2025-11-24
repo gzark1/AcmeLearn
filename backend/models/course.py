@@ -6,7 +6,7 @@ their many-to-many relationship junction tables.
 """
 import uuid
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import String, Text, Integer, Enum as SQLEnum, ForeignKey, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -128,6 +128,11 @@ class Tag(Base):
         unique=True,
         nullable=False,
         index=True  # For fast lookups and autocomplete
+    )
+    category: Mapped[Optional[str]] = mapped_column(
+        String(50),
+        nullable=True,
+        index=True  # For filtering by category
     )
     created_at: Mapped[datetime] = mapped_column(
         default=datetime.utcnow,

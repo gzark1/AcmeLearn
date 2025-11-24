@@ -157,7 +157,8 @@ AcmeLearn/
 │
 ├── backend/
 │   ├── models/             # ✅ SQLAlchemy ORM models
-│   │   ├── base.py         # ✅ Base class, DifficultyLevel enum
+│   │   ├── base.py         # ✅ Base class
+│   │   ├── enums.py        # ✅ DifficultyLevel, TimeCommitment, TagCategory enums
 │   │   ├── course.py       # ✅ Course, Tag, Skill, junction tables
 │   │   ├── user.py         # ✅ User (fastapi-users)
 │   │   ├── user_profile.py # ✅ UserProfile, UserInterest
@@ -194,12 +195,23 @@ AcmeLearn/
 │   │   └── seed_courses.py # ✅ Import courses.json → extract tags/skills
 │   │
 │   ├── main.py             # ✅ FastAPI app with all routers mounted
-│   ├── pyproject.toml      # ✅ uv dependencies
+│   ├── pyproject.toml      # ✅ uv dependencies (includes test extras)
 │   └── uv.lock             # ✅ Locked dependencies
+│
+├── tests/                  # ✅ Test suite (at project root)
+│   ├── conftest.py         # Root-level (reserved for cross-stack fixtures)
+│   └── backend/
+│       ├── conftest.py     # ✅ Backend fixtures (test_db, client, auth_headers)
+│       ├── test_api/
+│       │   ├── test_auth.py     # ✅ Auth endpoint tests
+│       │   ├── test_courses.py  # ✅ Course endpoint tests
+│       │   └── test_profiles.py # ✅ Profile endpoint tests
+│       └── test_services/
+│           └── test_profile_service.py # ✅ Service layer tests
 │
 ├── docker-compose.yml      # ✅ PostgreSQL 16 Alpine container
 ├── .env                    # ✅ Database credentials (gitignored)
-├── .env.example            # ✅ Mock credentials template
+├── .env.example            # ✅ Mock credentials template (includes TEST_DATABASE_URL)
 ├── courses.json            # ✅ Course catalog data (48 courses)
 ├── BUSINESS_REQUIREMENTS.md # ✅ Business rules and access control
 ├── assessment.md           # 📄 Original requirements
@@ -293,6 +305,7 @@ See `docs/ARCHITECTURE.md` for detailed rationale. Quick summary:
 - [x] **User profile CRUD operations** (GET/PATCH /profiles/me)
 - [x] **Tags and skills endpoints** (GET /api/tags, /api/skills)
 - [x] **Profile version history** (automatic snapshots on updates)
+- [x] **Test suite** (pytest with async fixtures, separate test database)
 - [ ] AI recommendation generation endpoint
 - [ ] Course recommendations history
 
@@ -427,9 +440,68 @@ docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db  # Connect
 
 ## Testing Strategy
 
-- Backend: pytest for unit and integration tests
-- Frontend: Jest + React Testing Library (if time allows)
-- API: Manual testing with FastAPI's built-in docs (/docs)
+### Automated Testing (pytest) - IMPLEMENTED
+
+**Test Location**: `tests/backend/` (at project root, not inside backend folder)
+
+**Test Structure**:
+```
+tests/
+├── __init__.py
+├── conftest.py              # Root-level (reserved for cross-stack fixtures)
+└── backend/
+    ├── __init__.py
+    ├── conftest.py          # Backend fixtures (test_db, client, test_user, auth_headers)
+    ├── test_api/
+    │   ├── test_auth.py     # Registration, login, token tests
+    │   ├── test_courses.py  # Course listing, filtering, tag categories
+    │   └── test_profiles.py # Profile CRUD tests
+    └── test_services/
+        └── test_profile_service.py  # Service layer unit tests
+```
+
+**Test Database**:
+- Uses separate `acmelearn_test` database (auto-created if missing)
+- Configure via `TEST_DATABASE_URL` in `.env` (see `.env.example`)
+- Default: `postgresql+asyncpg://acmelearn_user:acmelearn_pass@localhost:5432/acmelearn_test`
+- Tables are created fresh per test session
+- Course data is seeded once per session (static data)
+- User data is truncated between each test (clean state)
+
+**Key Fixtures** (in `tests/backend/conftest.py`):
+- `test_db`: Async database session with clean user state per test
+- `client`: httpx.AsyncClient with database dependency override
+- `test_user`: Creates a test user (email: test@example.com, password: TestPassword123)
+- `auth_headers`: JWT authentication headers for protected endpoints
+- `test_user_profile`: The auto-created profile for test_user
+
+**Running Tests**:
+```bash
+# From backend directory
+cd backend
+source .venv/bin/activate
+
+# Install test dependencies (if not already installed)
+uv sync --extra test
+
+# Run all backend tests
+pytest ../tests/backend -v
+
+# Run specific test file
+pytest ../tests/backend/test_api/test_auth.py -v
+
+# Run with coverage
+pytest ../tests/backend --cov=. --cov-report=html
+```
+
+**Prerequisites**:
+- PostgreSQL must be running (`docker compose up -d`)
+- Test database is auto-created on first run
+
+### Manual Testing
+- API: Manual testing with FastAPI's built-in docs (`/docs`)
+- Use `curl` for endpoint testing (examples in `docs/AUTHENTICATION.md`)
+- Verify database state with PostgreSQL MCP queries
 - E2E: Manual testing of critical user flows
 
 ## Success Criteria
@@ -453,7 +525,7 @@ docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db  # Connect
 - Type safety and validation (Pydantic, SQLAlchemy)
 - Professional documentation and architecture decisions
 
-## Current Status (Day 3 - 2025-11-24)
+## Current Status (Day 4 - 2025-11-25)
 
 ✅ **Phases 1-3 Complete - Backend Fully Functional**:
 - PostgreSQL 16 via Docker Compose (9 tables implemented)
@@ -467,6 +539,15 @@ docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db  # Connect
 - Tags and skills endpoints
 - Profile CRUD endpoints
 - All core backend features working and tested
+- Centralized enums in `models/enums.py` (DifficultyLevel, TimeCommitment, TagCategory)
+
+✅ **Test Suite Implemented**:
+- Comprehensive pytest test suite in `tests/backend/`
+- Separate test database (`acmelearn_test`) with auto-creation
+- API tests: auth, courses, profiles endpoints
+- Service tests: ProfileService unit tests
+- Async fixtures: test_db, client, test_user, auth_headers
+- Course data seeded once per session, user data cleaned between tests
 
 ❌ **Not Implemented**:
 - LLM integration (OpenAI/Claude)
@@ -496,4 +577,5 @@ docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db  # Connect
 - Code readability and maintainability are priorities
 - Follow the layered architecture pattern strictly (no business logic in API routes!)
 - Test thoroughly using curl, PostgreSQL queries, and FastAPI /docs
-- Consult docs/ARCHITECTURE.md, docs/PRODUCT_DATA_STRATEGY.md, and docs/AUTHENTICATION.md for all design decisions
+- Consult docs/ARCHITECTURE.md, docs/PRODUCT_DATA_STRATEGY.md, and docs/AUTHENTICATION.md and docs/BUSINESS_REQUIREMENTS.md for all design decisions
+- never add "Generated with Claude Code" to commit messages

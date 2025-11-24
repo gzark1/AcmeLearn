@@ -54,6 +54,33 @@ TestSessionLocal = async_sessionmaker(
 )
 
 
+async def ensure_test_database_exists():
+    """
+    Create test database if it doesn't exist.
+
+    Connects to the default 'postgres' database to create acmelearn_test.
+    """
+    from sqlalchemy import text
+    from sqlalchemy.ext.asyncio import create_async_engine
+
+    # Connect to default postgres database
+    admin_url = "postgresql+asyncpg://acmelearn_user:acmelearn_pass@localhost:5432/postgres"
+    admin_engine = create_async_engine(admin_url, isolation_level="AUTOCOMMIT")
+
+    async with admin_engine.connect() as conn:
+        # Check if database exists
+        result = await conn.execute(
+            text("SELECT 1 FROM pg_database WHERE datname = 'acmelearn_test'")
+        )
+        exists = result.scalar() is not None
+
+        if not exists:
+            await conn.execute(text("CREATE DATABASE acmelearn_test"))
+            print("Created test database: acmelearn_test")
+
+    await admin_engine.dispose()
+
+
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def setup_test_database():
     """
@@ -62,6 +89,9 @@ async def setup_test_database():
     Creates all tables and seeds course data (static data).
     Runs once at the start of test session, not per test.
     """
+    # Ensure test database exists
+    await ensure_test_database_exists()
+
     # Create all tables
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)

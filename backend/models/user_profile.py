@@ -7,11 +7,12 @@ import uuid
 from datetime import datetime
 from typing import Optional, List
 
-from sqlalchemy import Integer, Text, ForeignKey, String
+from sqlalchemy import Integer, Text, ForeignKey, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID as Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base import Base, DifficultyLevel
+from .base import Base
+from .enums import DifficultyLevel, TimeCommitment
 
 
 class UserProfile(Base):
@@ -36,11 +37,11 @@ class UserProfile(Base):
     # Profile fields (all optional - can be filled gradually)
     learning_goal: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     current_level: Mapped[Optional[DifficultyLevel]] = mapped_column(
-        String, nullable=True
+        SQLEnum(DifficultyLevel, native_enum=False), nullable=True
     )
-    time_commitment: Mapped[Optional[str]] = mapped_column(
-        String(10), nullable=True
-    )  # Time range: "1-5", "5-10", "10-20", "20+"
+    time_commitment: Mapped[Optional[TimeCommitment]] = mapped_column(
+        SQLEnum(TimeCommitment, native_enum=False), nullable=True
+    )
 
     # Versioning for snapshot tracking
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)

@@ -11,7 +11,8 @@ from typing import List, Optional
 from sqlalchemy import String, Text, Integer, Enum as SQLEnum, ForeignKey, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base import Base, DifficultyLevel
+from .base import Base
+from .enums import DifficultyLevel, TagCategory
 
 
 # Junction Tables (many-to-many)
@@ -78,7 +79,7 @@ class Course(Base):
     title: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     difficulty: Mapped[DifficultyLevel] = mapped_column(
-        SQLEnum(DifficultyLevel, native_enum=False, length=20),
+        SQLEnum(DifficultyLevel, native_enum=False),
         nullable=False,
         index=True  # For filtering by difficulty
     )
@@ -129,8 +130,8 @@ class Tag(Base):
         nullable=False,
         index=True  # For fast lookups and autocomplete
     )
-    category: Mapped[Optional[str]] = mapped_column(
-        String(50),
+    category: Mapped[Optional[TagCategory]] = mapped_column(
+        SQLEnum(TagCategory, native_enum=False),
         nullable=True,
         index=True  # For filtering by category
     )

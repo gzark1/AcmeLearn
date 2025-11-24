@@ -15,6 +15,7 @@ from services.profile_service import ProfileService
 from repositories.user_profile_repository import UserProfileRepository
 from models.user_profile import UserProfile
 from models.user_profile_snapshot import UserProfileSnapshot
+from models.enums import DifficultyLevel, TimeCommitment
 
 
 async def test_update_profile_with_snapshot_atomic(
@@ -29,12 +30,12 @@ async def test_update_profile_with_snapshot_atomic(
     updated_profile = await profile_service.update_profile_with_snapshot(
         user_id=test_user_profile.user_id,
         learning_goal="Master Python",
-        current_level="Intermediate"
+        current_level=DifficultyLevel.INTERMEDIATE
     )
 
     # Profile should be updated
     assert updated_profile.learning_goal == "Master Python"
-    assert updated_profile.current_level == "Intermediate"
+    assert updated_profile.current_level == DifficultyLevel.INTERMEDIATE
     assert updated_profile.version == 2
 
     # Snapshot should exist
@@ -46,7 +47,7 @@ async def test_update_profile_with_snapshot_atomic(
     snapshot = result.scalar_one()
 
     assert snapshot.learning_goal == "Master Python"
-    assert snapshot.current_level == "Intermediate"
+    assert snapshot.current_level == DifficultyLevel.INTERMEDIATE
 
 
 async def test_snapshot_version_matches_profile_version(
@@ -117,9 +118,9 @@ async def test_multiple_updates_create_multiple_snapshots(
     profile_service = ProfileService(test_db)
 
     updates_data = [
-        {"learning_goal": "Goal 1", "time_commitment": "1-5"},
-        {"learning_goal": "Goal 2", "time_commitment": "5-10"},
-        {"learning_goal": "Goal 3", "time_commitment": "10-20"},
+        {"learning_goal": "Goal 1", "time_commitment": TimeCommitment.HOURS_1_5},
+        {"learning_goal": "Goal 2", "time_commitment": TimeCommitment.HOURS_5_10},
+        {"learning_goal": "Goal 3", "time_commitment": TimeCommitment.HOURS_10_20},
     ]
 
     for update_data in updates_data:
@@ -141,10 +142,10 @@ async def test_multiple_updates_create_multiple_snapshots(
 
     # Check each snapshot has correct data
     assert snapshots[1].learning_goal == "Goal 1"
-    assert snapshots[1].time_commitment == "1-5"
+    assert snapshots[1].time_commitment == TimeCommitment.HOURS_1_5
 
     assert snapshots[2].learning_goal == "Goal 2"
-    assert snapshots[2].time_commitment == "5-10"
+    assert snapshots[2].time_commitment == TimeCommitment.HOURS_5_10
 
     assert snapshots[3].learning_goal == "Goal 3"
-    assert snapshots[3].time_commitment == "10-20"
+    assert snapshots[3].time_commitment == TimeCommitment.HOURS_10_20

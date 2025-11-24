@@ -1,10 +1,8 @@
 """
-SQLAlchemy Base and Common Types
+SQLAlchemy Base class for all models.
 
-This module provides the declarative base class and common enums
-used across all database models.
+Note: Domain enums have been moved to models/enums.py for better organization.
 """
-import enum
 from sqlalchemy.orm import DeclarativeBase
 
 
@@ -16,15 +14,3 @@ class Base(DeclarativeBase):
     for better type safety and extensibility.
     """
     pass
-
-
-class DifficultyLevel(str, enum.Enum):
-    """
-    Course difficulty levels.
-
-    Inherits from str to ensure JSON serialization works smoothly.
-    SQLite will store these as VARCHAR with CHECK constraint.
-    """
-    BEGINNER = "beginner"
-    INTERMEDIATE = "intermediate"
-    ADVANCED = "advanced"

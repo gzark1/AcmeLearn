@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "backend"))
 
 from models.user_profile import UserProfile
 from models.user_profile_snapshot import UserProfileSnapshot
+from models.enums import DifficultyLevel, TimeCommitment
 
 
 async def test_get_profile_authenticated(client, auth_headers, test_user_profile):
@@ -41,7 +42,7 @@ async def test_update_profile_creates_snapshot(client, auth_headers, test_db, te
         headers=auth_headers,
         json={
             "learning_goal": "Become a data scientist",
-            "current_level": "Beginner"
+            "current_level": "beginner"
         }
     )
 
@@ -60,7 +61,7 @@ async def test_update_profile_creates_snapshot(client, auth_headers, test_db, te
     snapshot = result.scalar_one()
 
     assert snapshot.learning_goal == "Become a data scientist"
-    assert snapshot.current_level == "Beginner"
+    assert snapshot.current_level == DifficultyLevel.BEGINNER
     assert snapshot.version == 2
 
 
@@ -113,7 +114,6 @@ async def test_update_time_commitment_invalid_enum_rejected(client, auth_headers
     )
 
     assert response.status_code == 422  # Validation error
-    assert "pattern" in response.text.lower()
 
 
 async def test_update_interests_with_tag_ids(client, auth_headers, test_db):
@@ -163,5 +163,5 @@ async def test_snapshot_captures_correct_state(client, auth_headers, test_db, te
     snapshot_v2 = result.scalar_one()
 
     assert snapshot_v2.learning_goal == "Version 2 goal"
-    assert snapshot_v2.time_commitment == "5-10"
+    assert snapshot_v2.time_commitment == TimeCommitment.HOURS_5_10
     assert snapshot_v2.version == 2

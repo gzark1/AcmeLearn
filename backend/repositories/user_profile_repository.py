@@ -11,6 +11,7 @@ from sqlalchemy.orm import selectinload
 
 from models.user_profile import UserProfile
 from models.course import Tag
+from models.enums import DifficultyLevel, TimeCommitment
 
 
 class UserProfileRepository:
@@ -40,8 +41,8 @@ class UserProfileRepository:
         self,
         user_id: uuid.UUID,
         learning_goal: Optional[str] = None,
-        current_level: Optional[str] = None,
-        time_commitment: Optional[int] = None,
+        current_level: Optional[DifficultyLevel] = None,
+        time_commitment: Optional[TimeCommitment] = None,
         interest_tag_ids: Optional[List[uuid.UUID]] = None,
     ) -> UserProfile:
         """
@@ -84,8 +85,8 @@ class UserProfileRepository:
         self,
         profile: UserProfile,
         learning_goal: Optional[str] = None,
-        current_level: Optional[str] = None,
-        time_commitment: Optional[int] = None,
+        current_level: Optional[DifficultyLevel] = None,
+        time_commitment: Optional[TimeCommitment] = None,
         interest_tag_ids: Optional[List[uuid.UUID]] = None,
     ) -> UserProfile:
         """

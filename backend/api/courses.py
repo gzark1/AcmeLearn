@@ -18,7 +18,7 @@ from core.database import get_async_session
 from core.users import current_active_user
 from models.user import User
 from models.course import Course, Tag, Skill
-from models.base import DifficultyLevel
+from models.enums import DifficultyLevel
 
 
 router = APIRouter()

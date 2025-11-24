@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 # Import all models to ensure SQLAlchemy can resolve relationships
 import models  # noqa: F401
 from models.course import Course, Tag, Skill
-from models.base import DifficultyLevel
+from models.enums import DifficultyLevel, TagCategory
 
 
 async def seed_courses(db: AsyncSession) -> None:
@@ -68,7 +68,12 @@ async def seed_courses(db: AsyncSession) -> None:
     # Step 2: Create Tag records with categories
     tag_map: Dict[str, Tag] = {}
     for tag_name in unique_tags:
-        category = tag_categories.get(tag_name, "Other")
+        category_str = tag_categories.get(tag_name, "Other")
+        # Convert string to TagCategory enum
+        try:
+            category = TagCategory(category_str)
+        except ValueError:
+            category = TagCategory.OTHER
         tag = Tag(name=tag_name, category=category)
         db.add(tag)
         tag_map[tag_name] = tag

@@ -6,12 +6,14 @@ from typing import Optional, List
 from datetime import datetime
 from pydantic import BaseModel, Field
 
+from models.enums import DifficultyLevel, TimeCommitment, TagCategory
+
 
 class TagResponse(BaseModel):
     """Tag reference in profile responses."""
     id: uuid.UUID
     name: str
-    category: Optional[str] = None
+    category: Optional[TagCategory] = None
 
     class Config:
         from_attributes = True
@@ -26,8 +28,8 @@ class ProfileRead(BaseModel):
     id: uuid.UUID
     user_id: uuid.UUID
     learning_goal: Optional[str] = None
-    current_level: Optional[str] = None
-    time_commitment: Optional[str] = None  # Time range: "1-5", "5-10", "10-20", "20+"
+    current_level: Optional[DifficultyLevel] = None
+    time_commitment: Optional[TimeCommitment] = None
     version: int
     interests: List[TagResponse] = []
     created_at: datetime
@@ -44,8 +46,8 @@ class ProfileCreate(BaseModel):
     All fields optional for initial registration.
     """
     learning_goal: Optional[str] = Field(None, max_length=1000)
-    current_level: Optional[str] = Field(None, pattern="^(Beginner|Intermediate|Advanced)$")
-    time_commitment: Optional[str] = Field(None, pattern="^(1-5|5-10|10-20|20\\+)$")
+    current_level: Optional[DifficultyLevel] = None
+    time_commitment: Optional[TimeCommitment] = None
     interest_tag_ids: List[uuid.UUID] = Field(default_factory=list)
 
 
@@ -57,6 +59,6 @@ class ProfileUpdate(BaseModel):
     interest_tag_ids replaces all interests (not append).
     """
     learning_goal: Optional[str] = Field(None, max_length=1000)
-    current_level: Optional[str] = Field(None, pattern="^(Beginner|Intermediate|Advanced)$")
-    time_commitment: Optional[str] = Field(None, pattern="^(1-5|5-10|10-20|20\\+)$")
+    current_level: Optional[DifficultyLevel] = None
+    time_commitment: Optional[TimeCommitment] = None
     interest_tag_ids: Optional[List[uuid.UUID]] = None

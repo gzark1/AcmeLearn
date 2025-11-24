@@ -7,11 +7,12 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Integer, Text, ForeignKey, String, Index
+from sqlalchemy import Integer, Text, ForeignKey, Enum as SQLEnum, Index
 from sqlalchemy.dialects.postgresql import UUID as Uuid, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import Base
+from .enums import DifficultyLevel, TimeCommitment
 
 
 class UserProfileSnapshot(Base):
@@ -42,8 +43,12 @@ class UserProfileSnapshot(Base):
 
     # Snapshot of profile fields
     learning_goal: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    current_level: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    time_commitment: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    current_level: Mapped[Optional[DifficultyLevel]] = mapped_column(
+        SQLEnum(DifficultyLevel, native_enum=False), nullable=True
+    )
+    time_commitment: Mapped[Optional[TimeCommitment]] = mapped_column(
+        SQLEnum(TimeCommitment, native_enum=False), nullable=True
+    )
 
     # Interests snapshot (JSONB array of tag names)
     # Denormalized for historical accuracy - tags might be renamed/deleted

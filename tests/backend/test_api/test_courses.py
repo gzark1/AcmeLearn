@@ -10,7 +10,7 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "backend"))
 
-from models.base import DifficultyLevel
+from models.enums import DifficultyLevel
 
 
 async def test_list_courses(client, auth_headers):

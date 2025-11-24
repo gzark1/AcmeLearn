@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.user_profile import UserProfile
 from models.user_profile_snapshot import UserProfileSnapshot
+from models.enums import DifficultyLevel, TimeCommitment
 from repositories.user_profile_repository import UserProfileRepository
 
 
@@ -23,8 +24,8 @@ class ProfileService:
         self,
         user_id: uuid.UUID,
         learning_goal: Optional[str] = None,
-        current_level: Optional[str] = None,
-        time_commitment: Optional[int] = None,
+        current_level: Optional[DifficultyLevel] = None,
+        time_commitment: Optional[TimeCommitment] = None,
         interest_tag_ids: Optional[List[uuid.UUID]] = None,
     ) -> UserProfile:
         """

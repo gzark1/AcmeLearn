@@ -122,6 +122,6 @@ class UserProfileRepository:
         profile.version += 1
 
         await self.db.commit()
-        await self.db.refresh(profile)
+        await self.db.refresh(profile, ["interests"])
 
         return profile

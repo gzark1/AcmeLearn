@@ -32,6 +32,18 @@ AcmeLearn is an AI-driven learning recommendation system that helps users discov
 - Keep commits focused and professional
 - Commit at logical completion points (feature done, milestone reached)
 
+**Asking Clarifying Questions**:
+Before starting any significant feature or system implementation, **ASK clarifying questions** to ensure we're building exactly what's needed. Don't assume you know the requirements - surface hidden assumptions early.
+
+Examples of good clarifying questions:
+- "For the LLM integration, should we use OpenAI, Claude, or support both? What's your preference for cost vs quality tradeoffs?"
+- "For the recommendation system, should users be able to provide a free-text query, or just rely on their profile data?"
+- "How many recommendations should we return per request? Should they be ranked by confidence?"
+- "For the frontend, do you want a minimal functional UI or something more polished with animations?"
+- "Should we store recommendation history, or is each request independent?"
+
+This approach reveals assumptions you might not realize you're making and ensures we build the right thing the first time.
+
 **Development Focus**:
 - Prioritize clean code and polished UX
 - Show technical sophistication beyond minimum requirements
@@ -40,9 +52,26 @@ AcmeLearn is an AI-driven learning recommendation system that helps users discov
 - NEVER put business logic in API routes - always delegate to services
 - NEVER access database directly from API routes - always use repositories
 
+**Database Access (MCP PostgreSQL)**:
+- A PostgreSQL MCP server is available: `mcp__acmelearn-postgres__query`
+- **ALWAYS prefer using the MCP tool** for database queries over `docker exec` or `psql` commands
+- The MCP tool accepts a `sql` parameter with read-only SQL queries
+- Use it for: checking table data, verifying database state, exploring schema, debugging
+- Fall back to Bash/psql only when you need write operations (INSERT, UPDATE, DELETE) or PostgreSQL-specific commands not supported by MCP
+
+Examples:
+```
+# Good - use MCP for queries
+mcp__acmelearn-postgres__query with sql: "SELECT COUNT(*) FROM courses"
+mcp__acmelearn-postgres__query with sql: "SELECT * FROM user_profiles WHERE user_id = '...'"
+
+# Fall back to Bash only when necessary (writes, admin commands)
+docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db -c "TRUNCATE TABLE..."
+```
+
 **Testing Best Practices**:
 - Use `curl` to test API endpoints (examples in `docs/AUTHENTICATION.md`)
-- Verify database state with PostgreSQL queries after operations
+- Verify database state with PostgreSQL MCP queries after operations
 - Use FastAPI's `/docs` endpoint for interactive API testing
 - Test with actual data, not just HTTP status codes
 - Verify both success cases AND error handling

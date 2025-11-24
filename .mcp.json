@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "acmelearn-postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://acmelearn_user:acmelearn_pass@localhost:5432/acmelearn_db"
+      ]
+    }
+  }
+}

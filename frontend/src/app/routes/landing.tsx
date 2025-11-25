@@ -1,8 +1,18 @@
+import { Navigate } from 'react-router-dom'
+
 import { Link } from '@/components/ui/link'
 import { Button } from '@/components/ui/button'
 import { paths } from '@/config/paths'
+import { useUser } from '@/lib/auth'
 
 export const LandingPage = () => {
+  const { data: user } = useUser()
+
+  // Redirect logged-in users to dashboard
+  if (user) {
+    return <Navigate to={paths.app.dashboard.getHref()} replace />
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4">
       <div className="text-center">

@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { paths } from '@/config/paths'
 import { MainLayout, AdminLayout } from '@/layouts'
+import { ProtectedRoute, AdminRoute, useUser, useLogout } from '@/lib/auth'
 
 // Lazy load pages
 const LandingPage = () => import('./routes/landing').then((m) => ({ Component: m.default }))
@@ -19,22 +20,39 @@ const AdminDashboardPage = () => import('./routes/admin/dashboard').then((m) => 
 const AdminUsersPage = () => import('./routes/admin/users').then((m) => ({ Component: m.default }))
 const AdminAnalyticsPage = () => import('./routes/admin/analytics').then((m) => ({ Component: m.default }))
 
-// Mock user for now - will be replaced with real auth in Phase 6
-const mockUser = { email: 'demo@acmelearn.com', is_superuser: true }
-const handleLogout = () => {
-  // Will be implemented in Phase 6
-  window.location.href = paths.auth.login.getHref()
+// App layout wrapper with real auth
+const AppLayoutWrapper = () => {
+  const { data: user } = useUser()
+  const logout = useLogout()
+
+  const handleLogout = () => {
+    logout()
+    window.location.href = paths.auth.login.getHref()
+  }
+
+  return (
+    <ProtectedRoute>
+      <MainLayout user={user ?? undefined} onLogout={handleLogout} />
+    </ProtectedRoute>
+  )
 }
 
-// App layout wrapper - MainLayout already uses Outlet internally
-const AppLayoutWrapper = () => (
-  <MainLayout user={mockUser} onLogout={handleLogout} />
-)
+// Admin layout wrapper with real auth + superuser check
+const AdminLayoutWrapper = () => {
+  const { data: user } = useUser()
+  const logout = useLogout()
 
-// Admin layout wrapper - AdminLayout already uses Outlet internally
-const AdminLayoutWrapper = () => (
-  <AdminLayout user={mockUser} onLogout={handleLogout} />
-)
+  const handleLogout = () => {
+    logout()
+    window.location.href = paths.auth.login.getHref()
+  }
+
+  return (
+    <AdminRoute>
+      <AdminLayout user={user ?? undefined} onLogout={handleLogout} />
+    </AdminRoute>
+  )
+}
 
 const createAppRouter = () =>
   createBrowserRouter([
@@ -52,7 +70,7 @@ const createAppRouter = () =>
       lazy: RegisterPage,
     },
 
-    // App routes (will be protected in Phase 6)
+    // App routes (protected)
     {
       element: <AppLayoutWrapper />,
       children: [
@@ -83,7 +101,7 @@ const createAppRouter = () =>
       ],
     },
 
-    // Admin routes (will be protected + superuser check in Phase 6)
+    // Admin routes (protected + superuser check)
     {
       element: <AdminLayoutWrapper />,
       children: [

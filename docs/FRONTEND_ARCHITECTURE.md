@@ -1809,18 +1809,27 @@ This checklist is ordered by dependency and priority. Each item is a discrete, i
 - [x] **5.5** Create paths config (src/config/paths.ts)
 - [x] **5.6** Create placeholder pages for all routes
 
-### Phase 6: Authentication Feature
+### Phase 6: Authentication Feature ✅ COMPLETE
 
-- [ ] **6.1** Create auth types (`features/auth/types/index.ts`)
-- [ ] **6.2** Create login API hook (`features/auth/api/login.ts`)
-- [ ] **6.3** Create register API hook (`features/auth/api/register.ts`)
-- [ ] **6.4** Create get-user API hook (`features/auth/api/get-user.ts`)
-- [ ] **6.5** Create auth library (`lib/auth.tsx`) with AuthLoader and ProtectedRoute
-- [ ] **6.6** Create LoginForm component
-- [ ] **6.7** Create RegisterForm component
-- [ ] **6.8** Create Login page (`app/routes/auth/login.tsx`)
-- [ ] **6.9** Create Register page (`app/routes/auth/register.tsx`)
-- [ ] **6.10** Create Landing page (`app/routes/landing.tsx`)
+- [x] **6.1** Create auth types (`features/auth/types/index.ts`)
+- [x] **6.2** Create login API hook (`features/auth/api/login.ts`)
+- [x] **6.3** Create register API hook (`features/auth/api/register.ts`)
+- [x] **6.4** Create get-user API hook (`features/auth/api/get-user.ts`)
+- [x] **6.5** Create auth library (`lib/auth.tsx`) with AuthLoader, ProtectedRoute, AdminRoute
+- [x] **6.6** Create LoginForm component (`features/auth/components/login-form.tsx`)
+- [x] **6.7** Create RegisterForm component (`features/auth/components/register-form.tsx`)
+- [x] **6.8** Update Login page to use LoginForm
+- [x] **6.9** Update Register page to use RegisterForm
+- [x] **6.10** Update Landing page with auth-aware redirect (logged-in users → dashboard)
+- [x] **6.11** Wire ProtectedRoute/AdminRoute into router
+- [x] **6.12** Add CORS middleware to backend (allows localhost:5173)
+
+**Auth Flow Notes**:
+- Login: POST `/auth/jwt/login` (form-urlencoded with `username` field)
+- Register: POST `/auth/register` (JSON) → auto-login after success
+- JWT token stored in localStorage via `utils/storage.ts`
+- AuthLoader in AppProvider fetches user on app startup
+- Landing page (`/`) redirects logged-in users to `/dashboard`
 
 ### Phase 7: Courses Feature
 

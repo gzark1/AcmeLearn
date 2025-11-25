@@ -7,6 +7,7 @@ This is the main entry point for the AcmeLearn backend API.
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 
 from core.database import init_db, async_session_maker
@@ -115,6 +116,15 @@ app = FastAPI(
     description="AI-powered learning recommendation system",
     version="0.1.0",
     lifespan=lifespan
+)
+
+# CORS middleware - allow frontend to make requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

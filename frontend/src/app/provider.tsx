@@ -7,6 +7,7 @@ import { MainErrorFallback } from '@/components/errors/main-error-fallback'
 import { Toaster } from '@/components/ui/toast'
 import { Spinner } from '@/components/ui/spinner'
 import { queryConfig } from '@/lib/react-query'
+import { AuthLoader } from '@/lib/auth'
 
 type AppProviderProps = {
   children: React.ReactNode
@@ -29,7 +30,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         <QueryClientProvider client={queryClient}>
           {import.meta.env.DEV && <ReactQueryDevtools />}
           <Toaster />
-          {children}
+          <AuthLoader>{children}</AuthLoader>
         </QueryClientProvider>
       </ErrorBoundary>
     </React.Suspense>

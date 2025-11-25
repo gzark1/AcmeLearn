@@ -1,20 +1,31 @@
 import { useParams } from 'react-router-dom'
 
+import { useCourse } from '@/features/courses/api/get-course'
+import { CourseDetail } from '@/features/courses/components/course-detail'
+import { CourseDetailSkeleton } from '@/features/courses/components/course-skeleton'
+
 export const CoursePage = () => {
   const { courseId } = useParams<{ courseId: string }>()
+  const { data: course, isLoading, error } = useCourse(courseId || '')
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Course Detail</h1>
-        <p className="mt-1 text-slate-600">Course ID: {courseId}</p>
-      </div>
+  if (isLoading) {
+    return <CourseDetailSkeleton />
+  }
 
-      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-        <p className="text-slate-500">Course detail will be implemented in Phase 7</p>
+  if (error || !course) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-slate-900">Course Not Found</h2>
+          <p className="mt-2 text-slate-600">
+            The course you're looking for doesn't exist or has been removed.
+          </p>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return <CourseDetail course={course} />
 }
 
 export default CoursePage

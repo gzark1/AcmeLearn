@@ -1831,22 +1831,27 @@ This checklist is ordered by dependency and priority. Each item is a discrete, i
 - AuthLoader in AppProvider fetches user on app startup
 - Landing page (`/`) redirects logged-in users to `/dashboard`
 
-### Phase 7: Courses Feature
+### Phase 7: Courses Feature (COMPLETED 2025-11-25)
 
-- [ ] **7.1** Create course types (`features/courses/types/index.ts`)
-- [ ] **7.2** Create get-courses API hook
-- [ ] **7.3** Create get-course API hook
-- [ ] **7.4** Create get-tags API hook
-- [ ] **7.5** Create get-skills API hook
-- [ ] **7.6** Create DifficultyBadge component
-- [ ] **7.7** Create TagBadge component
-- [ ] **7.8** Create CourseSkeleton component
-- [ ] **7.9** Create CourseCard component
-- [ ] **7.10** Create CourseGrid component
-- [ ] **7.11** Create CourseFilters component (with URL state)
-- [ ] **7.12** Create CourseDetail component
-- [ ] **7.13** Create Courses page (`app/routes/app/courses/courses.tsx`)
-- [ ] **7.14** Create CourseDetail page (`app/routes/app/courses/course-detail.tsx`)
+- [x] **7.1** Create course types (`features/courses/types/index.ts`)
+- [x] **7.2** Create get-courses API hook (`features/courses/api/get-courses.ts`)
+- [x] **7.3** Create get-course API hook (`features/courses/api/get-course.ts`)
+- [x] **7.4** Create get-tags API hook (`features/courses/api/get-tags.ts`)
+- [x] **7.5** Create DifficultyBadge component (success/warning/error variants)
+- [x] **7.6** Create TagBadge component (outline variant with click support)
+- [x] **7.7** Create CourseSkeleton component (card + detail skeletons)
+- [x] **7.8** Create CourseCard component (responsive, clickable)
+- [x] **7.9** Create CourseGrid component (1→2→3→4 col responsive)
+- [x] **7.10** Create CourseFilters component (difficulty filter, search, URL sync)
+- [x] **7.11** Create CourseDetail component (full course view with skills/tags)
+- [x] **7.12** Create Courses page (`app/routes/app/courses.tsx`)
+- [x] **7.13** Create Course detail page (`app/routes/app/course.tsx`)
+
+**Implementation Notes:**
+- Filters sync with URL via `useSearchParams` for shareable URLs
+- Search input debounced at 300ms
+- Course grid: 1 col (mobile) → 2 col (sm) → 3 col (lg) → 4 col (xl)
+- Course cards show 3 tags max with "+N" badge for overflow
 
 ### Phase 8: Profile Feature
 

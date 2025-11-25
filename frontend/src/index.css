@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/*
+ * AcmeLearn Design System Tokens
+ * Source: docs/UI_DESIGN_SYSTEM.md
+ */
+
+@theme {
+  /* Font Family - Inter with system fallback */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Container */
+  --container-max-width: 80rem; /* 1280px */
+
+  /* Custom Colors - extending Tailwind defaults */
+  /* Primary - Blue */
+  --color-primary: #1E40AF;       /* blue-800 - Headers, primary actions */
+  --color-primary-light: #3B82F6; /* blue-500 - Buttons, links, focus states */
+  --color-primary-lighter: #DBEAFE; /* blue-100 - Backgrounds, selections */
+
+  /* Admin - Violet */
+  --color-admin: #7C3AED;        /* violet-600 - Admin nav, headers, actions */
+  --color-admin-light: #A78BFA;  /* violet-400 - Hover states, accents */
+  --color-admin-lighter: #EDE9FE; /* violet-100 - Backgrounds, selections */
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  /* Typography - Letter spacing for headings */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+  }
+}

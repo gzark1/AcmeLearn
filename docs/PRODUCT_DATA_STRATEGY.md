@@ -4,7 +4,7 @@
 
 This document captures the product-thinking and data strategy behind AcmeLearn's database schema design. While the assessment requires basic user profiles and course recommendations, we've designed the schema with real-world product analytics and business intelligence in mind.
 
-**Last Updated**: 2025-11-24 (Day 3 - User Authentication & Profiles Complete)
+**Last Updated**: 2025-11-25 (Day 4 - Admin System & Analytics Implemented)
 
 ---
 
@@ -457,18 +457,18 @@ class UserInterest(Base):
 4. ✅ course_tags (junction table, UUID foreign keys)
 5. ✅ course_skills (junction table, UUID foreign keys)
 
-<!-- ✅ IMPLEMENTED (Phase 2 - 2025-11-24): 4 tables -->
+<!-- ✅ IMPLEMENTED (Phase 2-3 - 2025-11-24/25): 4 tables -->
 
-**User Tables** (Phase 2):
-6. ✅ users (authentication layer)
-7. ✅ user_profiles (user preferences)
-8. ✅ user_profile_snapshots (historical tracking)
+**User Tables** (Phase 2-3):
+6. ✅ users (authentication layer with is_superuser flag)
+7. ✅ user_profiles (user preferences with versioning)
+8. ✅ user_profile_snapshots (historical tracking, analytics-ready)
 9. ✅ user_interests (junction table: user_profiles ↔ tags)
 
 <!-- ❌ NOT IMPLEMENTED (Phase 4 - AI Integration): 1 table -->
 
 **AI Tables** (Phase 4):
-10. ❌ recommendations (AI recommendation history)
+10. ❌ recommendations (AI recommendation history - model exists, stub endpoints ready)
 
 ---
 
@@ -549,6 +549,19 @@ interests = Column(
 ---
 
 ## Analytics Capabilities
+
+<!-- ✅ PARTIALLY IMPLEMENTED: Admin analytics endpoints (2025-11-25) -->
+
+**Implemented Analytics Endpoints** (`/admin/analytics/*`):
+- `GET /admin/analytics/overview` - System stats (total users, active, superusers, profile completion rate)
+- `GET /admin/analytics/tags/popular` - Tags sorted by user interest count
+
+**Admin User Management** (`/admin/users/*`):
+- `GET /admin/users` - Paginated user list with filters (email, is_active, is_superuser)
+- `GET /admin/users/{id}` - Detailed user info with profile summary
+- `GET /admin/users/{id}/profile-history` - Profile snapshot history for a user
+
+---
 
 ### User Journey Analysis
 
@@ -810,21 +823,37 @@ api/courses.py       # Course browsing, tags, skills
 - Layered architecture implemented
 ```
 
-### Phase 4: AI Recommendations (Day 4-5)
+### Phase 3: Admin & Analytics (Day 4) ✅ COMPLETED
 ```python
-# Add model
+# Admin routes
+api/admin.py              # Admin user management & analytics
+
+# Admin repository
+repositories/user_repository.py  # User queries & analytics data access
+
+# Admin schemas
+schemas/admin.py          # UserListResponse, AnalyticsOverview, PopularTags, etc.
+
+# Superuser infrastructure
+core/users.py             # current_superuser dependency
+main.py                   # Auto-create superuser from env vars on startup
+
+# Results
+- Superuser system with is_superuser flag
+- Admin endpoints for user management (list, detail, deactivate)
+- Admin endpoints for analytics (overview, popular tags)
+- Profile history endpoint for users (/profiles/me/history)
+- Recommendation stub endpoints (quota, history)
+- Comprehensive test suite (tests/backend/test_api/test_admin.py)
+```
+
+### Phase 4: AI Recommendations (Day 5)
+```python
+# Add model (exists, but stub implementation)
 models/recommendation.py  # Recommendation
 
 # Service layer
-services/recommendation_service.py  # LLM integration
-```
-
-### Phase 3: Analytics (Day 5 - Optional)
-```python
-# Dashboard queries
-analytics/queries.py  # SQL queries for metrics
-# OR: Simple notebook for ad-hoc analysis
-notebooks/analytics.ipynb
+services/recommendation_service.py  # LLM integration (to be implemented)
 ```
 
 ---

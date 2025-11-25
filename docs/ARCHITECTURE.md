@@ -69,8 +69,10 @@ backend/
 │   ├── deps.py            # Shared dependencies (get_db, get_current_user)
 │   ├── auth.py            # Authentication endpoints
 │   ├── courses.py         # Course browsing endpoints
-│   ├── users.py           # User profile endpoints
-│   └── recommendations.py # AI recommendation endpoints
+│   ├── users.py           # User management & recommendations endpoints
+│   ├── profiles.py        # User profile CRUD endpoints
+│   ├── admin.py           # Admin user management & analytics (superuser only)
+│   └── recommendations.py # AI recommendation endpoints (Phase 4)
 │
 ├── services/              # 🟢 BUSINESS LOGIC LAYER
 │   ├── __init__.py
@@ -81,9 +83,10 @@ backend/
 │
 ├── repositories/          # 🟡 DATA ACCESS LAYER
 │   ├── __init__.py
-│   ├── user_repository.py       # User CRUD operations
+│   ├── user_repository.py       # User queries & admin operations
+│   ├── user_profile_repository.py # Profile CRUD operations
 │   ├── course_repository.py     # Course queries
-│   └── recommendation_repository.py  # Recommendation persistence
+│   └── recommendation_repository.py  # Recommendation persistence (stub)
 │
 ├── models/               # 📦 DATABASE MODELS
 │   ├── __init__.py
@@ -95,9 +98,11 @@ backend/
 ├── schemas/             # 📋 PYDANTIC DTOs
 │   ├── __init__.py
 │   ├── auth.py         # Auth request/response schemas
-│   ├── user.py         # User profile schemas
+│   ├── user.py         # User schemas (UserRead, UserCreate, UserUpdate)
+│   ├── profile.py      # Profile schemas (ProfileRead, ProfileUpdate)
 │   ├── course.py       # Course schemas
-│   └── recommendation.py # Recommendation schemas
+│   ├── recommendation.py # Recommendation schemas
+│   └── admin.py        # Admin schemas (user lists, analytics, snapshots)
 │
 ├── core/               # ⚙️ CONFIGURATION
 │   ├── __init__.py
@@ -314,7 +319,41 @@ def filter_by_tags(db: Session, tags: list[str]) -> list[Course]:
 - Auto-create empty profile on registration via hook
 - See `docs/AUTHENTICATION.md` for complete implementation details
 
-### 5. Dependency Management: uv vs pip
+### 5. Superuser & Admin System
+
+<!-- ✅ IMPLEMENTED: Superuser system (Phase 3 - 2025-11-25) -->
+
+**Decision**: Role-based access control with superuser flag
+
+**Rationale**:
+- Simple, effective access control for admin features
+- Built-in fastapi-users support for `is_superuser` flag
+- Single admin role sufficient for MVP (no complex RBAC needed)
+- Environment-based superuser creation for secure deployment
+
+**Implementation**:
+- `is_superuser` boolean flag on User model
+- `current_superuser` dependency for admin-only endpoints
+- Auto-create/promote superuser from `SUPERUSER_EMAIL` and `SUPERUSER_PASSWORD` env vars on startup
+- Admin routes mounted at `/admin/*` prefix
+
+**Admin Endpoints**:
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/admin/users` | GET | List users with pagination and filters |
+| `/admin/users/{id}` | GET | Get user detail with profile |
+| `/admin/users/{id}/deactivate` | PATCH | Soft-delete user (set is_active=false) |
+| `/admin/users/{id}/profile-history` | GET | Get user's profile snapshots |
+| `/admin/analytics/overview` | GET | System stats (total users, active, completion rate) |
+| `/admin/analytics/tags/popular` | GET | Tags sorted by user interest count |
+
+**Security Measures**:
+- All admin endpoints require `current_superuser` dependency (403 for non-superusers)
+- Cannot deactivate yourself (prevents admin lockout)
+- `is_superuser` cannot be self-set via user update endpoints
+- Superuser creation only via environment variables (not API)
+
+### 6. Dependency Management: uv vs pip
 
 <!-- ✅ COMPLETED: Using uv with pyproject.toml (2025-11-22) -->
 
@@ -626,13 +665,19 @@ def build_context(user_profile, courses, query):
 - ✅ User profile model with versioning
 - ✅ Profile snapshot system (historical tracking)
 - ✅ Auto-create empty profile on registration
+- ✅ Superuser system (is_superuser flag, current_superuser dependency)
+- ✅ Auto-create superuser from environment variables on startup
 
 ### Phase 3: Core Features (Day 3-4) ✅ COMPLETED
 - ✅ Course browsing API (list, filter by difficulty/tags)
 - ✅ User profile CRUD (GET/PATCH /profiles/me)
-- ✅ Repository pattern implementation (UserProfileRepository)
+- ✅ Profile history endpoint (GET /profiles/me/history)
+- ✅ Repository pattern implementation (UserProfileRepository, UserRepository)
 - ✅ Service layer implementation (ProfileService with snapshots)
 - ✅ Tags and skills endpoints (GET /api/tags, /api/skills)
+- ✅ Admin user management (list, detail, deactivate users)
+- ✅ Admin analytics (overview stats, popular tags)
+- ✅ Comprehensive test suite (auth, courses, profiles, admin)
 
 ### Phase 4: AI Integration (Day 3-4)
 - LLM client setup
@@ -825,8 +870,8 @@ def get_suitable_courses(db, user):
 
 ---
 
-**Last Updated**: Day 3 (2025-11-24)
-**Status**: Phases 1-3 complete (database, authentication, profiles, API layer)
+**Last Updated**: Day 4 (2025-11-25)
+**Status**: Phases 1-3 complete (database, authentication, profiles, admin, analytics, comprehensive tests)
 
 <!--
 ✅ COMPLETED:
@@ -843,6 +888,16 @@ Phase 2-3 (2025-11-24):
 - API layer (auth, users, profiles, courses endpoints)
 - Layered architecture (API/Service/Repository)
 - Profile snapshot system (historical tracking)
+
+Phase 3 Extended (2025-11-25):
+- Superuser system (is_superuser flag, current_superuser dependency)
+- Admin user management endpoints (list, detail, deactivate)
+- Admin analytics endpoints (overview stats, popular tags)
+- User profile history endpoint (/profiles/me/history)
+- UserRepository for admin data access
+- Recommendation stub endpoints (quota, history)
+- Comprehensive test suite (93% coverage on API endpoints)
+- Auto-create superuser from environment variables
 
 ❌ NOT IMPLEMENTED:
 - LLM integration (OpenAI/Claude)

@@ -45,3 +45,8 @@ logs/
 
 # Docker
 docker-compose.override.yml
+
+# Reference docs (external downloads)
+docs/bulletproof-react-master.zip
+docs/bulletproof-react-master/
+docs/CLAUDE_CODE_BEST_PRACTICES.md

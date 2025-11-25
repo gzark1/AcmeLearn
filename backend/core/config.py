@@ -3,6 +3,8 @@ Application configuration.
 
 Settings for database connections and other app-wide configs.
 """
+from typing import Optional
+
 from pydantic_settings import BaseSettings
 
 
@@ -18,6 +20,10 @@ class Settings(BaseSettings):
     # Authentication
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+    # Superuser (optional - creates admin on startup)
+    SUPERUSER_EMAIL: Optional[str] = None
+    SUPERUSER_PASSWORD: Optional[str] = None
 
     # API
     API_V1_STR: str = "/api/v1"

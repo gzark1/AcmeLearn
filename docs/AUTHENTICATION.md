@@ -328,12 +328,22 @@ Custom implementation (not from fastapi-users):
 |--------|----------|-------------|---------------|
 | GET | `/profiles/me` | Get current user's profile | Yes |
 | PATCH | `/profiles/me` | Update current user's profile | Yes |
+| GET | `/profiles/me/history` | Get profile snapshot history | Yes |
 
 **Profile Update Flow**:
 1. User sends `PATCH /profiles/me` with new data
 2. ProfileService updates profile (increments version)
 3. ProfileService creates snapshot with new data
 4. Both committed atomically
+
+### Recommendation Routes (`/users/me`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/users/me/recommendations` | Get recommendation history (stub) | Yes |
+| GET | `/users/me/recommendation-quota` | Get quota status (stub) | Yes |
+
+**Note**: These are stub endpoints. Full implementation requires LLM integration.
 
 ---
 
@@ -431,9 +441,88 @@ Visit `http://localhost:8000/docs`:
 
 ---
 
+## Superuser System
+
+### Environment Variable Configuration
+
+Superusers are created automatically on application startup via environment variables:
+
+```bash
+# .env
+SUPERUSER_EMAIL=admin@example.com
+SUPERUSER_PASSWORD=SecureAdminPassword123!
+```
+
+**Startup Behavior**:
+1. If `SUPERUSER_EMAIL` is set and user doesn't exist → Create user as superuser
+2. If user exists but not superuser → Promote to superuser
+3. Profile is auto-created via `on_after_register` hook
+
+### current_superuser Dependency
+
+Protected admin routes use the `current_superuser` dependency:
+
+```python
+from core.users import current_superuser
+
+@router.get("/admin/users")
+async def list_users(admin: User = Depends(current_superuser)):
+    # Only superusers can access this
+    ...
+```
+
+**Returns 403 Forbidden** if user is not a superuser.
+
+### Security: Preventing Self-Promotion
+
+The `UserUpdate` schema explicitly excludes `is_superuser`:
+
+```python
+class UserUpdate(schemas.BaseUserUpdate):
+    is_superuser: None = None  # Always ignored
+```
+
+Regular users **cannot** promote themselves via `PATCH /users/me`.
+
+---
+
+## Admin Endpoints
+
+Admin endpoints require superuser authentication (`current_superuser` dependency).
+
+### User Management (`/admin`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/admin/users` | List users with filters (email, is_active, is_superuser) |
+| GET | `/admin/users/{id}` | Get user detail with profile |
+| PATCH | `/admin/users/{id}/deactivate` | Soft-delete user |
+| GET | `/admin/users/{id}/profile-history` | View user's profile snapshots |
+
+### Analytics (`/admin/analytics`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/admin/analytics/overview` | System stats (user counts, profile completion rate) |
+| GET | `/admin/analytics/tags/popular` | Top tags by user interest count |
+
+---
+
 ## Common Operations
 
-### Create Superuser (for testing)
+### Create Superuser (via environment variables)
+
+The preferred method is to set environment variables:
+
+```bash
+# .env
+SUPERUSER_EMAIL=admin@example.com
+SUPERUSER_PASSWORD=AdminPass123!
+```
+
+Restart the app—the superuser will be created automatically on startup.
+
+### Create Superuser (via code - alternative)
 
 ```python
 # Via Python script or shell
@@ -519,5 +608,14 @@ profile = profile.scalar_one_or_none()
 
 ---
 
-**Last Updated**: 2025-11-24 (Phase 2 Complete)
+**Last Updated**: 2025-11-25 (Backend Improvements Added)
 **Implementation Status**: ✅ COMPLETED
+
+### Recent Additions (2025-11-25)
+- Superuser system via environment variables
+- `current_superuser` dependency for admin routes
+- Admin user management endpoints (`/admin/users`)
+- Admin analytics endpoints (`/admin/analytics`)
+- Profile snapshot history endpoint (`/profiles/me/history`)
+- Recommendation history stub endpoints
+- Security fix: `is_superuser` excluded from `UserUpdate`

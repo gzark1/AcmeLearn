@@ -4,6 +4,8 @@ User schemas for authentication.
 Based on fastapi-users standard schemas.
 """
 import uuid
+from typing import Optional
+from pydantic import field_validator
 from fastapi_users import schemas
 
 
@@ -41,11 +43,20 @@ class UserUpdate(schemas.BaseUserUpdate):
     """
     User update schema.
 
+    Security: is_superuser is always forced to None to prevent self-promotion.
+    Only env var-based superuser creation can set this flag.
+
     Inherits from BaseUserUpdate:
     - email: Optional[EmailStr]
     - password: Optional[str]
     - is_active: Optional[bool]
-    - is_superuser: Optional[bool]
     - is_verified: Optional[bool]
     """
-    pass
+    # Override is_superuser to always be None (prevents self-promotion)
+    is_superuser: Optional[bool] = None
+
+    @field_validator("is_superuser", mode="before")
+    @classmethod
+    def force_is_superuser_none(cls, v):
+        """Always return None for is_superuser to prevent self-promotion."""
+        return None

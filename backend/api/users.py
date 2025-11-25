@@ -4,6 +4,8 @@ User management routes.
 Provides:
 - fastapi-users standard user routes (GET /me, PATCH /me, DELETE /me)
 - Custom password change endpoint
+- Recommendation history (stub)
+- Recommendation quota (stub)
 """
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_users import exceptions
@@ -11,6 +13,7 @@ from fastapi_users import exceptions
 from core.users import fastapi_users, current_active_user
 from schemas.user import UserRead, UserUpdate
 from schemas.auth import PasswordChangeRequest
+from schemas.recommendation import RecommendationListResponse, RecommendationQuota
 from models.user import User
 
 
@@ -63,3 +66,44 @@ async def change_password(
         raise HTTPException(status_code=400, detail="Failed to update password")
 
     return None
+
+
+@router.get("/me/recommendations", response_model=RecommendationListResponse)
+async def get_my_recommendations(
+    user: User = Depends(current_active_user),
+):
+    """
+    Get current user's recommendation history.
+
+    Note: This is a stub endpoint. Full implementation requires
+    LLM integration in Phase 4.
+
+    Returns:
+        RecommendationListResponse: Empty list (stub)
+    """
+    # Stub - returns empty list until LLM integration is complete
+    return RecommendationListResponse(
+        recommendations=[],
+        count=0,
+    )
+
+
+@router.get("/me/recommendation-quota", response_model=RecommendationQuota)
+async def get_my_recommendation_quota(
+    user: User = Depends(current_active_user),
+):
+    """
+    Get current user's recommendation quota status.
+
+    Note: This is a stub endpoint. Quota tracking will be
+    implemented with rate limiting in a future phase.
+
+    Returns:
+        RecommendationQuota: Static quota (10 limit, 0 used)
+    """
+    # Stub - returns static quota until rate limiting is implemented
+    return RecommendationQuota(
+        used=0,
+        limit=10,
+        remaining=10,
+    )

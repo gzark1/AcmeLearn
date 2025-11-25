@@ -1,0 +1,287 @@
+"""
+Admin routes for user management and analytics.
+
+All endpoints require superuser authentication.
+"""
+import uuid
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import select, func
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.database import get_async_session
+from core.users import current_superuser
+from models.user import User
+from models.user_profile import UserProfile, UserInterest
+from models.course import Tag
+from repositories.user_repository import UserRepository
+from schemas.admin import (
+    UserListItem,
+    UserListResponse,
+    UserDetailResponse,
+    ProfileSummary,
+    SnapshotRead,
+    SnapshotListResponse,
+    AnalyticsOverview,
+    PopularTag,
+    PopularTagsResponse,
+)
+
+
+router = APIRouter()
+
+
+# ============================================================================
+# User Management Endpoints
+# ============================================================================
+
+
+@router.get("/users", response_model=UserListResponse)
+async def list_users(
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(20, ge=1, le=100, description="Max records to return"),
+    email: Optional[str] = Query(None, description="Email substring search"),
+    is_active: Optional[bool] = Query(None, description="Filter by active status"),
+    is_superuser: Optional[bool] = Query(None, description="Filter by superuser status"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    List all users with optional filters (superuser only).
+
+    Supports pagination and filtering by email, is_active, is_superuser.
+    """
+    repo = UserRepository(db)
+    users, total = await repo.get_users_with_filters(
+        skip=skip,
+        limit=limit,
+        email_search=email,
+        is_active=is_active,
+        is_superuser=is_superuser,
+    )
+
+    # Build response with profile summaries
+    user_items = []
+    for user in users:
+        # Get profile summary for each user
+        profile_result = await db.execute(
+            select(UserProfile).where(UserProfile.user_id == user.id)
+        )
+        profile = profile_result.scalar_one_or_none()
+
+        interest_count = 0
+        has_learning_goal = False
+
+        if profile:
+            has_learning_goal = profile.learning_goal is not None
+            # Count interests
+            count_result = await db.execute(
+                select(func.count())
+                .select_from(UserInterest)
+                .where(UserInterest.user_profile_id == profile.id)
+            )
+            interest_count = count_result.scalar() or 0
+
+        user_items.append(UserListItem(
+            id=user.id,
+            email=user.email,
+            is_active=user.is_active,
+            is_superuser=user.is_superuser,
+            is_verified=user.is_verified,
+            has_learning_goal=has_learning_goal,
+            interest_count=interest_count,
+        ))
+
+    return UserListResponse(
+        users=user_items,
+        total=total,
+        skip=skip,
+        limit=limit,
+    )
+
+
+@router.get("/users/{user_id}", response_model=UserDetailResponse)
+async def get_user_detail(
+    user_id: uuid.UUID,
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get detailed user information with profile (superuser only).
+    """
+    repo = UserRepository(db)
+    result = await repo.get_user_with_profile(user_id)
+
+    if not result:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user, profile = result
+
+    profile_summary = None
+    if profile:
+        interests = [tag.name for tag in profile.interests] if profile.interests else []
+        profile_summary = ProfileSummary(
+            id=profile.id,
+            learning_goal=profile.learning_goal,
+            current_level=profile.current_level,
+            time_commitment=profile.time_commitment,
+            version=profile.version,
+            interest_count=len(interests),
+            interests=interests,
+            created_at=profile.created_at,
+            updated_at=profile.updated_at,
+        )
+
+    return UserDetailResponse(
+        id=user.id,
+        email=user.email,
+        is_active=user.is_active,
+        is_superuser=user.is_superuser,
+        is_verified=user.is_verified,
+        profile=profile_summary,
+    )
+
+
+@router.patch("/users/{user_id}/deactivate", response_model=UserDetailResponse)
+async def deactivate_user(
+    user_id: uuid.UUID,
+    admin: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Soft-delete user by setting is_active=False (superuser only).
+
+    Cannot deactivate yourself.
+    """
+    if user_id == admin.id:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot deactivate yourself"
+        )
+
+    repo = UserRepository(db)
+    user = await repo.deactivate_user(user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Get profile for response
+    result = await repo.get_user_with_profile(user_id)
+    _, profile = result
+
+    profile_summary = None
+    if profile:
+        interests = [tag.name for tag in profile.interests] if profile.interests else []
+        profile_summary = ProfileSummary(
+            id=profile.id,
+            learning_goal=profile.learning_goal,
+            current_level=profile.current_level,
+            time_commitment=profile.time_commitment,
+            version=profile.version,
+            interest_count=len(interests),
+            interests=interests,
+            created_at=profile.created_at,
+            updated_at=profile.updated_at,
+        )
+
+    return UserDetailResponse(
+        id=user.id,
+        email=user.email,
+        is_active=user.is_active,
+        is_superuser=user.is_superuser,
+        is_verified=user.is_verified,
+        profile=profile_summary,
+    )
+
+
+@router.get("/users/{user_id}/profile-history", response_model=SnapshotListResponse)
+async def get_user_profile_history(
+    user_id: uuid.UUID,
+    limit: int = Query(50, ge=1, le=100, description="Max snapshots to return"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get profile snapshot history for a user (superuser only).
+    """
+    repo = UserRepository(db)
+    snapshots = await repo.get_user_profile_snapshots(user_id, limit=limit)
+
+    snapshot_items = [
+        SnapshotRead(
+            id=s.id,
+            version=s.version,
+            learning_goal=s.learning_goal,
+            current_level=s.current_level,
+            time_commitment=s.time_commitment,
+            interests_snapshot=s.interests_snapshot if isinstance(s.interests_snapshot, list) else [],
+            created_at=s.created_at,
+        )
+        for s in snapshots
+    ]
+
+    return SnapshotListResponse(
+        snapshots=snapshot_items,
+        count=len(snapshot_items),
+    )
+
+
+# ============================================================================
+# Analytics Endpoints
+# ============================================================================
+
+
+@router.get("/analytics/overview", response_model=AnalyticsOverview)
+async def get_analytics_overview(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get system-wide analytics overview (superuser only).
+    """
+    repo = UserRepository(db)
+
+    stats = await repo.get_user_count_stats()
+    completion_rate = await repo.get_profile_completion_rate()
+
+    return AnalyticsOverview(
+        total_users=stats["total_users"],
+        active_users=stats["active_users"],
+        superuser_count=stats["superuser_count"],
+        new_registrations_7d=0,  # Would need created_at tracking
+        new_registrations_30d=0,  # Would need created_at tracking
+        profile_completion_rate=completion_rate,
+    )
+
+
+@router.get("/analytics/tags/popular", response_model=PopularTagsResponse)
+async def get_popular_tags(
+    limit: int = Query(20, ge=1, le=100, description="Max tags to return"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get most popular tags by user interest count (superuser only).
+    """
+    # Query tags with user interest count
+    result = await db.execute(
+        select(Tag.id, Tag.name, func.count(UserInterest.user_profile_id).label("user_count"))
+        .outerjoin(UserInterest, Tag.id == UserInterest.tag_id)
+        .group_by(Tag.id, Tag.name)
+        .order_by(func.count(UserInterest.user_profile_id).desc())
+        .limit(limit)
+    )
+
+    rows = result.all()
+
+    tags = [
+        PopularTag(tag_id=row.id, tag_name=row.name, user_count=row.user_count)
+        for row in rows
+    ]
+
+    # Get total tag count
+    total_result = await db.execute(select(func.count()).select_from(Tag))
+    total_tags = total_result.scalar() or 0
+
+    return PopularTagsResponse(tags=tags, total_tags=total_tags)

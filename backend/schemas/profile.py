@@ -62,3 +62,27 @@ class ProfileUpdate(BaseModel):
     current_level: Optional[DifficultyLevel] = None
     time_commitment: Optional[TimeCommitment] = None
     interest_tag_ids: Optional[List[uuid.UUID]] = None
+
+
+class SnapshotRead(BaseModel):
+    """
+    Profile snapshot response.
+
+    Represents a historical snapshot of profile state.
+    """
+    id: uuid.UUID
+    version: int
+    learning_goal: Optional[str] = None
+    current_level: Optional[DifficultyLevel] = None
+    time_commitment: Optional[TimeCommitment] = None
+    interests_snapshot: List[str] = []
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class SnapshotListResponse(BaseModel):
+    """List of profile snapshots."""
+    snapshots: List[SnapshotRead]
+    count: int

@@ -4,9 +4,10 @@ FastAPI Users instance and dependencies.
 Provides:
 - fastapi_users instance
 - current_active_user dependency for route protection
+- current_superuser dependency for admin route protection
 """
 import uuid
-from fastapi import Depends
+from fastapi import Depends, HTTPException, status
 from fastapi_users import FastAPIUsers
 from fastapi_users.db import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,3 +34,18 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](
 
 # Dependency for route protection
 current_active_user = fastapi_users.current_user(active=True)
+
+
+async def current_superuser(user: User = Depends(current_active_user)) -> User:
+    """
+    Dependency for superuser-only routes (admin endpoints).
+
+    Requires authenticated active user with is_superuser=True.
+    Returns 403 Forbidden if user is not a superuser.
+    """
+    if not user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Superuser privileges required"
+        )
+    return user

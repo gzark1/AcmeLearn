@@ -1,33 +1,69 @@
 /**
  * Application route paths
- * Centralized to avoid magic strings throughout the app
+ * Each path has a `path` for router definition and `getHref` for navigation
  */
 export const paths = {
-  // Public routes
-  home: '/',
-  login: '/login',
-  register: '/register',
-
-  // Protected routes
-  dashboard: '/dashboard',
-  courses: {
-    list: '/courses',
-    detail: (id: string) => `/courses/${id}`,
+  home: {
+    path: '/',
+    getHref: () => '/',
   },
-  recommendations: '/recommendations',
-  profile: {
-    view: '/profile',
-    history: '/profile/history',
-  },
-  settings: '/settings',
 
-  // Admin routes (superuser only)
-  admin: {
-    dashboard: '/admin',
-    users: {
-      list: '/admin/users',
-      detail: (id: string) => `/admin/users/${id}`,
+  auth: {
+    login: {
+      path: '/login',
+      getHref: (redirectTo?: string | null) =>
+        `/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
-    analytics: '/admin/analytics',
+    register: {
+      path: '/register',
+      getHref: (redirectTo?: string | null) =>
+        `/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
+    },
+  },
+
+  app: {
+    dashboard: {
+      path: '/dashboard',
+      getHref: () => '/dashboard',
+    },
+    courses: {
+      path: '/courses',
+      getHref: () => '/courses',
+    },
+    course: {
+      path: '/courses/:courseId',
+      getHref: (courseId: string) => `/courses/${courseId}`,
+    },
+    recommendations: {
+      path: '/recommendations',
+      getHref: () => '/recommendations',
+    },
+    profile: {
+      path: '/profile',
+      getHref: () => '/profile',
+    },
+    settings: {
+      path: '/settings',
+      getHref: () => '/settings',
+    },
+  },
+
+  admin: {
+    root: {
+      path: '/admin',
+      getHref: () => '/admin',
+    },
+    users: {
+      path: '/admin/users',
+      getHref: () => '/admin/users',
+    },
+    user: {
+      path: '/admin/users/:userId',
+      getHref: (userId: string) => `/admin/users/${userId}`,
+    },
+    analytics: {
+      path: '/admin/analytics',
+      getHref: () => '/admin/analytics',
+    },
   },
 } as const

@@ -38,7 +38,7 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401) {
       const redirectTo = window.location.pathname
-      window.location.href = `${paths.login}?redirectTo=${encodeURIComponent(redirectTo)}`
+      window.location.href = paths.auth.login.getHref(redirectTo)
     }
 
     return Promise.reject(error)

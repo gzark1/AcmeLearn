@@ -1,0 +1,448 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-25",
+    "generated_by": "workflow-orchestrator",
+    "version": "1.0.0",
+    "purpose": "Shared context for inter-agent communication",
+    "last_updated": "2025-11-25T00:00:00Z",
+    "verified_by": "context-manager",
+    "context_version": "1.0",
+    "verification_status": "VERIFIED",
+    "source_files": [
+      "CLAUDE.md",
+      "docs/ARCHITECTURE.md",
+      "docs/PRODUCT_DATA_STRATEGY.md",
+      "docs/AUTHENTICATION.md",
+      "docs/UI_DESIGN_SYSTEM.md"
+    ]
+  },
+  "project": {
+    "name": "AcmeLearn",
+    "description": "AI-powered learning recommendation system for personalized course discovery",
+    "timeline": "1 week assessment project",
+    "current_phase": "Phase 5 - Frontend Development",
+    "assessment_criteria": [
+      "Code quality - clean, maintainable, well-structured",
+      "Product polish - professional UI/UX with attention to detail",
+      "Git hygiene - meaningful commits at logical checkpoints",
+      "Technical depth - advanced techniques demonstrated thoughtfully"
+    ]
+  },
+  "implementation_status": {
+    "completed_phases": [
+      {
+        "phase": 1,
+        "name": "Foundation",
+        "status": "COMPLETED",
+        "deliverables": [
+          "PostgreSQL 16 via Docker Compose",
+          "SQLAlchemy ORM with native UUID types",
+          "Course data seeding (48 courses, 169 tags, 230 skills)",
+          "Normalized schema with many-to-many relationships"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Authentication & User Management",
+        "status": "COMPLETED",
+        "deliverables": [
+          "JWT authentication via fastapi-users",
+          "User registration, login, password reset endpoints",
+          "UserProfile model with versioning",
+          "Auto-create empty profile on registration"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "API Layer & Core Features",
+        "status": "COMPLETED",
+        "deliverables": [
+          "Course browsing API with filtering",
+          "User profile CRUD (GET/PATCH /profiles/me)",
+          "Tags and skills endpoints",
+          "Repository pattern implementation",
+          "Service layer with profile snapshots"
+        ]
+      }
+    ],
+    "pending_phases": [
+      {
+        "phase": 4,
+        "name": "AI Integration",
+        "status": "NOT_STARTED",
+        "planned_deliverables": [
+          "LLM client setup (OpenAI or Claude)",
+          "Recommendation engine implementation",
+          "Context engineering and prompt optimization",
+          "POST /recommendations/generate endpoint"
+        ]
+      },
+      {
+        "phase": 5,
+        "name": "Frontend & Polish",
+        "status": "IN_PROGRESS",
+        "planned_deliverables": [
+          "React frontend setup with Vite",
+          "Authentication UI (login/register)",
+          "Course browsing interface",
+          "Profile management UI",
+          "Recommendation interface"
+        ]
+      }
+    ]
+  },
+  "backend_api": {
+    "base_url": "http://localhost:8000",
+    "documentation_url": "http://localhost:8000/docs",
+    "authentication": {
+      "type": "JWT Bearer Token",
+      "token_expiration": "1 hour",
+      "header_format": "Authorization: Bearer {token}"
+    },
+    "endpoints": {
+      "public": [
+        {
+          "method": "GET",
+          "path": "/",
+          "description": "Root health check"
+        },
+        {
+          "method": "GET",
+          "path": "/health",
+          "description": "Health check for monitoring"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/register",
+          "description": "Register new user",
+          "request_body": {
+            "email": "string (required)",
+            "password": "string (required, min 8 chars)"
+          },
+          "response": {
+            "id": "uuid",
+            "email": "string",
+            "is_active": "boolean",
+            "is_superuser": "boolean",
+            "is_verified": "boolean"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/jwt/login",
+          "description": "Login (returns JWT token)",
+          "content_type": "application/x-www-form-urlencoded",
+          "request_body": {
+            "username": "string (email)",
+            "password": "string"
+          },
+          "response": {
+            "access_token": "string",
+            "token_type": "bearer"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/forgot-password",
+          "description": "Request password reset email"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/reset-password",
+          "description": "Reset password with token"
+        }
+      ],
+      "protected": [
+        {
+          "method": "GET",
+          "path": "/users/me",
+          "description": "Get current user info",
+          "response": {
+            "id": "uuid",
+            "email": "string",
+            "is_active": "boolean",
+            "is_superuser": "boolean",
+            "is_verified": "boolean"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/profiles/me",
+          "description": "Get current user's learning profile",
+          "response": {
+            "id": "uuid",
+            "user_id": "uuid",
+            "learning_goal": "string | null",
+            "current_level": "beginner | intermediate | advanced | null",
+            "time_commitment": "1-5 | 5-10 | 10-20 | 20+ | null",
+            "version": "integer",
+            "interests": [
+              {
+                "id": "uuid",
+                "name": "string",
+                "category": "Programming | Data Science | DevOps | Business | Marketing | Design | Soft Skills | HR & Talent | Security | Sustainability | Other | null"
+              }
+            ],
+            "created_at": "datetime",
+            "updated_at": "datetime"
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/profiles/me",
+          "description": "Update user profile (creates snapshot)",
+          "request_body": {
+            "learning_goal": "string | null (optional, max 1000 chars)",
+            "current_level": "beginner | intermediate | advanced | null (optional)",
+            "time_commitment": "1-5 | 5-10 | 10-20 | 20+ | null (optional)",
+            "interest_tag_ids": "uuid[] (optional, replaces all interests)"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/courses",
+          "description": "List courses with filtering",
+          "query_params": {
+            "difficulty": "beginner | intermediate | advanced (optional)",
+            "tag_ids": "uuid[] (optional, courses with at least one matching tag)",
+            "limit": "integer (1-100, default 50)",
+            "offset": "integer (default 0)"
+          },
+          "response": "array of Course objects"
+        },
+        {
+          "method": "GET",
+          "path": "/api/courses/{course_id}",
+          "description": "Get single course by ID",
+          "response": {
+            "id": "uuid",
+            "title": "string",
+            "description": "string",
+            "difficulty": "beginner | intermediate | advanced",
+            "duration": "integer (hours)",
+            "contents": "string",
+            "tags": [{"id": "uuid", "name": "string", "category": "string | null"}],
+            "skills": [{"id": "uuid", "name": "string"}],
+            "created_at": "datetime"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/tags",
+          "description": "List all tags (flat list)",
+          "response": [
+            {
+              "id": "uuid",
+              "name": "string",
+              "category": "string | null"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "path": "/api/tag-categories",
+          "description": "Tags grouped by category (for multi-select UI)",
+          "response": {
+            "Programming": [{"id": "uuid", "name": "string", "category": "string"}],
+            "Data Science": [],
+            "...": "..."
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/api/skills",
+          "description": "List all skills",
+          "response": [
+            {
+              "id": "uuid",
+              "name": "string"
+            }
+          ]
+        }
+      ],
+      "planned_not_implemented": [
+        {
+          "method": "POST",
+          "path": "/recommendations/generate",
+          "description": "Generate AI course recommendations",
+          "request_body": {
+            "query": "string (optional, user's learning query)"
+          },
+          "response": {
+            "id": "uuid",
+            "recommended_courses": "Course[]",
+            "explanation": "string"
+          }
+        }
+      ]
+    }
+  },
+  "data_models": {
+    "course": {
+      "id": "uuid",
+      "title": "string (max 255)",
+      "description": "text",
+      "difficulty": "enum: beginner, intermediate, advanced",
+      "duration": "integer (hours, 20-90)",
+      "contents": "text (course outline)",
+      "tags": "Tag[] (many-to-many)",
+      "skills": "Skill[] (many-to-many)",
+      "created_at": "datetime"
+    },
+    "tag": {
+      "id": "uuid",
+      "name": "string (unique, max 100)",
+      "category": "enum: Programming, Data Science, DevOps, Business, Marketing, Design, Soft Skills, HR & Talent, Security, Sustainability, Other"
+    },
+    "skill": {
+      "id": "uuid",
+      "name": "string (unique, max 200)"
+    },
+    "user": {
+      "id": "uuid",
+      "email": "string (unique)",
+      "hashed_password": "string",
+      "is_active": "boolean (soft delete)",
+      "is_superuser": "boolean",
+      "is_verified": "boolean",
+      "created_at": "datetime",
+      "updated_at": "datetime"
+    },
+    "user_profile": {
+      "id": "uuid",
+      "user_id": "uuid (FK to users, unique)",
+      "learning_goal": "text (nullable)",
+      "current_level": "enum: beginner, intermediate, advanced (nullable)",
+      "time_commitment": "enum: 1-5, 5-10, 10-20, 20+ (nullable)",
+      "interests": "Tag[] (many-to-many via user_interests)",
+      "version": "integer (increments on update)",
+      "created_at": "datetime",
+      "updated_at": "datetime"
+    },
+    "recommendation": {
+      "status": "NOT_IMPLEMENTED",
+      "planned_fields": {
+        "id": "uuid",
+        "user_id": "uuid (FK to users)",
+        "profile_version": "integer",
+        "query": "text (nullable)",
+        "recommended_course_ids": "uuid[] (JSONB)",
+        "explanation": "text",
+        "llm_model": "string",
+        "created_at": "datetime"
+      }
+    }
+  },
+  "database": {
+    "type": "PostgreSQL 16",
+    "container": "acmelearn_postgres",
+    "connection": "postgresql://acmelearn_user:***@localhost:5432/acmelearn_db",
+    "tables_implemented": [
+      "users",
+      "user_profiles",
+      "user_profile_snapshots",
+      "user_interests",
+      "courses",
+      "tags",
+      "skills",
+      "course_tags",
+      "course_skills"
+    ],
+    "data_volume": {
+      "courses": 48,
+      "tags": 169,
+      "skills": 230
+    }
+  },
+  "enums": {
+    "DifficultyLevel": {
+      "values": ["beginner", "intermediate", "advanced"],
+      "description": "Course difficulty and user experience levels"
+    },
+    "TimeCommitment": {
+      "values": ["1-5", "5-10", "10-20", "20+"],
+      "description": "User's weekly hours available for learning"
+    },
+    "TagCategory": {
+      "values": [
+        "Programming",
+        "Data Science",
+        "DevOps",
+        "Business",
+        "Marketing",
+        "Design",
+        "Soft Skills",
+        "HR & Talent",
+        "Security",
+        "Sustainability",
+        "Other"
+      ],
+      "description": "Categories for organizing course tags"
+    }
+  },
+  "business_rules": {
+    "authentication": "Required for all endpoints except /health, /auth/register, /auth/jwt/login",
+    "profile_creation": "Empty profile auto-created on registration via hook",
+    "profile_versioning": "Profile version increments on each update, snapshot created after update",
+    "course_data": "Read-only, seeded from courses.json on startup",
+    "user_deletion": "Soft delete only (is_active = false)"
+  },
+  "technology_stack": {
+    "backend": {
+      "framework": "FastAPI (Python 3.11+)",
+      "orm": "SQLAlchemy 2.0 (async)",
+      "authentication": "fastapi-users with JWT",
+      "database": "PostgreSQL 16",
+      "package_manager": "uv"
+    },
+    "frontend": {
+      "framework": "React 18 with Vite",
+      "styling": "Tailwind CSS",
+      "state_management": "TanStack Query (server state) + React Context (client state)",
+      "routing": "React Router v6",
+      "form_handling": "React Hook Form + Zod"
+    }
+  },
+  "verification_notes": {
+    "verified_date": "2025-11-25",
+    "verified_by": "context-manager",
+    "findings": [
+      {
+        "type": "MINOR_DISCREPANCY",
+        "description": "CLAUDE.md states '50 courses' but actual seeded data contains 48 courses",
+        "resolution": "Context files use actual data count (48 courses)",
+        "impact": "LOW - does not affect implementation"
+      },
+      {
+        "type": "CONFIRMED",
+        "description": "All backend endpoints, data models, and enums verified against source code",
+        "files_checked": [
+          "backend/models/enums.py",
+          "backend/api/*.py",
+          "tests/backend/**/*.py",
+          ".env.example"
+        ]
+      },
+      {
+        "type": "CONFIRMED",
+        "description": "Frontend directory does not exist - ready for fresh implementation",
+        "status": "NOT_STARTED"
+      },
+      {
+        "type": "CONFIRMED",
+        "description": "Test suite structure and configuration verified",
+        "test_location": "tests/backend/",
+        "test_database": "acmelearn_test"
+      }
+    ],
+    "completeness_check": {
+      "backend_api_documentation": "COMPLETE",
+      "data_models": "COMPLETE",
+      "enums": "COMPLETE",
+      "authentication_flow": "COMPLETE",
+      "business_rules": "COMPLETE",
+      "technology_stack": "COMPLETE",
+      "frontend_specifications": "COMPLETE (in design-context.json)"
+    }
+  }
+}

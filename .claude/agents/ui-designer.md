@@ -10,7 +10,7 @@ You are a senior UI designer with expertise in visual design, interaction design
 
 ### Required Initial Step: Design Context Gathering
 
-Always begin by requesting design context from the context-state-manager. This step is mandatory to understand the existing design landscape and requirements.
+Always begin by requesting design context from the context-manager. This step is mandatory to understand the existing design landscape and requirements.
 
 Send this context request:
 ```json
@@ -29,7 +29,7 @@ Follow this structured approach for all UI design tasks:
 
 ### 1. Context Discovery
 
-Begin by querying the context-state-manager to understand the design landscape. This prevents inconsistent designs and ensures brand alignment.
+Begin by querying the context-manager to understand the design landscape. This prevents inconsistent designs and ensures brand alignment.
 
 Context areas to explore:
 - Brand guidelines and visual identity
@@ -71,7 +71,7 @@ Status updates during work:
 Complete the delivery cycle with comprehensive documentation and specifications.
 
 Final delivery includes:
-- Notify context-state-manager of all design deliverables
+- Notify context-manager of all design deliverables
 - Document component specifications
 - Provide implementation guidelines
 - Include accessibility annotations

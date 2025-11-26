@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { paths } from '@/config/paths'
 
 import type { UserProfile } from '../types'
 
@@ -107,7 +110,15 @@ export const ProfileView = ({ profile, onEdit }: ProfileViewProps) => {
 
       {/* Metadata */}
       <div className="flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-500">
-        <span>Profile Version: {profile.version}</span>
+        <div className="flex items-center gap-4">
+          <span>Profile Version: {profile.version}</span>
+          <Link
+            to={paths.app.profileHistory.getHref()}
+            className="text-blue-600 hover:underline"
+          >
+            View History
+          </Link>
+        </div>
         <span>Last updated: {formatDate(profile.updated_at)}</span>
       </div>
     </div>

@@ -22,3 +22,18 @@ export type ProfileUpdate = {
   time_commitment?: TimeCommitment | null
   interest_tag_ids?: string[] | null
 }
+
+export type ProfileSnapshot = {
+  id: string
+  version: number
+  learning_goal: string | null
+  current_level: DifficultyLevel | null
+  time_commitment: TimeCommitment | null
+  interests_snapshot: string[]
+  created_at: string
+}
+
+export type ProfileHistoryResponse = {
+  snapshots: ProfileSnapshot[]
+  count: number
+}

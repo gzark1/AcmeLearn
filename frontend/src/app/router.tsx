@@ -15,6 +15,7 @@ const CoursesPage = () => import('./routes/app/courses').then((m) => ({ Componen
 const CoursePage = () => import('./routes/app/course').then((m) => ({ Component: m.default }))
 const RecommendationsPage = () => import('./routes/app/recommendations').then((m) => ({ Component: m.default }))
 const ProfilePage = () => import('./routes/app/profile').then((m) => ({ Component: m.default }))
+const ProfileHistoryPage = () => import('./routes/app/profile-history').then((m) => ({ Component: m.default }))
 const SettingsPage = () => import('./routes/app/settings').then((m) => ({ Component: m.default }))
 const AdminDashboardPage = () => import('./routes/admin/dashboard').then((m) => ({ Component: m.default }))
 const AdminUsersPage = () => import('./routes/admin/users').then((m) => ({ Component: m.default }))
@@ -93,6 +94,10 @@ const createAppRouter = () =>
         {
           path: paths.app.profile.path,
           lazy: ProfilePage,
+        },
+        {
+          path: paths.app.profileHistory.path,
+          lazy: ProfileHistoryPage,
         },
         {
           path: paths.app.settings.path,

@@ -42,6 +42,10 @@ export const paths = {
       path: '/profile',
       getHref: () => '/profile',
     },
+    profileHistory: {
+      path: '/profile/history',
+      getHref: () => '/profile/history',
+    },
     settings: {
       path: '/settings',
       getHref: () => '/settings',

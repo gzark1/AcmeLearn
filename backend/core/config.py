@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     SUPERUSER_EMAIL: Optional[str] = None
     SUPERUSER_PASSWORD: Optional[str] = None
 
+    # Demo User Seeding (for assessment/demos)
+    SEED_DEMO_USERS: bool = False
+    DEMO_USER_PASSWORD: Optional[str] = None
+
     # API
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AcmeLearn API"

@@ -13,6 +13,7 @@ from sqlalchemy import select
 from core.database import init_db, async_session_maker
 from core.config import settings
 from scripts.seed_courses import seed_courses
+from scripts.seed_demo_users import seed_demo_users
 from api import auth, users, profiles, courses, admin
 
 
@@ -101,6 +102,14 @@ async def lifespan(app: FastAPI):
             await create_or_promote_superuser(db)
         except Exception as e:
             print(f"Error creating superuser: {e}")
+            await db.rollback()
+
+    # Seed demo users if configured (for assessment/demos)
+    async with async_session_maker() as db:
+        try:
+            await seed_demo_users(db)
+        except Exception as e:
+            print(f"Error seeding demo users: {e}")
             await db.rollback()
 
     print("Startup complete!")

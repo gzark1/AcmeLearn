@@ -9,7 +9,10 @@ Provides:
 """
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_users import exceptions
+from fastapi_users.password import PasswordHelper
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from core.database import get_async_session
 from core.users import fastapi_users, current_active_user
 from schemas.user import UserRead, UserUpdate
 from schemas.auth import PasswordChangeRequest
@@ -32,6 +35,7 @@ router.include_router(
 async def change_password(
     password_data: PasswordChangeRequest,
     user: User = Depends(current_active_user),
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Change password with old password verification.
@@ -39,6 +43,7 @@ async def change_password(
     Args:
         password_data: Old and new passwords
         user: Current authenticated user
+        db: Database session
 
     Returns:
         204 No Content on success
@@ -46,11 +51,10 @@ async def change_password(
     Raises:
         HTTPException: 400 if old password is incorrect
     """
-    # Get user manager
-    user_manager = await fastapi_users.get_user_manager().__anext__()
+    password_helper = PasswordHelper()
 
     # Verify old password
-    verified, _ = user_manager.password_helper.verify_and_update(
+    verified, _ = password_helper.verify_and_update(
         password_data.old_password, user.hashed_password
     )
 
@@ -58,12 +62,9 @@ async def change_password(
         raise HTTPException(status_code=400, detail="Incorrect old password")
 
     # Update password
-    user.hashed_password = user_manager.password_helper.hash(password_data.new_password)
-
-    try:
-        await user_manager.user_db.update(user)
-    except exceptions.UserAlreadyExists:
-        raise HTTPException(status_code=400, detail="Failed to update password")
+    user.hashed_password = password_helper.hash(password_data.new_password)
+    db.add(user)
+    await db.commit()
 
     return None
 

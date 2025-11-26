@@ -134,10 +134,11 @@ mcp__puppeteer__puppeteer_evaluate with script: "document.querySelector('.error-
   - 9 tables implemented (courses, tags, skills, users, profiles, snapshots, + junction tables)
   - **See `docs/PRODUCT_DATA_STRATEGY.md` for schema details**
 
-- **Docker**: PostgreSQL 16 Alpine container ✅ **Implemented**
-  - docker-compose.yml configured
-  - Environment variables via .env (gitignored)
-  - Backend runs locally for hot reload
+- **Docker**: Full containerization ✅ **Implemented**
+  - 4 containers: postgres, postgres_test, backend, frontend
+  - Single `docker compose up --build` starts everything
+  - Hot reload via volume mounts
+  - **See `docs/DOCKER.md` for complete setup details**
 
 - **Dependency Management**: uv ✅ **Implemented**
   - `pyproject.toml` for dependency management
@@ -177,6 +178,7 @@ mcp__puppeteer__puppeteer_evaluate with script: "document.querySelector('.error-
 **📋 See `docs/ARCHITECTURE.md` for complete architecture details**
 **📊 See `docs/PRODUCT_DATA_STRATEGY.md` for database schema and data modeling**
 **🔐 See `docs/AUTHENTICATION.md` for authentication implementation**
+**🐳 See `docs/DOCKER.md` for Docker setup and commands**
 
 Current structure (Phases 1-3 Complete):
 
@@ -185,9 +187,12 @@ AcmeLearn/
 ├── docs/                   # 📚 Technical documentation
 │   ├── ARCHITECTURE.md     # ✅ Architecture decisions and patterns
 │   ├── PRODUCT_DATA_STRATEGY.md # ✅ Database schema and data modeling
-│   └── AUTHENTICATION.md   # ✅ Authentication implementation details
+│   ├── AUTHENTICATION.md   # ✅ Authentication implementation details
+│   └── DOCKER.md           # ✅ Docker setup and commands
 │
 ├── backend/
+│   ├── Dockerfile          # ✅ Python 3.12-slim + uv
+│   ├── .dockerignore       # ✅ Docker build exclusions
 │   ├── models/             # ✅ SQLAlchemy ORM models
 │   │   ├── base.py         # ✅ Base class
 │   │   ├── enums.py        # ✅ DifficultyLevel, TimeCommitment, TagCategory enums
@@ -241,7 +246,11 @@ AcmeLearn/
 │       └── test_services/
 │           └── test_profile_service.py # ✅ Service layer tests
 │
-├── docker-compose.yml      # ✅ PostgreSQL 16 Alpine container
+├── frontend/
+│   ├── Dockerfile          # ✅ Node 20-alpine
+│   └── .dockerignore       # ✅ Docker build exclusions
+│
+├── docker-compose.yml      # ✅ All 4 services (postgres, postgres_test, backend, frontend)
 ├── .env                    # ✅ Database credentials (gitignored)
 ├── .env.example            # ✅ Mock credentials template (includes TEST_DATABASE_URL)
 ├── courses.json            # ✅ Course catalog data (48 courses)
@@ -273,9 +282,10 @@ See `docs/ARCHITECTURE.md` for detailed rationale. Quick summary:
 - **Optimization**: Pre-filter courses by difficulty/tags before LLM (reduce cost/tokens)
 
 ### 4. Development Workflow
-- **Current**: PostgreSQL in Docker, backend runs locally for hot reload
-- **Setup**: `docker compose up -d` for database, `uvicorn main:app --reload` for backend
-- **Priority**: Working features > infrastructure polish
+- **Current**: Full Docker containerization (4 containers)
+- **Setup**: `docker compose up --build` starts everything
+- **Hot Reload**: Volume mounts enable live code updates
+- **See `docs/DOCKER.md`** for complete commands and troubleshooting
 
 ## Development Phases
 
@@ -432,42 +442,33 @@ VITE_API_URL=http://localhost:8000
 
 ## Getting Started
 
-**Current setup (Phase 1)**:
-
 ```bash
 # 1. Setup environment
 cp .env.example .env       # Copy and edit with your credentials
 
-# 2. Start PostgreSQL (Docker)
-docker compose up -d       # Starts PostgreSQL 16 container
-docker ps                  # Verify container is running
+# 2. Start all services
+docker compose up --build  # Builds and starts all 4 containers
 
-# 3. Setup backend
-cd backend
-uv sync                    # Install dependencies from pyproject.toml
-source .venv/bin/activate  # Activate virtual environment
-
-# 4. Run backend (auto-seeds database on first run)
-uvicorn main:app --reload  # Starts on http://localhost:8000
-# Access health endpoint: http://localhost:8000/health
-
-# 5. Verify database
-docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db -c "SELECT COUNT(*) FROM courses;"
-# Should return: 48
-
-# Frontend setup (Phase 4 - not started yet)
-cd frontend
-npm install
-npm run dev
+# 3. Access the application
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# API Docs: http://localhost:8000/docs
 ```
 
-**Docker commands**:
+**Common Docker commands**:
 ```bash
-docker compose up -d       # Start PostgreSQL
-docker compose down        # Stop PostgreSQL
-docker compose logs -f     # View logs
-docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db  # Connect to DB
+docker compose up --build   # Start all services (rebuild if needed)
+docker compose down         # Stop all services
+docker compose logs -f      # View all logs
+docker compose logs backend # View backend logs only
+docker compose ps           # Check container status
 ```
+
+**See `docs/DOCKER.md`** for complete Docker documentation including:
+- Running tests in Docker
+- Database access commands
+- Volume mounts and hot reload
+- Troubleshooting guide
 
 ## Testing Strategy
 
@@ -506,28 +507,20 @@ tests/
 - `auth_headers`: JWT authentication headers for protected endpoints
 - `test_user_profile`: The auto-created profile for test_user
 
-**Running Tests**:
+**Running Tests** (via Docker):
 ```bash
-# From backend directory
-cd backend
-source .venv/bin/activate
-
-# Install test dependencies (if not already installed)
-uv sync --extra test
-
-# Run all backend tests
-pytest ../tests/backend -v
+# Run all tests
+docker compose exec -e PYTHONPATH=/app backend sh -c \
+  'cd /tests/backend && /app/.venv/bin/pytest . -v --asyncio-mode=auto'
 
 # Run specific test file
-pytest ../tests/backend/test_api/test_auth.py -v
-
-# Run with coverage
-pytest ../tests/backend --cov=. --cov-report=html
+docker compose exec -e PYTHONPATH=/app backend sh -c \
+  'cd /tests/backend && /app/.venv/bin/pytest test_api/test_auth.py -v --asyncio-mode=auto'
 ```
 
 **Prerequisites**:
-- PostgreSQL must be running (`docker compose up -d`)
-- Test database is auto-created on first run
+- All containers running (`docker compose up --build`)
+- Test database container (postgres_test) uses in-memory storage for fast tests
 
 ### Manual Testing
 - API: Manual testing with FastAPI's built-in docs (`/docs`)
@@ -587,6 +580,7 @@ pytest ../tests/backend --cov=. --cov-report=html
 - **`docs/ARCHITECTURE.md`**: Architecture decisions, layer responsibilities, design patterns
 - **`docs/PRODUCT_DATA_STRATEGY.md`**: Database schema, data modeling, analytics strategy
 - **`docs/AUTHENTICATION.md`**: Authentication implementation and design choices
+- **`docs/DOCKER.md`**: Docker setup, commands, and troubleshooting
 - **`BUSINESS_REQUIREMENTS.md`**: Business rules and access control
 - **`assessment.md`**: Original project requirements
 

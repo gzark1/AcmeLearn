@@ -59,12 +59,21 @@ async def ensure_test_database_exists():
     Create test database if it doesn't exist.
 
     Connects to the default 'postgres' database to create acmelearn_test.
+    Works both locally (localhost) and in Docker (postgres_test hostname).
     """
     from sqlalchemy import text
     from sqlalchemy.ext.asyncio import create_async_engine
+    from urllib.parse import urlparse
 
-    # Connect to default postgres database
-    admin_url = "postgresql+asyncpg://acmelearn_user:acmelearn_pass@localhost:5432/postgres"
+    # Extract host from TEST_DATABASE_URL to support both local and Docker
+    parsed = urlparse(TEST_DATABASE_URL.replace("+asyncpg", ""))
+    db_host = parsed.hostname or "localhost"
+    db_port = parsed.port or 5432
+    db_user = parsed.username or "acmelearn_user"
+    db_pass = parsed.password or "acmelearn_pass"
+
+    # Connect to default postgres database on same host
+    admin_url = f"postgresql+asyncpg://{db_user}:{db_pass}@{db_host}:{db_port}/postgres"
     admin_engine = create_async_engine(admin_url, isolation_level="AUTOCOMMIT")
 
     async with admin_engine.connect() as conn:

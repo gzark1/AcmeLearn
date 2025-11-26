@@ -119,7 +119,7 @@ async def test_update_time_commitment_invalid_enum_rejected(client, auth_headers
 async def test_update_interests_with_tag_ids(client, auth_headers, test_db):
     """Test updating user interests with tag IDs."""
     # Get some tag IDs
-    from backend.models.course import Tag
+    from models.course import Tag
     result = await test_db.execute(select(Tag).limit(3))
     tags = result.scalars().all()
     tag_ids = [str(tag.id) for tag in tags]

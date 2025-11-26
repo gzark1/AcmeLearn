@@ -1,0 +1,16 @@
+# Dependencies (will be installed in container)
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.idea/
+.vscode/
+
+# Local env
+.env
+.env.local
+
+# Logs
+*.log

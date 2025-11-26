@@ -79,3 +79,27 @@ export const usePopularTags = (limit: number = 20) => {
     staleTime: 15 * 60 * 1000,
   })
 }
+
+// User Growth
+export type UserGrowthDataPoint = {
+  date: string
+  new_users: number
+  cumulative_users: number
+}
+
+export type UserGrowthResponse = {
+  data: UserGrowthDataPoint[]
+  period_days: number
+}
+
+export const getUserGrowth = async (days: number = 30): Promise<UserGrowthResponse> => {
+  return api.get(`/admin/analytics/user-growth?days=${days}`) as Promise<UserGrowthResponse>
+}
+
+export const useUserGrowth = (days: number = 30) => {
+  return useQuery({
+    queryKey: ['admin', 'analytics', 'user-growth', days],
+    queryFn: () => getUserGrowth(days),
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  })
+}

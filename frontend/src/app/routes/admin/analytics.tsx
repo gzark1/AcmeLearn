@@ -1,29 +1,62 @@
+import { Button } from '@/components/ui/button'
 import {
   useProfileBreakdown,
   useLevelDistribution,
   useTimeDistribution,
   usePopularTags,
+  useUserGrowth,
 } from '@/features/admin/api'
 import {
   ProfileBreakdownChart,
   LevelDistribution,
   TimeDistribution,
   PopularTagsChart,
+  UserGrowthChart,
 } from '@/features/admin/components'
+import { exportAnalyticsToCsv } from '@/features/admin/utils/export-csv'
 
 export const AdminAnalyticsPage = () => {
   const { data: profileBreakdown, isLoading: profileLoading } = useProfileBreakdown()
   const { data: levelDist, isLoading: levelLoading } = useLevelDistribution()
   const { data: timeDist, isLoading: timeLoading } = useTimeDistribution()
   const { data: popularTags, isLoading: tagsLoading } = usePopularTags(50)
+  const { data: userGrowth, isLoading: growthLoading } = useUserGrowth(30)
+
+  const isAnyLoading = profileLoading || levelLoading || timeLoading || tagsLoading || growthLoading
+
+  const handleExportCsv = () => {
+    exportAnalyticsToCsv({
+      profileBreakdown,
+      levelDistribution: levelDist,
+      timeDistribution: timeDist,
+      popularTags,
+      userGrowth,
+    })
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
-        <p className="mt-1 text-slate-600">Platform usage statistics and insights</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
+          <p className="mt-1 text-slate-600">Platform usage statistics and insights</p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={handleExportCsv}
+          disabled={isAnyLoading}
+        >
+          Export CSV
+        </Button>
       </div>
+
+      {/* User Growth Chart */}
+      <UserGrowthChart
+        data={userGrowth?.data ?? []}
+        periodDays={userGrowth?.period_days ?? 30}
+        isLoading={growthLoading}
+      />
 
       {/* Profile Completion Breakdown */}
       <ProfileBreakdownChart

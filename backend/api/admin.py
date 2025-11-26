@@ -26,6 +26,9 @@ from schemas.admin import (
     AnalyticsOverview,
     PopularTag,
     PopularTagsResponse,
+    ProfileBreakdownResponse,
+    LevelDistributionResponse,
+    TimeDistributionResponse,
 )
 
 
@@ -270,11 +273,16 @@ async def get_popular_tags(
     """
     Get most popular tags by user interest count (superuser only).
     """
-    # Query tags with user interest count
+    # Query tags with user interest count and category
     result = await db.execute(
-        select(Tag.id, Tag.name, func.count(UserInterest.user_profile_id).label("user_count"))
+        select(
+            Tag.id,
+            Tag.name,
+            Tag.category,
+            func.count(UserInterest.user_profile_id).label("user_count")
+        )
         .outerjoin(UserInterest, Tag.id == UserInterest.tag_id)
-        .group_by(Tag.id, Tag.name)
+        .group_by(Tag.id, Tag.name, Tag.category)
         .order_by(func.count(UserInterest.user_profile_id).desc())
         .limit(limit)
     )
@@ -282,7 +290,12 @@ async def get_popular_tags(
     rows = result.all()
 
     tags = [
-        PopularTag(tag_id=row.id, tag_name=row.name, user_count=row.user_count)
+        PopularTag(
+            tag_id=row.id,
+            tag_name=row.name,
+            tag_category=row.category.value if row.category else "OTHER",
+            user_count=row.user_count
+        )
         for row in rows
     ]
 
@@ -291,3 +304,133 @@ async def get_popular_tags(
     total_tags = total_result.scalar() or 0
 
     return PopularTagsResponse(tags=tags, total_tags=total_tags)
+
+
+@router.get("/analytics/profile-breakdown", response_model=ProfileBreakdownResponse)
+async def get_profile_breakdown(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get profile completion breakdown (superuser only).
+
+    - Complete: has goal, level, time commitment, and 1+ interests
+    - Partial: has some but not all fields
+    - Empty: no profile data set
+    """
+    # Get all profiles with interest counts
+    profiles_result = await db.execute(select(UserProfile))
+    profiles = profiles_result.scalars().all()
+
+    complete = 0
+    partial = 0
+    empty = 0
+
+    for profile in profiles:
+        # Count interests for this profile
+        interest_count_result = await db.execute(
+            select(func.count())
+            .select_from(UserInterest)
+            .where(UserInterest.user_profile_id == profile.id)
+        )
+        interest_count = interest_count_result.scalar() or 0
+
+        has_goal = profile.learning_goal is not None
+        has_level = profile.current_level is not None
+        has_time = profile.time_commitment is not None
+        has_interests = interest_count > 0
+
+        filled_fields = sum([has_goal, has_level, has_time, has_interests])
+
+        if filled_fields == 4:
+            complete += 1
+        elif filled_fields == 0:
+            empty += 1
+        else:
+            partial += 1
+
+    total = complete + partial + empty
+
+    return ProfileBreakdownResponse(
+        complete=complete,
+        partial=partial,
+        empty=empty,
+        total=total,
+    )
+
+
+@router.get("/analytics/level-distribution", response_model=LevelDistributionResponse)
+async def get_level_distribution(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get user level distribution (superuser only).
+    """
+    profiles_result = await db.execute(select(UserProfile.current_level))
+    levels = profiles_result.scalars().all()
+
+    beginner = 0
+    intermediate = 0
+    advanced = 0
+    not_set = 0
+
+    for level in levels:
+        if level is None:
+            not_set += 1
+        elif level.value == "beginner":
+            beginner += 1
+        elif level.value == "intermediate":
+            intermediate += 1
+        elif level.value == "advanced":
+            advanced += 1
+
+    return LevelDistributionResponse(
+        beginner=beginner,
+        intermediate=intermediate,
+        advanced=advanced,
+        not_set=not_set,
+    )
+
+
+@router.get("/analytics/time-distribution", response_model=TimeDistributionResponse)
+async def get_time_distribution(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get time commitment distribution (superuser only).
+
+    Buckets: 1-5, 5-10, 10-20, 20+ hours/week
+    """
+    profiles_result = await db.execute(select(UserProfile.time_commitment))
+    time_values = profiles_result.scalars().all()
+
+    hours_1_5 = 0
+    hours_5_10 = 0
+    hours_10_20 = 0
+    hours_20_plus = 0
+    not_set = 0
+
+    for time_commitment in time_values:
+        if time_commitment is None:
+            not_set += 1
+        else:
+            # TimeCommitment enum - compare by name or value
+            tc_name = time_commitment.name if hasattr(time_commitment, 'name') else str(time_commitment)
+            if tc_name == "HOURS_1_5" or (hasattr(time_commitment, 'value') and time_commitment.value == "1-5"):
+                hours_1_5 += 1
+            elif tc_name == "HOURS_5_10" or (hasattr(time_commitment, 'value') and time_commitment.value == "5-10"):
+                hours_5_10 += 1
+            elif tc_name == "HOURS_10_20" or (hasattr(time_commitment, 'value') and time_commitment.value == "10-20"):
+                hours_10_20 += 1
+            elif tc_name == "HOURS_20_PLUS" or (hasattr(time_commitment, 'value') and time_commitment.value == "20+"):
+                hours_20_plus += 1
+
+    return TimeDistributionResponse(
+        hours_1_5=hours_1_5,
+        hours_5_10=hours_5_10,
+        hours_10_20=hours_10_20,
+        hours_20_plus=hours_20_plus,
+        not_set=not_set,
+    )

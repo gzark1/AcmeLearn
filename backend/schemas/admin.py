@@ -100,6 +100,7 @@ class PopularTag(BaseModel):
     """Tag popularity data."""
     tag_id: uuid.UUID
     tag_name: str
+    tag_category: str
     user_count: int
 
 
@@ -107,6 +108,31 @@ class PopularTagsResponse(BaseModel):
     """Popular tags response."""
     tags: List[PopularTag]
     total_tags: int
+
+
+class ProfileBreakdownResponse(BaseModel):
+    """Profile completion breakdown."""
+    complete: int  # Has goal, level, time, and 1+ interests
+    partial: int   # Has some but not all fields
+    empty: int     # No profile data
+    total: int
+
+
+class LevelDistributionResponse(BaseModel):
+    """User level distribution."""
+    beginner: int
+    intermediate: int
+    advanced: int
+    not_set: int
+
+
+class TimeDistributionResponse(BaseModel):
+    """Time commitment distribution."""
+    hours_1_5: int     # 1-5 hours/week
+    hours_5_10: int    # 5-10 hours/week
+    hours_10_20: int   # 10-20 hours/week
+    hours_20_plus: int # 20+ hours/week
+    not_set: int
 
 
 class UserGrowthDataPoint(BaseModel):

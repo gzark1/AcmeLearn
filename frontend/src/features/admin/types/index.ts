@@ -13,6 +13,8 @@ export type AdminUserListItem = {
   is_superuser: boolean
   is_verified: boolean
   has_learning_goal: boolean
+  has_level: boolean
+  has_time_commitment: boolean
   interest_count: number
 }
 

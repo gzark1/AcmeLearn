@@ -35,8 +35,8 @@ export const UserTableRow = ({ user }: UserTableRowProps) => {
         <div className="flex flex-col gap-1">
           <ProfileCompleteness
             hasGoal={user.has_learning_goal}
-            hasLevel={false}
-            hasTimeCommitment={false}
+            hasLevel={user.has_level}
+            hasTimeCommitment={user.has_time_commitment}
             interestCount={user.interest_count}
           />
           <span className="text-xs text-slate-500">

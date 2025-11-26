@@ -72,9 +72,13 @@ async def list_users(
 
         interest_count = 0
         has_learning_goal = False
+        has_level = False
+        has_time_commitment = False
 
         if profile:
             has_learning_goal = profile.learning_goal is not None
+            has_level = profile.current_level is not None
+            has_time_commitment = profile.time_commitment is not None
             # Count interests
             count_result = await db.execute(
                 select(func.count())
@@ -90,6 +94,8 @@ async def list_users(
             is_superuser=user.is_superuser,
             is_verified=user.is_verified,
             has_learning_goal=has_learning_goal,
+            has_level=has_level,
+            has_time_commitment=has_time_commitment,
             interest_count=interest_count,
         ))
 

@@ -19,6 +19,8 @@ class UserListItem(BaseModel):
     is_verified: bool
     # Profile summary
     has_learning_goal: bool = False
+    has_level: bool = False
+    has_time_commitment: bool = False
     interest_count: int = 0
 
     class Config:

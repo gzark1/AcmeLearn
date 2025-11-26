@@ -19,6 +19,7 @@ const ProfileHistoryPage = () => import('./routes/app/profile-history').then((m)
 const SettingsPage = () => import('./routes/app/settings').then((m) => ({ Component: m.default }))
 const AdminDashboardPage = () => import('./routes/admin/dashboard').then((m) => ({ Component: m.default }))
 const AdminUsersPage = () => import('./routes/admin/users').then((m) => ({ Component: m.default }))
+const AdminUserDetailPage = () => import('./routes/admin/user-detail').then((m) => ({ Component: m.default }))
 const AdminAnalyticsPage = () => import('./routes/admin/analytics').then((m) => ({ Component: m.default }))
 
 // App layout wrapper with real auth
@@ -117,6 +118,10 @@ const createAppRouter = () =>
         {
           path: paths.admin.users.path,
           lazy: AdminUsersPage,
+        },
+        {
+          path: paths.admin.user.path,
+          lazy: AdminUserDetailPage,
         },
         {
           path: paths.admin.analytics.path,

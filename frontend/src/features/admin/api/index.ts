@@ -1,3 +1,5 @@
 export * from './get-admin-stats'
 export * from './get-admin-users'
 export * from './get-admin-user-detail'
+export * from './get-user-profile-history'
+export * from './deactivate-user'

@@ -1869,6 +1869,101 @@ This checklist is ordered by dependency and priority. Each item is a discrete, i
 - [ ] **8.12** Create Profile page (`app/routes/app/profile/profile.tsx`)
 - [ ] **8.13** Create ProfileHistory page (`app/routes/app/profile/profile-history.tsx`)
 
+### Phase 8.5: UI Improvements (Polish)
+
+**Context**: Before moving to recommendations, address UI/UX issues identified in design review (see `UI_DESIGN_SYSTEM.md` Section 10 and `.claude/ui-review/UI_ISSUES.md`). These improvements enhance the existing courses feature and prepare the application for a professional launch.
+
+- [ ] **8.5.1** Create Tooltip component (`components/ui/tooltip/tooltip.tsx`)
+  - Implement hover-triggered tooltip with 300ms delay
+  - Support positioning (top, bottom, left, right)
+  - Include accessible keyboard focus behavior
+  - Add dark background with high contrast text (WCAG AAA)
+  - Mobile: disable on touch devices
+
+- [ ] **8.5.2** Enhance course contents display (`features/courses/components/course-detail.tsx`)
+  - Parse module text using regex: `Module N: Title - Description`
+  - Display as structured numbered list with clear hierarchy
+  - Apply design system styles: module number (blue-800 semibold), description (gray-600)
+  - Add spacing between modules (`space-y-4`)
+  - Alternative: implement accordion pattern if modules are lengthy (>50 words)
+
+- [ ] **8.5.3** Improve course card layout (`features/courses/components/course-card.tsx`)
+  - Increase card content height (min-h-80 / 20rem)
+  - Allow title to span 2 lines (`line-clamp-2`, min-h-[3.5rem]`)
+  - Expand description to 3 lines (`line-clamp-3` instead of current 2)
+  - Wrap title with Tooltip to show full text on hover
+  - Wrap description with Tooltip for full content preview
+  - Add `cursor-help` class to truncated elements
+
+- [ ] **8.5.4** Create expandable tag list component (`features/courses/components/tag-list.tsx`)
+  - Display first 4 tags by default (increase from current 3)
+  - Render "+N" button for hidden tags with hover/focus states
+  - Implement toggle to expand/collapse all tags
+  - Prevent card click event when expanding tags (`e.stopPropagation()`)
+  - Add ARIA attributes: `aria-expanded`, `aria-controls`, `aria-live="polite"`
+  - Show tooltips on individual tags for full tag names
+  - Mobile: use tap-to-expand inline (no tooltips)
+
+- [ ] **8.5.5** Implement tag filtering in catalog (`features/courses/components/course-filters.tsx`)
+  - Add multi-select tag dropdown using Headless UI Listbox
+  - Fetch all tags via existing `get-tags` API hook
+  - Group tags by category if `tag_category` field exists
+  - Sync selected tags with URL search params (`?tag=python&tag=react`)
+  - Display selected tags as dismissible pills/badges
+  - Update course query to filter by `tag_ids` array
+
+- [ ] **8.5.6** Add duration filtering (`features/courses/components/course-filters.tsx`)
+  - Create duration range options: "Short (0-20h)", "Medium (20-50h)", "Long (50h+)"
+  - Render as button group or dropdown
+  - Sync with URL params (`?duration=short`)
+  - Filter courses client-side or via API if backend supports it
+
+- [ ] **8.5.7** Add sorting functionality (`features/courses/components/course-filters.tsx`)
+  - Create sort dropdown with options: "Title (A-Z)", "Title (Z-A)", "Duration (Short-Long)", "Duration (Long-Short)", "Difficulty"
+  - Sync sort selection with URL params (`?sort=duration-asc`)
+  - Implement client-side sorting in `useCourses` hook or course grid component
+  - Display current sort order visually
+
+- [ ] **8.5.8** Enhance filter UI with active filters visualization
+  - Create "Active Filters" section showing all applied filters as pills
+  - Each pill should have dismiss (X) button to remove individual filter
+  - Add "Clear All Filters" button when 2+ filters active
+  - Display results counter: "Showing X of 48 courses"
+  - Update search placeholder: "Search by title, description, or tags"
+  - Ensure all filters work together (difficulty + tags + duration + search)
+
+- [ ] **8.5.9** Responsive improvements for mobile
+  - Verify card grid responsiveness (1 col mobile → 4 col desktop)
+  - Test filter controls on mobile (stack vertically, touch-friendly targets)
+  - Ensure tooltips are disabled on touch devices
+  - Test expanded tags behavior on mobile (inline expansion)
+  - Verify navigation and scrolling on small screens
+
+- [ ] **8.5.10** Accessibility audit and refinements
+  - Test keyboard navigation through filters and course cards
+  - Verify screen reader announcements for filter changes
+  - Ensure tooltip content is accessible via keyboard focus
+  - Test color contrast ratios (4.5:1 minimum, 7:1 for body text)
+  - Add focus visible states to all interactive elements
+  - Test with VoiceOver (Mac) or NVDA (Windows)
+
+**Implementation Notes**:
+- **Issue Priority**: Address in order of user impact
+  1. Filtering/sorting (Issue #3) - Critical for discovery
+  2. Course contents (Issue #1) - High impact on detail page
+  3. Card truncation (Issue #2) - Medium priority polish
+
+- **Tooltip Component**: Create once, reuse everywhere (title, description, tags)
+- **URL State Management**: All filters should sync with URL for shareable links
+- **Testing**: Manually test with various screen sizes and accessibility tools
+- **Performance**: Debounce search input (300ms), memoize filter functions
+- **Backward Compatibility**: Existing course cards should still work without tooltips if Tooltip component fails
+
+**Design References**:
+- Full specifications in `docs/UI_DESIGN_SYSTEM.md` Section 10
+- UI issues documented in `.claude/ui-review/UI_ISSUES.md`
+- Component patterns from bulletproof-react: `docs/bulletproof-react-master/`
+
 ### Phase 9: Recommendations Feature
 
 - [ ] **9.1** Create recommendation types (`features/recommendations/types/index.ts`)

@@ -22,8 +22,14 @@ export type Course = {
   skills: Skill[]
 }
 
+export type DurationRange = 'short' | 'medium' | 'long'
+
+export type SortOption = 'title-asc' | 'title-desc' | 'duration-asc' | 'duration-desc' | 'difficulty'
+
 export type CourseFilters = {
   difficulty?: DifficultyLevel
   tagIds?: string[]
   search?: string
+  duration?: DurationRange
+  sort?: SortOption
 }

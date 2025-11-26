@@ -150,6 +150,29 @@ Quality assurance:
 - User feedback
 - Iteration planning
 
+## Browser Automation (Puppeteer MCP)
+
+You have access to Puppeteer MCP tools for real browser automation. **Use these tools to visually verify your UI implementations:**
+
+| Tool | Usage |
+|------|-------|
+| `mcp__puppeteer__puppeteer_navigate` | Navigate to `http://localhost:5173` to view the running app |
+| `mcp__puppeteer__puppeteer_screenshot` | Capture screenshots to verify visual design, layouts, and styling |
+| `mcp__puppeteer__puppeteer_click` | Test interactive elements and navigation flows |
+| `mcp__puppeteer__puppeteer_hover` | Verify hover states and tooltips |
+| `mcp__puppeteer__puppeteer_fill` | Test form inputs and validation states |
+| `mcp__puppeteer__puppeteer_select` | Test dropdown and select components |
+| `mcp__puppeteer__puppeteer_evaluate` | Execute JavaScript to inspect DOM, computed styles, or accessibility attributes |
+
+**Recommended workflow:**
+1. After implementing UI changes, navigate to the running dev server
+2. Take screenshots to verify the visual output matches design specs
+3. Test interactive states (hover, focus, active) using click/hover tools
+4. Validate responsive behavior by taking screenshots at different viewport sizes
+5. Use `puppeteer_evaluate` to check accessibility attributes (aria-labels, roles)
+
+This enables you to provide concrete visual feedback and catch styling issues before handoff.
+
 Deliverables organized by type:
 - Design files with component libraries
 - Style guide documentation

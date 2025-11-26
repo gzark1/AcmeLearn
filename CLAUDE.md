@@ -69,9 +69,41 @@ mcp__acmelearn-postgres__query with sql: "SELECT * FROM user_profiles WHERE user
 docker exec acmelearn_postgres psql -U acmelearn_user -d acmelearn_db -c "TRUNCATE TABLE..."
 ```
 
+**Browser Automation (MCP Puppeteer)**:
+- A Puppeteer MCP server is available for frontend visual testing and browser automation
+- Use it for: taking screenshots, testing interactions, verifying UI implementations
+- The frontend dev server runs at `http://localhost:5173`
+
+Available tools:
+| Tool | Usage |
+|------|-------|
+| `mcp__puppeteer__puppeteer_navigate` | Navigate to URLs (e.g., `http://localhost:5173`) |
+| `mcp__puppeteer__puppeteer_screenshot` | Capture screenshots to verify visual output |
+| `mcp__puppeteer__puppeteer_click` | Click elements via CSS selector |
+| `mcp__puppeteer__puppeteer_hover` | Hover over elements to test hover states |
+| `mcp__puppeteer__puppeteer_fill` | Fill form inputs |
+| `mcp__puppeteer__puppeteer_select` | Select dropdown options |
+| `mcp__puppeteer__puppeteer_evaluate` | Execute JavaScript in browser context |
+
+Examples:
+```
+# Navigate to frontend
+mcp__puppeteer__puppeteer_navigate with url: "http://localhost:5173"
+
+# Take a screenshot
+mcp__puppeteer__puppeteer_screenshot with name: "homepage"
+
+# Test form input
+mcp__puppeteer__puppeteer_fill with selector: "#email" value: "test@example.com"
+
+# Check DOM state
+mcp__puppeteer__puppeteer_evaluate with script: "document.querySelector('.error-message')?.textContent"
+```
+
 **Testing Best Practices**:
 - Use `curl` to test API endpoints (examples in `docs/AUTHENTICATION.md`)
 - Verify database state with PostgreSQL MCP queries after operations
+- Use Puppeteer MCP tools to visually verify frontend implementations
 - Use FastAPI's `/docs` endpoint for interactive API testing
 - Test with actual data, not just HTTP status codes
 - Verify both success cases AND error handling

@@ -110,6 +110,29 @@ Beyond the reference docs, you possess deep knowledge in these areas:
 - **UI**: Radix, Headless UI, shadcn/ui
 - **Styling**: Tailwind, CSS Modules, styled-components
 
+## Browser Automation (Puppeteer MCP)
+
+You have access to Puppeteer MCP tools for real browser automation. **Use these tools to visually verify your implementations:**
+
+| Tool | Usage |
+|------|-------|
+| `mcp__puppeteer__puppeteer_navigate` | Navigate to `http://localhost:5173` to view the running app |
+| `mcp__puppeteer__puppeteer_screenshot` | Capture screenshots to verify component rendering and layouts |
+| `mcp__puppeteer__puppeteer_click` | Test click handlers, navigation, and interactive elements |
+| `mcp__puppeteer__puppeteer_hover` | Verify hover states and dropdown menus |
+| `mcp__puppeteer__puppeteer_fill` | Test form inputs, validation, and error states |
+| `mcp__puppeteer__puppeteer_select` | Test select/dropdown components |
+| `mcp__puppeteer__puppeteer_evaluate` | Execute JavaScript to inspect React state, DOM structure, or debug issues |
+
+**Recommended workflow:**
+1. After implementing a feature, navigate to the dev server at `localhost:5173`
+2. Take screenshots to visually verify the component renders correctly
+3. Test user interactions (clicks, form submissions, navigation)
+4. Use `puppeteer_evaluate` to check React component state or inspect the DOM
+5. Validate error states and edge cases visually
+
+This allows you to catch rendering issues, verify styling, and ensure components behave correctly in a real browser environment.
+
 ## Quality Standards
 
 Your implementations should achieve:

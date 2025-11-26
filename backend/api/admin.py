@@ -4,10 +4,11 @@ Admin routes for user management and analytics.
 All endpoints require superuser authentication.
 """
 import uuid
+from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, func
+from sqlalchemy import select, func, cast, Date
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
@@ -29,6 +30,8 @@ from schemas.admin import (
     ProfileBreakdownResponse,
     LevelDistributionResponse,
     TimeDistributionResponse,
+    UserGrowthDataPoint,
+    UserGrowthResponse,
 )
 
 
@@ -433,4 +436,59 @@ async def get_time_distribution(
         hours_10_20=hours_10_20,
         hours_20_plus=hours_20_plus,
         not_set=not_set,
+    )
+
+
+@router.get("/analytics/user-growth", response_model=UserGrowthResponse)
+async def get_user_growth(
+    days: int = Query(30, ge=7, le=90, description="Number of days to include"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get user growth data for the last N days (superuser only).
+
+    Returns daily new user counts and cumulative totals.
+    """
+    # Calculate date range
+    end_date = datetime.utcnow().date()
+    start_date = end_date - timedelta(days=days - 1)
+
+    # Query users grouped by registration date
+    result = await db.execute(
+        select(
+            cast(User.created_at, Date).label("date"),
+            func.count(User.id).label("count")
+        )
+        .where(cast(User.created_at, Date) >= start_date)
+        .group_by(cast(User.created_at, Date))
+        .order_by(cast(User.created_at, Date))
+    )
+    daily_counts = {row.date: row.count for row in result.all()}
+
+    # Get total users before the start date (for cumulative base)
+    base_count_result = await db.execute(
+        select(func.count(User.id))
+        .where(cast(User.created_at, Date) < start_date)
+    )
+    base_count = base_count_result.scalar() or 0
+
+    # Build data points with cumulative counts, filling in gaps
+    data_points = []
+    cumulative = base_count
+    current_date = start_date
+
+    while current_date <= end_date:
+        new_users = daily_counts.get(current_date, 0)
+        cumulative += new_users
+        data_points.append(UserGrowthDataPoint(
+            date=current_date.isoformat(),
+            new_users=new_users,
+            cumulative_users=cumulative,
+        ))
+        current_date += timedelta(days=1)
+
+    return UserGrowthResponse(
+        data=data_points,
+        period_days=days,
     )

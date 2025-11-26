@@ -3,7 +3,11 @@ User model for authentication.
 
 Extends fastapi-users base model with built-in fields for authentication.
 """
+from datetime import datetime
+
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
+from sqlalchemy import func
+from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import Base
 
@@ -24,4 +28,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     keeping authentication concerns separate from profile data.
     """
 
-    pass  # No additional fields needed - all in UserProfile
+    created_at: Mapped[datetime] = mapped_column(
+        server_default=func.now(),
+        nullable=False
+    )

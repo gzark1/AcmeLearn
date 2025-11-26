@@ -119,6 +119,7 @@ async def seed_demo_users(db: AsyncSession) -> None:
             is_active=True,
             is_superuser=False,
             is_verified=False,
+            created_at=created_at,
         )
         db.add(user)
         await db.flush()

@@ -52,6 +52,8 @@ class RecommendationRepository:
         explanation: str,
         query: Optional[str] = None,
         llm_model: Optional[str] = None,
+        profile_analysis_data: Optional[dict] = None,
+        recommendation_details: Optional[dict] = None,
     ) -> Recommendation:
         """
         Create a new recommendation record.
@@ -63,6 +65,8 @@ class RecommendationRepository:
             explanation: AI-generated explanation
             query: User's query (optional)
             llm_model: LLM model used (optional)
+            profile_analysis_data: ProfileAnalysis JSON from Agent 1 (optional)
+            recommendation_details: Full recommendation details with scores (optional)
 
         Returns:
             Created Recommendation
@@ -77,6 +81,8 @@ class RecommendationRepository:
             recommended_course_ids=course_ids_json,
             explanation=explanation,
             llm_model=llm_model,
+            profile_analysis_data=profile_analysis_data,
+            recommendation_details=recommendation_details,
         )
 
         self.db.add(recommendation)

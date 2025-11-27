@@ -54,6 +54,18 @@ class Recommendation(Base):
         Text, nullable=True
     )  # "gpt-4", "claude-3-sonnet"
 
+    # Structured data storage (JSONB) for analytics and debugging
+    profile_analysis_data: Mapped[Optional[dict]] = mapped_column(
+        JSONB,
+        nullable=True,
+        comment="ProfileAnalysis JSON from Agent 1",
+    )
+    recommendation_details: Mapped[Optional[dict]] = mapped_column(
+        JSONB,
+        nullable=True,
+        comment="Full recommendation details: courses with scores, learning path",
+    )
+
     # Timestamp (used for rate limiting)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
 

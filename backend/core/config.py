@@ -29,6 +29,16 @@ class Settings(BaseSettings):
     SEED_DEMO_USERS: bool = False
     DEMO_USER_PASSWORD: Optional[str] = None
 
+    # OpenAI / LLM Configuration
+    OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-5-nano"
+    OPENAI_TEMPERATURE: float = 0.3  # Lower for more consistent outputs
+    OPENAI_TIMEOUT_SECONDS: int = 120
+
+    # LLM Feature Flags
+    LLM_ENABLED: bool = True
+    LLM_DEBUG_MODE: bool = False  # Log prompts/responses when True
+
     # API
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "AcmeLearn API"

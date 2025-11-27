@@ -22,6 +22,18 @@ docker compose logs -f
 | `acmelearn_backend` | 8000 | FastAPI backend |
 | `acmelearn_frontend` | 5173 | React/Vite frontend |
 
+## Backend Startup Sequence
+
+When the backend container starts, the following happens automatically:
+
+1. **Alembic migrations** - Database schema migrations run (`alembic upgrade head`)
+2. **Table creation** - Any tables not covered by migrations are created
+3. **Course seeding** - Courses loaded from `courses.json` (skipped if already exist)
+4. **Superuser creation** - Admin user created if `SUPERUSER_EMAIL` is set
+5. **Demo users** - 25 demo users created if `SEED_DEMO_USERS=true`
+
+Logs show: `Running database migrations...` followed by `Startup complete!`
+
 ## Access Points
 
 - **Frontend**: http://localhost:5173
@@ -98,8 +110,29 @@ docker compose ps
 # View backend logs only
 docker compose logs -f backend
 
+# View performance logs (recommendation timing)
+docker compose logs backend | grep "\[PERF\]"
+
 # Clean up everything (including volumes)
 docker compose down -v
+```
+
+## Database Migrations
+
+Migrations run automatically on startup. For manual operations:
+
+```bash
+# Check current migration version
+docker exec acmelearn_backend uv run alembic current
+
+# Create migration after model changes
+docker exec acmelearn_backend uv run alembic revision --autogenerate -m "description"
+
+# Apply pending migrations
+docker exec acmelearn_backend uv run alembic upgrade head
+
+# Rollback one migration
+docker exec acmelearn_backend uv run alembic downgrade -1
 ```
 
 ## Database Access

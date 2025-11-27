@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from models.user_profile import UserProfile
+from models.user_profile_snapshot import UserProfileSnapshot
 from models.course import Tag
 from models.enums import DifficultyLevel, TimeCommitment
 
@@ -126,3 +127,26 @@ class UserProfileRepository:
         await self.db.refresh(profile, ["interests"])
 
         return profile
+
+    async def get_snapshots(
+        self,
+        profile_id: uuid.UUID,
+        limit: int = 3,
+    ) -> List[UserProfileSnapshot]:
+        """
+        Get recent profile snapshots for history context.
+
+        Args:
+            profile_id: UserProfile's UUID
+            limit: Maximum number of snapshots to return
+
+        Returns:
+            List of UserProfileSnapshot objects (newest first)
+        """
+        result = await self.db.execute(
+            select(UserProfileSnapshot)
+            .where(UserProfileSnapshot.user_profile_id == profile_id)
+            .order_by(UserProfileSnapshot.created_at.desc())
+            .limit(limit)
+        )
+        return list(result.scalars().all())

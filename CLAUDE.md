@@ -123,10 +123,22 @@ mcp__puppeteer__puppeteer_evaluate with script: "document.querySelector('.error-
 
 ## Technology Stack Summary
 
-**Backend**: FastAPI (Python 3.12) + PostgreSQL 16 + SQLAlchemy + fastapi-users (JWT auth)
+**Backend**: FastAPI (Python 3.12) + PostgreSQL 16 + SQLAlchemy + Alembic + fastapi-users (JWT auth)
 **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS + TanStack Query
 **Testing**: pytest (backend) + httpx (async client)
 **Deployment**: Docker Compose (4 containers)
+**LLM**: LangChain + OpenAI (2-agent recommendation pipeline)
+
+## Database Migrations
+
+Alembic migrations run automatically on backend startup. No manual migration needed for normal development.
+
+**After model changes**, create a migration:
+```bash
+docker exec acmelearn_backend uv run alembic revision --autogenerate -m "description"
+```
+
+See `backend/CLAUDE.md` for full Alembic documentation.
 
 ## OpenAI API Keys
 

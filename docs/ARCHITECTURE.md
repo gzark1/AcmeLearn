@@ -244,17 +244,37 @@ def filter_by_tags(db: Session, tags: list[str]) -> list[Course]:
 
 ### 1. LLM Integration Placement
 
-**Decision**: LLM integration lives in `services/recommendation_service.py`
+**Decision**: Separate `llm/` module for multi-agent recommendation system
 
 **Rationale**:
-- LLM calls are business logic (context engineering, prompt construction)
-- Not infrastructure (unlike database)
-- Tightly coupled to recommendation use case
-- For 5-day timeline, no need for separate `llm/` abstraction layer
+- Multi-agent architecture (Profile Analyzer + Course Recommender) justifies abstraction
+- LangChain integration requires structured prompts, schemas, and configuration
+- Clean separation allows testing agents independently
+- Reusable across future AI features (e.g., skill assessment, content generation)
 
-**Alternative considered**: Separate `llm/` module with client abstractions
-- **Rejected**: Over-engineering for single LLM use case
-- **When to reconsider**: If adding multi-agent systems or multiple LLM providers
+**Structure**:
+```
+backend/llm/
+├── agents/              # Agent implementations
+│   ├── profile_analyzer.py   # Agent 1: Analyzes user profile
+│   └── course_recommender.py # Agent 2: Generates recommendations
+├── prompts/             # Prompt templates (separate from logic)
+│   ├── profile_analyzer.py
+│   └── course_recommender.py
+├── schemas.py           # Structured output schemas (Pydantic)
+├── filters.py           # Pre-filtering logic (difficulty, interests)
+├── config.py            # LangChain LLM configuration (singleton)
+└── exceptions.py        # LLM-specific exceptions
+```
+
+**Service Layer Integration**:
+- `RecommendationService` orchestrates the pipeline without knowing LLM internals
+- Agents are imported and invoked as dependencies
+- Prompt engineering and LLM configuration isolated in `llm/` module
+
+**Original decision (superseded)**: LLM logic in `services/recommendation_service.py` only
+- Made sense for single LLM call in 5-day MVP
+- Evolved to multi-agent system requiring proper module structure
 
 ### 2. Database Choice: PostgreSQL with Docker
 

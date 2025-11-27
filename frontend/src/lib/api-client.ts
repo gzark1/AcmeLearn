@@ -3,7 +3,7 @@ import Axios, { type InternalAxiosRequestConfig } from 'axios'
 import { env } from '@/config/env'
 import { paths } from '@/config/paths'
 import { useNotifications } from '@/stores/notifications'
-import { getToken } from '@/utils/storage'
+import { getToken, clearToken } from '@/utils/storage'
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
@@ -37,8 +37,13 @@ api.interceptors.response.use(
     })
 
     if (error.response?.status === 401) {
-      const redirectTo = window.location.pathname
-      window.location.href = paths.auth.login.getHref(redirectTo)
+      // Clear the invalid token to prevent infinite redirect loop
+      clearToken()
+      // Only redirect if not already on auth pages
+      const currentPath = window.location.pathname
+      if (!currentPath.startsWith('/login') && !currentPath.startsWith('/register')) {
+        window.location.href = paths.auth.login.getHref(currentPath)
+      }
     }
 
     return Promise.reject(error)

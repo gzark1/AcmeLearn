@@ -197,3 +197,21 @@ class CategoryDistributionResponse(BaseModel):
     """Category interest distribution response."""
     categories: List[CategoryDistributionItem]
     total_selections: int
+
+
+# Course Catalog Summary schemas
+
+class DifficultyStats(BaseModel):
+    """Stats for a single difficulty level."""
+    difficulty: str  # beginner, intermediate, advanced
+    count: int
+    percentage: float
+    avg_hours: float
+
+
+class CourseSummaryResponse(BaseModel):
+    """Course catalog summary response."""
+    difficulty_distribution: List[DifficultyStats]
+    total_courses: int
+    total_hours: int
+    avg_course_hours: float

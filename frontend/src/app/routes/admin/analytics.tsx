@@ -6,6 +6,7 @@ import {
   usePopularTags,
   useUserGrowth,
   useCategoryDistribution,
+  useCourseSummary,
 } from '@/features/admin/api'
 import {
   ProfileBreakdownChart,
@@ -14,6 +15,7 @@ import {
   PopularTagsChart,
   UserGrowthChart,
   CategoryDistribution,
+  CourseSummary,
 } from '@/features/admin/components'
 import { exportAnalyticsToCsv } from '@/features/admin/utils/export-csv'
 
@@ -24,8 +26,9 @@ export const AdminAnalyticsPage = () => {
   const { data: popularTags, isLoading: tagsLoading } = usePopularTags(50)
   const { data: userGrowth, isLoading: growthLoading } = useUserGrowth(30)
   const { data: categoryDist, isLoading: categoryLoading } = useCategoryDistribution()
+  const { data: courseSummary, isLoading: courseLoading } = useCourseSummary()
 
-  const isAnyLoading = profileLoading || levelLoading || timeLoading || tagsLoading || growthLoading || categoryLoading
+  const isAnyLoading = profileLoading || levelLoading || timeLoading || tagsLoading || growthLoading || categoryLoading || courseLoading
 
   const handleExportCsv = () => {
     exportAnalyticsToCsv({
@@ -100,6 +103,15 @@ export const AdminAnalyticsPage = () => {
         categories={categoryDist?.categories ?? []}
         totalSelections={categoryDist?.total_selections ?? 0}
         isLoading={categoryLoading}
+      />
+
+      {/* Course Catalog Summary */}
+      <CourseSummary
+        difficultyDistribution={courseSummary?.difficulty_distribution ?? []}
+        totalCourses={courseSummary?.total_courses ?? 0}
+        totalHours={courseSummary?.total_hours ?? 0}
+        avgCourseHours={courseSummary?.avg_course_hours ?? 0}
+        isLoading={courseLoading}
       />
     </div>
   )

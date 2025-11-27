@@ -127,3 +127,30 @@ export const useCategoryDistribution = () => {
     staleTime: 15 * 60 * 1000, // 15 minutes
   })
 }
+
+// Course Summary
+export type DifficultyStats = {
+  difficulty: string
+  count: number
+  percentage: number
+  avg_hours: number
+}
+
+export type CourseSummaryResponse = {
+  difficulty_distribution: DifficultyStats[]
+  total_courses: number
+  total_hours: number
+  avg_course_hours: number
+}
+
+export const getCourseSummary = async (): Promise<CourseSummaryResponse> => {
+  return api.get('/admin/analytics/course-summary') as Promise<CourseSummaryResponse>
+}
+
+export const useCourseSummary = () => {
+  return useQuery({
+    queryKey: ['admin', 'analytics', 'course-summary'],
+    queryFn: getCourseSummary,
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  })
+}

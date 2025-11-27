@@ -19,7 +19,7 @@ from core.database import get_async_session
 from core.users import current_superuser
 from models.user import User
 from models.user_profile import UserProfile, UserInterest
-from models.course import Tag
+from models.course import Tag, Course
 from models.recommendation import Recommendation
 from repositories.user_repository import UserRepository
 from schemas.admin import (
@@ -43,6 +43,8 @@ from schemas.admin import (
     InsightsResponse,
     CategoryDistributionItem,
     CategoryDistributionResponse,
+    DifficultyStats,
+    CourseSummaryResponse,
 )
 
 
@@ -744,6 +746,65 @@ async def get_user_growth(
     return UserGrowthResponse(
         data=data_points,
         period_days=days,
+    )
+
+
+@router.get("/analytics/course-summary", response_model=CourseSummaryResponse)
+async def get_course_summary(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get course catalog summary (superuser only).
+
+    Returns difficulty distribution with counts, percentages, and average hours,
+    plus total and average course duration.
+    """
+    # Query course stats grouped by difficulty
+    result = await db.execute(
+        select(
+            Course.difficulty,
+            func.count(Course.id).label("count"),
+            func.avg(Course.duration).label("avg_hours"),
+        )
+        .group_by(Course.difficulty)
+    )
+    difficulty_rows = result.all()
+
+    # Get totals
+    total_result = await db.execute(
+        select(
+            func.count(Course.id).label("total"),
+            func.sum(Course.duration).label("total_hours"),
+            func.avg(Course.duration).label("avg_hours"),
+        )
+    )
+    totals = total_result.first()
+    total_courses = totals.total or 0
+    total_hours = totals.total_hours or 0
+    avg_course_hours = totals.avg_hours or 0.0
+
+    # Build difficulty distribution with percentages
+    difficulty_distribution = []
+    for row in difficulty_rows:
+        difficulty_name = row.difficulty.value if row.difficulty else "unknown"
+        percentage = (row.count / total_courses * 100) if total_courses > 0 else 0
+        difficulty_distribution.append(DifficultyStats(
+            difficulty=difficulty_name,
+            count=row.count,
+            percentage=round(percentage, 1),
+            avg_hours=round(row.avg_hours or 0, 1),
+        ))
+
+    # Sort by standard difficulty order: beginner, intermediate, advanced
+    difficulty_order = {"beginner": 0, "intermediate": 1, "advanced": 2}
+    difficulty_distribution.sort(key=lambda x: difficulty_order.get(x.difficulty, 99))
+
+    return CourseSummaryResponse(
+        difficulty_distribution=difficulty_distribution,
+        total_courses=total_courses,
+        total_hours=int(total_hours),
+        avg_course_hours=round(avg_course_hours, 1),
     )
 
 

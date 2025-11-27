@@ -103,3 +103,27 @@ export const useUserGrowth = (days: number = 30) => {
     staleTime: 15 * 60 * 1000, // 15 minutes
   })
 }
+
+// Category Distribution
+export type CategoryDistributionItem = {
+  category: string
+  count: number
+  percentage: number
+}
+
+export type CategoryDistributionApiResponse = {
+  categories: CategoryDistributionItem[]
+  total_selections: number
+}
+
+export const getCategoryDistribution = async (): Promise<CategoryDistributionApiResponse> => {
+  return api.get('/admin/analytics/category-distribution') as Promise<CategoryDistributionApiResponse>
+}
+
+export const useCategoryDistribution = () => {
+  return useQuery({
+    queryKey: ['admin', 'analytics', 'category-distribution'],
+    queryFn: getCategoryDistribution,
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  })
+}

@@ -17,6 +17,10 @@ export const getAdminUsers = async (
     params.append('is_active', String(filters.is_active))
   }
 
+  if (filters.profile_status) {
+    params.append('profile_status', filters.profile_status)
+  }
+
   if (filters.skip !== undefined) {
     params.append('skip', String(filters.skip))
   }

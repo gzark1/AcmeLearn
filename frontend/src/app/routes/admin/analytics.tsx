@@ -5,6 +5,7 @@ import {
   useTimeDistribution,
   usePopularTags,
   useUserGrowth,
+  useCategoryDistribution,
 } from '@/features/admin/api'
 import {
   ProfileBreakdownChart,
@@ -12,6 +13,7 @@ import {
   TimeDistribution,
   PopularTagsChart,
   UserGrowthChart,
+  CategoryDistribution,
 } from '@/features/admin/components'
 import { exportAnalyticsToCsv } from '@/features/admin/utils/export-csv'
 
@@ -21,8 +23,9 @@ export const AdminAnalyticsPage = () => {
   const { data: timeDist, isLoading: timeLoading } = useTimeDistribution()
   const { data: popularTags, isLoading: tagsLoading } = usePopularTags(50)
   const { data: userGrowth, isLoading: growthLoading } = useUserGrowth(30)
+  const { data: categoryDist, isLoading: categoryLoading } = useCategoryDistribution()
 
-  const isAnyLoading = profileLoading || levelLoading || timeLoading || tagsLoading || growthLoading
+  const isAnyLoading = profileLoading || levelLoading || timeLoading || tagsLoading || growthLoading || categoryLoading
 
   const handleExportCsv = () => {
     exportAnalyticsToCsv({
@@ -90,6 +93,13 @@ export const AdminAnalyticsPage = () => {
       <PopularTagsChart
         tags={popularTags?.tags ?? []}
         isLoading={tagsLoading}
+      />
+
+      {/* Category Interest Distribution */}
+      <CategoryDistribution
+        categories={categoryDist?.categories ?? []}
+        totalSelections={categoryDist?.total_selections ?? 0}
+        isLoading={categoryLoading}
       />
     </div>
   )

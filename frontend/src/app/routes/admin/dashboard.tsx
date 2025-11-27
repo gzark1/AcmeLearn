@@ -1,6 +1,14 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import { useAdminStats } from '@/features/admin/api'
-import { StatsCard } from '@/features/admin/components'
+import {
+  useAdminStats,
+  useActivityFeed,
+  useQuickInsights,
+} from '@/features/admin/api'
+import {
+  StatsCard,
+  ActivityFeed,
+  QuickInsights,
+} from '@/features/admin/components'
 
 const DashboardSkeleton = () => (
   <div className="space-y-6">
@@ -8,7 +16,9 @@ const DashboardSkeleton = () => (
       <Skeleton className="h-9 w-64" />
       <Skeleton className="mt-2 h-5 w-48" />
     </div>
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Skeleton className="h-[140px]" />
+      <Skeleton className="h-[140px]" />
       <Skeleton className="h-[140px]" />
       <Skeleton className="h-[140px]" />
       <Skeleton className="h-[140px]" />
@@ -18,13 +28,15 @@ const DashboardSkeleton = () => (
 )
 
 export const AdminDashboardPage = () => {
-  const { data: stats, isLoading, error } = useAdminStats()
+  const { data: stats, isLoading: statsLoading, error: statsError } = useAdminStats()
+  const { data: activityData, isLoading: activityLoading } = useActivityFeed(10)
+  const { data: insightsData, isLoading: insightsLoading } = useQuickInsights()
 
-  if (isLoading) {
+  if (statsLoading) {
     return <DashboardSkeleton />
   }
 
-  if (error) {
+  if (statsError) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4">
         <p className="text-red-700">Failed to load admin statistics.</p>
@@ -46,65 +58,91 @@ export const AdminDashboardPage = () => {
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
         <p className="mt-1 text-slate-600">
-          System overview and user management
+          Platform overview and user management
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {/* Stats Grid - 6 cards in 2 rows */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Row 1 */}
         <StatsCard
           label="Total Users"
           value={stats?.total_users ?? 0}
           description="Registered accounts"
           trend={{
-            value: `${stats?.active_users ?? 0} active`,
+            value: `+${stats?.new_registrations_7d ?? 0} this week`,
+            direction: (stats?.new_registrations_7d ?? 0) > 0 ? 'up' : 'neutral',
+          }}
+        />
+
+        <StatsCard
+          label="Profiles Complete"
+          value={completionPercentage}
+          description="Avg profile completeness"
+          trend={{
+            value: `${stats?.profiles_complete_count ?? 0} of ${stats?.total_users ?? 0} users`,
             direction: 'neutral',
+          }}
+        />
+
+        <StatsCard
+          label="Avg Profile Updates"
+          value={stats?.avg_profile_updates ?? 0}
+          description="Updates per user"
+          trend={{
+            value: 'Profile refinements',
+            direction: 'neutral',
+          }}
+        />
+
+        {/* Row 2 */}
+        <StatsCard
+          label="AI Recs Today"
+          value={0}
+          description="Recommendations generated"
+          trend={{
+            value: 'Coming soon',
+            direction: 'neutral',
+          }}
+        />
+
+        <StatsCard
+          label="Signups This Week"
+          value={stats?.new_registrations_7d ?? 0}
+          description="New registrations"
+          trend={{
+            value: `${stats?.new_registrations_30d ?? 0} this month`,
+            direction: (stats?.new_registrations_7d ?? 0) > 0 ? 'up' : 'neutral',
           }}
         />
 
         <StatsCard
           label="Active Users"
-          value={stats?.active_users ?? 0}
-          description={`${activeRate}% of all users`}
+          value={`${activeRate}%`}
+          description="Non-deactivated accounts"
           trend={{
-            value: 'Currently active',
-            direction: 'up',
-          }}
-        />
-
-        <StatsCard
-          label="Profile Completion"
-          value={completionPercentage}
-          description="Avg profile completeness"
-          trend={{
-            value: 'With learning goals',
-            direction: 'neutral',
-          }}
-        />
-
-        <StatsCard
-          label="Superusers"
-          value={stats?.superuser_count ?? 0}
-          description="Admin accounts"
-          trend={{
-            value: 'Platform admins',
-            direction: 'neutral',
+            value: `${stats?.active_users ?? 0} of ${stats?.total_users ?? 0}`,
+            direction: activeRate > 90 ? 'up' : 'neutral',
           }}
         />
       </div>
 
-      {/* Quick Stats Summary */}
-      <div className="rounded-xl border border-violet-200 bg-violet-50 p-6">
-        <h2 className="text-lg font-semibold text-violet-900">
-          Platform Summary
+      {/* Quick Insights */}
+      <div>
+        <h2 className="mb-3 text-lg font-semibold text-slate-900">
+          Quick Insights
         </h2>
-        <p className="mt-2 text-sm text-violet-700">
-          Your platform has <strong>{stats?.total_users ?? 0}</strong> registered
-          users, of which <strong>{stats?.active_users ?? 0}</strong> are
-          currently active. The average profile completion rate is{' '}
-          <strong>{completionPercentage}</strong>.
-        </p>
+        <QuickInsights
+          insights={insightsData?.insights ?? []}
+          isLoading={insightsLoading}
+        />
       </div>
+
+      {/* Activity Feed */}
+      <ActivityFeed
+        events={activityData?.events ?? []}
+        isLoading={activityLoading}
+      />
     </div>
   )
 }

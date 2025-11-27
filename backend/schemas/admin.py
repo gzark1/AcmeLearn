@@ -3,7 +3,7 @@ Admin schemas for user management and analytics.
 """
 import uuid
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -22,6 +22,7 @@ class UserListItem(BaseModel):
     has_level: bool = False
     has_time_commitment: bool = False
     interest_count: int = 0
+    current_level: Optional[str] = None  # beginner, intermediate, advanced
 
     class Config:
         from_attributes = True
@@ -58,6 +59,8 @@ class UserDetailResponse(BaseModel):
     is_active: bool
     is_superuser: bool
     is_verified: bool
+    created_at: datetime  # User registration date
+    recommendation_count: int = 0  # Count of AI recommendations
     profile: Optional[ProfileSummary] = None
 
     class Config:
@@ -91,9 +94,11 @@ class AnalyticsOverview(BaseModel):
     total_users: int
     active_users: int
     superuser_count: int
-    new_registrations_7d: int = 0  # Stub - would need created_at on User
-    new_registrations_30d: int = 0  # Stub
+    new_registrations_7d: int = 0
+    new_registrations_30d: int = 0
     profile_completion_rate: float = Field(..., ge=0.0, le=1.0)
+    avg_profile_updates: float = 0.0  # Average profile version across users
+    profiles_complete_count: int = 0  # Users with all 4 fields filled
 
 
 class PopularTag(BaseModel):
@@ -146,3 +151,49 @@ class UserGrowthResponse(BaseModel):
     """User growth time series response."""
     data: List[UserGrowthDataPoint]
     period_days: int
+
+
+# Dashboard schemas
+
+class ActivityLogRead(BaseModel):
+    """Activity log entry for dashboard feed."""
+    id: uuid.UUID
+    event_type: str
+    user_id: uuid.UUID
+    user_email: str
+    description: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ActivityFeedResponse(BaseModel):
+    """Activity feed response."""
+    events: List[ActivityLogRead]
+    count: int
+
+
+class InsightItem(BaseModel):
+    """Single insight item for dashboard."""
+    icon: str  # emoji
+    text: str
+    type: Literal["positive", "warning", "info"]
+
+
+class InsightsResponse(BaseModel):
+    """Quick insights response."""
+    insights: List[InsightItem]
+
+
+class CategoryDistributionItem(BaseModel):
+    """Single category in distribution."""
+    category: str
+    count: int
+    percentage: float
+
+
+class CategoryDistributionResponse(BaseModel):
+    """Category interest distribution response."""
+    categories: List[CategoryDistributionItem]
+    total_selections: int

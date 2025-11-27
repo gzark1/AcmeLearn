@@ -11,6 +11,7 @@ import {
   ProfileCompleteness,
   ProfileHistoryModal,
   DeactivateUserModal,
+  ActivitySummary,
 } from '@/features/admin/components'
 
 const UserDetailSkeleton = () => (
@@ -206,6 +207,9 @@ export const AdminUserDetailPage = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Activity Summary */}
+      <ActivitySummary user={user} />
 
       {/* Profile History Modal */}
       <ProfileHistoryModal

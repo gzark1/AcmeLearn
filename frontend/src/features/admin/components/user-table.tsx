@@ -55,6 +55,12 @@ export const UserTable = ({ users, isLoading }: UserTableProps) => {
               scope="col"
               className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-700"
             >
+              Level
+            </th>
+            <th
+              scope="col"
+              className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-700"
+            >
               Profile
             </th>
             <th

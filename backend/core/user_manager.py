@@ -75,6 +75,21 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 
         print(f"Created empty profile {profile.id} and initial snapshot for user {user.id}")
 
+        # Log registration event (non-blocking)
+        try:
+            from models.activity_log import ActivityLog, ActivityEventType
+
+            activity_log = ActivityLog(
+                event_type=ActivityEventType.REGISTRATION,
+                user_id=user.id,
+                user_email=user.email,
+                description="registered",
+            )
+            db.add(activity_log)
+            await db.commit()
+        except Exception as e:
+            print(f"Failed to log registration activity: {e}")
+
 
 async def get_user_manager(session: AsyncSession = Depends(get_async_session)):
     """Dependency to get UserManager instance."""

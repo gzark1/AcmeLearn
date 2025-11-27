@@ -26,6 +26,7 @@ export const AdminUsersPage = () => {
 
   const email = searchParams.get('email') || ''
   const status = searchParams.get('status') || ''
+  const profileStatus = searchParams.get('profile_status') || ''
   const page = parseInt(searchParams.get('page') || '1', 10)
 
   const skip = (page - 1) * ITEMS_PER_PAGE
@@ -33,6 +34,7 @@ export const AdminUsersPage = () => {
   const { data, isLoading, error } = useAdminUsers({
     email: email || undefined,
     is_active: status === 'active' ? true : status === 'inactive' ? false : undefined,
+    profile_status: profileStatus || undefined,
     skip,
     limit: ITEMS_PER_PAGE,
   })
@@ -54,6 +56,17 @@ export const AdminUsersPage = () => {
       newParams.set('status', value)
     } else {
       newParams.delete('status')
+    }
+    newParams.set('page', '1')
+    setSearchParams(newParams)
+  }
+
+  const handleProfileStatusChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value) {
+      newParams.set('profile_status', value)
+    } else {
+      newParams.delete('profile_status')
     }
     newParams.set('page', '1')
     setSearchParams(newParams)
@@ -95,6 +108,8 @@ export const AdminUsersPage = () => {
         onSearchChange={handleSearchChange}
         statusFilter={status}
         onStatusFilterChange={handleStatusChange}
+        profileFilter={profileStatus}
+        onProfileFilterChange={handleProfileStatusChange}
       />
 
       {/* User Table */}

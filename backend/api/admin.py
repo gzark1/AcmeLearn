@@ -7,7 +7,11 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Optional
 
+import csv
+import io
+
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from sqlalchemy import select, func, cast, Date
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,6 +20,7 @@ from core.users import current_superuser
 from models.user import User
 from models.user_profile import UserProfile, UserInterest
 from models.course import Tag
+from models.recommendation import Recommendation
 from repositories.user_repository import UserRepository
 from schemas.admin import (
     UserListItem,
@@ -32,6 +37,12 @@ from schemas.admin import (
     TimeDistributionResponse,
     UserGrowthDataPoint,
     UserGrowthResponse,
+    ActivityLogRead,
+    ActivityFeedResponse,
+    InsightItem,
+    InsightsResponse,
+    CategoryDistributionItem,
+    CategoryDistributionResponse,
 )
 
 
@@ -50,13 +61,15 @@ async def list_users(
     email: Optional[str] = Query(None, description="Email substring search"),
     is_active: Optional[bool] = Query(None, description="Filter by active status"),
     is_superuser: Optional[bool] = Query(None, description="Filter by superuser status"),
+    profile_status: Optional[str] = Query(None, description="Filter by profile completion: complete, partial, empty"),
     _: User = Depends(current_superuser),
     db: AsyncSession = Depends(get_async_session),
 ):
     """
     List all users with optional filters (superuser only).
 
-    Supports pagination and filtering by email, is_active, is_superuser.
+    Supports pagination and filtering by email, is_active, is_superuser, profile_status.
+    Profile status: complete (all fields), partial (some fields), empty (no fields).
     """
     repo = UserRepository(db)
     users, total = await repo.get_users_with_filters(
@@ -80,11 +93,13 @@ async def list_users(
         has_learning_goal = False
         has_level = False
         has_time_commitment = False
+        current_level = None
 
         if profile:
             has_learning_goal = profile.learning_goal is not None
             has_level = profile.current_level is not None
             has_time_commitment = profile.time_commitment is not None
+            current_level = profile.current_level.value if profile.current_level else None
             # Count interests
             count_result = await db.execute(
                 select(func.count())
@@ -92,6 +107,19 @@ async def list_users(
                 .where(UserInterest.user_profile_id == profile.id)
             )
             interest_count = count_result.scalar() or 0
+
+        # Determine profile completion status for filtering
+        filled_fields = sum([has_learning_goal, has_level, has_time_commitment, interest_count > 0])
+        if filled_fields == 4:
+            user_profile_status = "complete"
+        elif filled_fields == 0:
+            user_profile_status = "empty"
+        else:
+            user_profile_status = "partial"
+
+        # Skip user if profile_status filter doesn't match
+        if profile_status and user_profile_status != profile_status:
+            continue
 
         user_items.append(UserListItem(
             id=user.id,
@@ -103,13 +131,117 @@ async def list_users(
             has_level=has_level,
             has_time_commitment=has_time_commitment,
             interest_count=interest_count,
+            current_level=current_level,
         ))
+
+    # Adjust total count if profile_status filter applied
+    if profile_status:
+        total = len(user_items)
 
     return UserListResponse(
         users=user_items,
         total=total,
         skip=skip,
         limit=limit,
+    )
+
+
+@router.get("/users/export")
+async def export_users(
+    email: Optional[str] = Query(None, description="Email substring search"),
+    is_active: Optional[bool] = Query(None, description="Filter by active status"),
+    profile_status: Optional[str] = Query(None, description="Filter by profile completion: complete, partial, empty"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Export users list as CSV (superuser only).
+
+    Same filters as /users endpoint but returns all matching users as CSV.
+    """
+    repo = UserRepository(db)
+    # Fetch all users without pagination
+    users, _ = await repo.get_users_with_filters(
+        skip=0,
+        limit=10000,  # High limit for export
+        email_search=email,
+        is_active=is_active,
+        is_superuser=None,
+    )
+
+    # Build CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Header row
+    writer.writerow([
+        'Email', 'Status', 'Verified', 'Admin', 'Level',
+        'Learning Goal', 'Time Commitment', 'Interests'
+    ])
+
+    # Data rows
+    for user in users:
+        # Get profile data
+        profile_result = await db.execute(
+            select(UserProfile).where(UserProfile.user_id == user.id)
+        )
+        profile = profile_result.scalar_one_or_none()
+
+        # Profile fields
+        has_learning_goal = False
+        has_level = False
+        has_time_commitment = False
+        current_level = None
+        learning_goal = None
+        time_commitment = None
+        interest_count = 0
+
+        if profile:
+            has_learning_goal = profile.learning_goal is not None
+            has_level = profile.current_level is not None
+            has_time_commitment = profile.time_commitment is not None
+            current_level = profile.current_level.value if profile.current_level else None
+            learning_goal = profile.learning_goal
+            time_commitment = profile.time_commitment.value if profile.time_commitment else None
+
+            # Count interests
+            count_result = await db.execute(
+                select(func.count())
+                .select_from(UserInterest)
+                .where(UserInterest.user_profile_id == profile.id)
+            )
+            interest_count = count_result.scalar() or 0
+
+        # Determine profile status for filtering
+        filled_fields = sum([has_learning_goal, has_level, has_time_commitment, interest_count > 0])
+        if filled_fields == 4:
+            user_profile_status = "complete"
+        elif filled_fields == 0:
+            user_profile_status = "empty"
+        else:
+            user_profile_status = "partial"
+
+        # Skip if profile_status filter doesn't match
+        if profile_status and user_profile_status != profile_status:
+            continue
+
+        writer.writerow([
+            user.email,
+            'Active' if user.is_active else 'Inactive',
+            'Yes' if user.is_verified else 'No',
+            'Yes' if user.is_superuser else 'No',
+            current_level.capitalize() if current_level else '-',
+            learning_goal or '-',
+            time_commitment or '-',
+            str(interest_count),
+        ])
+
+    output.seek(0)
+
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=users.csv"}
     )
 
 
@@ -129,6 +261,14 @@ async def get_user_detail(
         raise HTTPException(status_code=404, detail="User not found")
 
     user, profile = result
+
+    # Count recommendations for this user
+    rec_count_result = await db.execute(
+        select(func.count())
+        .select_from(Recommendation)
+        .where(Recommendation.user_id == user_id)
+    )
+    recommendation_count = rec_count_result.scalar() or 0
 
     profile_summary = None
     if profile:
@@ -151,6 +291,8 @@ async def get_user_detail(
         is_active=user.is_active,
         is_superuser=user.is_superuser,
         is_verified=user.is_verified,
+        created_at=user.created_at,
+        recommendation_count=recommendation_count,
         profile=profile_summary,
     )
 
@@ -178,9 +320,32 @@ async def deactivate_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
+    # Log deactivation event (non-blocking)
+    try:
+        from models.activity_log import ActivityLog, ActivityEventType
+
+        activity_log = ActivityLog(
+            event_type=ActivityEventType.DEACTIVATION,
+            user_id=user.id,
+            user_email=user.email,
+            description="account deactivated",
+        )
+        db.add(activity_log)
+        await db.commit()
+    except Exception as e:
+        print(f"Failed to log deactivation activity: {e}")
+
     # Get profile for response
     result = await repo.get_user_with_profile(user_id)
     _, profile = result
+
+    # Count recommendations
+    rec_count_result = await db.execute(
+        select(func.count())
+        .select_from(Recommendation)
+        .where(Recommendation.user_id == user_id)
+    )
+    recommendation_count = rec_count_result.scalar() or 0
 
     profile_summary = None
     if profile:
@@ -203,6 +368,8 @@ async def deactivate_user(
         is_active=user.is_active,
         is_superuser=user.is_superuser,
         is_verified=user.is_verified,
+        created_at=user.created_at,
+        recommendation_count=recommendation_count,
         profile=profile_summary,
     )
 
@@ -257,13 +424,57 @@ async def get_analytics_overview(
     stats = await repo.get_user_count_stats()
     completion_rate = await repo.get_profile_completion_rate()
 
+    # Calculate new registrations in last 7 and 30 days
+    now = datetime.utcnow()
+    seven_days_ago = now - timedelta(days=7)
+    thirty_days_ago = now - timedelta(days=30)
+
+    new_7d_result = await db.execute(
+        select(func.count(User.id)).where(User.created_at >= seven_days_ago)
+    )
+    new_registrations_7d = new_7d_result.scalar() or 0
+
+    new_30d_result = await db.execute(
+        select(func.count(User.id)).where(User.created_at >= thirty_days_ago)
+    )
+    new_registrations_30d = new_30d_result.scalar() or 0
+
+    # Calculate average profile updates (version number)
+    avg_version_result = await db.execute(
+        select(func.avg(UserProfile.version))
+    )
+    avg_profile_updates = avg_version_result.scalar() or 0.0
+
+    # Calculate complete profiles count (all 4 fields filled)
+    profiles_result = await db.execute(select(UserProfile))
+    profiles = profiles_result.scalars().all()
+    complete_count = 0
+
+    for profile in profiles:
+        interest_count_result = await db.execute(
+            select(func.count())
+            .select_from(UserInterest)
+            .where(UserInterest.user_profile_id == profile.id)
+        )
+        interest_count = interest_count_result.scalar() or 0
+
+        has_goal = profile.learning_goal is not None
+        has_level = profile.current_level is not None
+        has_time = profile.time_commitment is not None
+        has_interests = interest_count > 0
+
+        if all([has_goal, has_level, has_time, has_interests]):
+            complete_count += 1
+
     return AnalyticsOverview(
         total_users=stats["total_users"],
         active_users=stats["active_users"],
         superuser_count=stats["superuser_count"],
-        new_registrations_7d=0,  # Would need created_at tracking
-        new_registrations_30d=0,  # Would need created_at tracking
+        new_registrations_7d=new_registrations_7d,
+        new_registrations_30d=new_registrations_30d,
         profile_completion_rate=completion_rate,
+        avg_profile_updates=round(avg_profile_updates, 1),
+        profiles_complete_count=complete_count,
     )
 
 
@@ -307,6 +518,48 @@ async def get_popular_tags(
     total_tags = total_result.scalar() or 0
 
     return PopularTagsResponse(tags=tags, total_tags=total_tags)
+
+
+@router.get("/analytics/category-distribution", response_model=CategoryDistributionResponse)
+async def get_category_distribution(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get category interest distribution (superuser only).
+
+    Shows the percentage breakdown of user interest selections by tag category.
+    """
+    # Query to get count of user interests by tag category
+    result = await db.execute(
+        select(
+            Tag.category,
+            func.count(UserInterest.tag_id).label("count")
+        )
+        .join(UserInterest, Tag.id == UserInterest.tag_id)
+        .group_by(Tag.category)
+        .order_by(func.count(UserInterest.tag_id).desc())
+    )
+    rows = result.all()
+
+    # Calculate total selections
+    total_selections = sum(row.count for row in rows)
+
+    # Build category distribution
+    categories = []
+    for row in rows:
+        category_name = row.category.value if row.category else "OTHER"
+        percentage = (row.count / total_selections * 100) if total_selections > 0 else 0
+        categories.append(CategoryDistributionItem(
+            category=category_name,
+            count=row.count,
+            percentage=round(percentage, 1),
+        ))
+
+    return CategoryDistributionResponse(
+        categories=categories,
+        total_selections=total_selections,
+    )
 
 
 @router.get("/analytics/profile-breakdown", response_model=ProfileBreakdownResponse)
@@ -492,3 +745,138 @@ async def get_user_growth(
         data=data_points,
         period_days=days,
     )
+
+
+# ============================================================================
+# Dashboard Endpoints
+# ============================================================================
+
+
+@router.get("/dashboard/activity", response_model=ActivityFeedResponse)
+async def get_activity_feed(
+    limit: int = Query(10, ge=1, le=50, description="Max events to return"),
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get recent activity events (superuser only).
+
+    Returns the most recent platform activity for the dashboard feed.
+    """
+    from models.activity_log import ActivityLog
+
+    result = await db.execute(
+        select(ActivityLog)
+        .order_by(ActivityLog.created_at.desc())
+        .limit(limit)
+    )
+    events = result.scalars().all()
+
+    return ActivityFeedResponse(
+        events=[
+            ActivityLogRead(
+                id=e.id,
+                event_type=e.event_type.value,
+                user_id=e.user_id,
+                user_email=e.user_email,
+                description=e.description,
+                created_at=e.created_at,
+            )
+            for e in events
+        ],
+        count=len(events),
+    )
+
+
+@router.get("/dashboard/insights", response_model=InsightsResponse)
+async def get_quick_insights(
+    _: User = Depends(current_superuser),
+    db: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get quick platform insights (superuser only).
+
+    Returns 3 insight cards for the dashboard.
+    """
+    insights = []
+
+    # Get all profiles with interest counts
+    profiles_result = await db.execute(select(UserProfile))
+    profiles = profiles_result.scalars().all()
+    total_profiles = len(profiles)
+
+    complete_count = 0
+    users_without_interests = 0
+
+    for profile in profiles:
+        interest_count_result = await db.execute(
+            select(func.count())
+            .select_from(UserInterest)
+            .where(UserInterest.user_profile_id == profile.id)
+        )
+        interest_count = interest_count_result.scalar() or 0
+
+        has_goal = profile.learning_goal is not None
+        has_level = profile.current_level is not None
+        has_time = profile.time_commitment is not None
+        has_interests = interest_count > 0
+
+        if all([has_goal, has_level, has_time, has_interests]):
+            complete_count += 1
+        if not has_interests:
+            users_without_interests += 1
+
+    completion_rate = (complete_count / total_profiles * 100) if total_profiles > 0 else 0
+
+    # 1. Complete profiles insight (users with all 4 fields filled)
+    if completion_rate >= 50:
+        insights.append(InsightItem(
+            icon="📈",
+            text=f"{complete_count} of {total_profiles} users have complete profiles ({completion_rate:.0f}%)",
+            type="positive",
+        ))
+    elif completion_rate < 30:
+        insights.append(InsightItem(
+            icon="⚠️",
+            text=f"Only {complete_count} of {total_profiles} users have complete profiles ({completion_rate:.0f}%)",
+            type="warning",
+        ))
+    else:
+        insights.append(InsightItem(
+            icon="📊",
+            text=f"{complete_count} of {total_profiles} users have complete profiles ({completion_rate:.0f}%)",
+            type="info",
+        ))
+
+    # 2. Most popular tag insight
+    tag_result = await db.execute(
+        select(Tag.name, func.count(UserInterest.tag_id).label("count"))
+        .join(UserInterest, Tag.id == UserInterest.tag_id)
+        .group_by(Tag.id, Tag.name)
+        .order_by(func.count(UserInterest.tag_id).desc())
+        .limit(1)
+    )
+    top_tag = tag_result.first()
+    if top_tag:
+        insights.append(InsightItem(
+            icon="🔥",
+            text=f"Top interest: \"{top_tag.name}\" ({top_tag.count} users)",
+            type="info",
+        ))
+
+    # 3. Users without interests insight
+    no_interest_rate = (users_without_interests / total_profiles * 100) if total_profiles > 0 else 0
+    if no_interest_rate > 20:
+        insights.append(InsightItem(
+            icon="⚠️",
+            text=f"{users_without_interests} users haven't selected interests",
+            type="warning",
+        ))
+    else:
+        insights.append(InsightItem(
+            icon="✅",
+            text="Most users have selected interests",
+            type="positive",
+        ))
+
+    return InsightsResponse(insights=insights)

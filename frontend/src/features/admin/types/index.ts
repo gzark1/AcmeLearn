@@ -16,6 +16,7 @@ export type AdminUserListItem = {
   has_level: boolean
   has_time_commitment: boolean
   interest_count: number
+  current_level: 'beginner' | 'intermediate' | 'advanced' | null
 }
 
 export type AdminUserListResponse = {
@@ -43,6 +44,8 @@ export type AdminUserDetail = {
   is_active: boolean
   is_superuser: boolean
   is_verified: boolean
+  created_at: string  // User registration date
+  recommendation_count: number  // Count of AI recommendations
   profile: ProfileSummary | null
 }
 
@@ -136,9 +139,15 @@ export type PopularTagsResponse = {
   total_tags: number
 }
 
-export type CategoryDistribution = {
+export type CategoryDistributionItem = {
   category: string
+  count: number
   percentage: number
+}
+
+export type CategoryDistributionResponse = {
+  categories: CategoryDistributionItem[]
+  total_selections: number
 }
 
 export type AnalyticsOverview = {
@@ -148,6 +157,8 @@ export type AnalyticsOverview = {
   new_registrations_7d: number
   new_registrations_30d: number
   profile_completion_rate: number
+  avg_profile_updates: number
+  profiles_complete_count: number
 }
 
 export type AnalyticsData = {
@@ -156,7 +167,7 @@ export type AnalyticsData = {
   level_distribution: LevelDistribution
   time_commitment_distribution: TimeDistribution
   popular_tags: PopularTag[]
-  category_distribution: CategoryDistribution[]
+  category_distribution: CategoryDistributionItem[]
 }
 
 // ============================================================================

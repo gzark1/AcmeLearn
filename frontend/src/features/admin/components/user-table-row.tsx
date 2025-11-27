@@ -32,6 +32,13 @@ export const UserTableRow = ({ user }: UserTableRowProps) => {
         </div>
       </td>
       <td className="px-4 py-3">
+        <span className="text-sm text-slate-700">
+          {user.current_level
+            ? user.current_level.charAt(0).toUpperCase() + user.current_level.slice(1)
+            : '-'}
+        </span>
+      </td>
+      <td className="px-4 py-3">
         <div className="flex flex-col gap-1">
           <ProfileCompleteness
             hasGoal={user.has_learning_goal}

@@ -7,6 +7,8 @@ import uuid
 from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sqlalchemy import select
+
 from models.user_profile import UserProfile
 from models.user_profile_snapshot import UserProfileSnapshot
 from models.enums import DifficultyLevel, TimeCommitment
@@ -76,5 +78,26 @@ class ProfileService:
         self.db.add(snapshot)
         await self.db.commit()
         await self.db.refresh(updated_profile)
+
+        # Log profile update event (non-blocking)
+        try:
+            from models.activity_log import ActivityLog, ActivityEventType
+            from models.user import User
+
+            user_result = await self.db.execute(
+                select(User.email).where(User.id == user_id)
+            )
+            user_email = user_result.scalar_one_or_none() or "unknown"
+
+            activity_log = ActivityLog(
+                event_type=ActivityEventType.PROFILE_UPDATE,
+                user_id=user_id,
+                user_email=user_email,
+                description=f"updated profile (v{updated_profile.version})",
+            )
+            self.db.add(activity_log)
+            await self.db.commit()
+        except Exception as e:
+            print(f"Failed to log profile update activity: {e}")
 
         return updated_profile

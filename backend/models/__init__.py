@@ -11,6 +11,7 @@ from .user_profile import UserProfile, UserInterest
 from .user_profile_snapshot import UserProfileSnapshot
 from .recommendation import Recommendation
 from .course import Course, Tag, Skill, CourseTag, CourseSkill
+from .activity_log import ActivityLog, ActivityEventType
 
 __all__ = [
     # Base
@@ -30,4 +31,6 @@ __all__ = [
     "Skill",
     "CourseTag",
     "CourseSkill",
+    "ActivityLog",
+    "ActivityEventType",
 ]

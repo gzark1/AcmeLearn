@@ -6,37 +6,71 @@ This document provides strategic guidance on feature prioritization for the AI r
 
 **Context**: This is a job application showcase project. The assessment explicitly invites you to "showcase your strengths" and "unique approach."
 
-**Last Updated**: 2025-11-27
+**Last Updated**: 2025-11-27 (Updated with user decisions)
+
+---
+
+## Decisions Summary
+
+**Status Legend**: ✅ CONFIRMED | 🔄 PHASE 2/3 | ⏸️ LOW PRIORITY | ❓ OPEN
+
+### Confirmed for MVP (Build Now)
+- ✅ **Rich Explanations with Reasoning** - Transparency builds trust
+- ✅ **Multi-Agent System** - **Enhanced 2-agent** with profile history (see 01-TECHNICAL-LANDSCAPE.md)
+- ✅ **Course Comparison View** - Side-by-side comparison tools
+- ✅ **Chat-Like Interface** - Conversational UI preferred
+- ✅ **"Explain This Recommendation" Deep Dive** - Creative feature confirmed
+- ✅ **Learning Path Preview** - **2-3 course** sequence suggestions
+
+### Technical Decisions (Finalized)
+- ✅ **Model**: Always GPT-5-nano (user tests mini manually)
+- ✅ **Pre-filtering**: Moderate (48 → ~30 courses)
+- ✅ **Learning Paths**: 2-3 courses (clearer, more focused)
+
+### Deferred to Later Phases
+- 🔄 **Streaming Responses** (Phase 2) - Start without, add later when ready
+- 🔄 **Conversational Refinement** (Phase 3) - Multi-turn conversation history
+
+### Low Priority for This Project
+- ⏸️ **Mobile-Responsive Design** - Not a focus
+- ⏸️ **Mobile-First Experience** - Desktop is primary target
+
+### Open Questions
+- ❓ **Visual Skill Map**: Maybe - needs more thought
 
 ---
 
 ## Executive Summary
 
-### Key Recommendations
+### Updated Strategic Direction (Based on Decisions)
 
-**Build This** (High Value + Reasonable Effort):
-1. **Streaming Responses with Typewriter Effect** - Modern, engaging UX that's expected in 2025
-2. **Rich Explanations with Reasoning** - Transparency builds trust and demonstrates AI quality
-3. **Profile-Based + Query-Based Flow** - Dual input modes maximize flexibility
-4. **Conversational Refinement** (Light version) - "Show me more like this" / "Make it harder"
-5. **Response Quality Indicators** - Match confidence, reasoning quality, profile fit
+**MVP Focus**:
+1. **Rich Explanations with Reasoning** ✅ - Transparency builds trust and demonstrates AI quality
+2. **Multi-Agent Architecture** ✅ - Explicitly mentioned in assessment as advanced feature
+3. **Recommendation Comparison View** ✅ - Side-by-side course comparison from AI suggestions
+4. **Chat-Like Interface** ✅ - Conversational UI vs form-based
+5. **Creative Features** ✅ - "Explain this" deep dive + Learning path preview
 
-**Consider Adding** (High Impact for Showcase):
-1. **Multi-Agent Architecture** - Explicitly mentioned in assessment as advanced feature
-2. **Recommendation Comparison View** - Side-by-side course comparison from AI suggestions
-3. **Interactive AI Assistant UI** - Chat-like interface vs form-based
+**Phase 2 Features** (Add After MVP):
+6. 🔄 **Streaming Responses with Typewriter Effect** - Modern, engaging UX (valuable but not blocking)
+7. 🔄 **Response Quality Indicators** - Match confidence, reasoning quality, profile fit
 
-**Defer to Future** (Lower ROI):
-1. **Full Recommendation History** - Backend ready, but frontend less critical for MVP
-2. **Feedback/Rating System** - Database schema supports it, but adds complexity
-3. **Advanced Conversational Memory** - Multi-turn context persistence
+**Phase 3 Features** (Future Enhancement):
+8. 🔄 **Conversational Refinement** - Multi-turn conversation with history
+9. 🔄 **Advanced Conversational Memory** - Persistent conversation threads
+
+**Deferred** (Lower ROI for This Project):
+- ❌ **Full Recommendation History** - Backend ready, but frontend less critical
+- ❌ **Feedback/Rating System** - Database schema supports it, but adds complexity
+- ⏸️ **Mobile-First Design** - Not a priority for this showcase
 
 ### Strategic Insight
 
 The market research reveals a critical trend: **Users expect AI to be transparent and conversational in 2025, not just accurate.** The winning formula is:
-- Fast, streaming responses (reduce perceived wait time by 80-98%)
-- Clear explanations (build trust through transparency)
-- Conversational refinement (feel like talking to an advisor, not filling forms)
+- Clear explanations (build trust through transparency) ✅ **CONFIRMED**
+- Conversational interface (feel like talking to an advisor) ✅ **CONFIRMED**
+- Multi-agent sophistication (advanced AI architecture) ✅ **CONFIRMED**
+- Fast, streaming responses (reduce perceived wait time) 🔄 **PHASE 2**
 
 ---
 
@@ -168,28 +202,29 @@ These are **explicitly required** by the assessment:
 
 **Implementation Priority**: ALL of these must be built. Focus on quality execution.
 
-### 2.2 Advanced Features (Optional - Choose Strategically)
+### 2.2 Advanced Features (Decision Status Updated)
 
 These are **mentioned in assessment** as ways to showcase skills:
 
-| Feature | User Value | Impressiveness | Implementation Complexity | Recommendation |
-|---------|-----------|----------------|---------------------------|----------------|
-| **Streaming Responses** | High | Very High | Medium | **✅ HIGHLY RECOMMENDED** |
-| **Multi-Agent System** | Medium | Very High | High | **✅ RECOMMENDED** (explicit in assessment) |
-| **Conversational Refinement** | Very High | High | Medium | **✅ HIGHLY RECOMMENDED** |
-| **Confidence Scores** | Medium | Medium | Low | **✅ INCLUDE** (easy win) |
-| **Rich Explanations with Reasoning** | Very High | High | Low-Medium | **✅ HIGHLY RECOMMENDED** |
-| **Recommendation History** | Low | Low | Low | **⚠️ DEFER** (backend ready, low UI value) |
-| **Feedback/Rating System** | Medium | Low | Medium | **⚠️ DEFER** (adds complexity) |
-| **Course Comparison View** | High | Medium | Medium | **✅ CONSIDER** (unique differentiator) |
-| **Skill Gap Analysis** | High | Very High | High | **⚠️ DEFER** (time-intensive) |
-| **Adaptive Learning Paths** | Medium | Very High | Very High | **❌ SKIP** (out of scope) |
+| Feature | User Value | Impressiveness | Complexity | Status | Notes |
+|---------|-----------|----------------|------------|--------|-------|
+| **Rich Explanations with Reasoning** | Very High | High | Low-Medium | ✅ **CONFIRMED** | Build for MVP |
+| **Multi-Agent System** | Medium | Very High | High | ✅ **CONFIRMED** | Architecture TBD |
+| **Course Comparison View** | High | Medium | Medium | ✅ **CONFIRMED** | Side-by-side view |
+| **Streaming Responses** | High | Very High | Medium | 🔄 **PHASE 2** | Start without, add later |
+| **Conversational Refinement** | Very High | High | Medium | 🔄 **PHASE 3** | Multi-turn conversation |
+| **Confidence Scores** | Medium | Medium | Low | 🔄 **PHASE 2** | Quality indicators |
+| **Recommendation History** | Low | Low | Low | ❌ **DEFERRED** | Backend ready, low UI value |
+| **Feedback/Rating System** | Medium | Low | Medium | ❌ **DEFERRED** | Adds complexity |
+| **Skill Gap Analysis** | High | Very High | High | ❌ **DEFERRED** | Time-intensive |
+| **Adaptive Learning Paths** | Medium | Very High | Very High | ❌ **SKIP** | Out of scope |
 
 ### 2.3 Feature Evaluation Detail
 
 #### Streaming Responses with Typewriter Effect
+**STATUS**: 🔄 **PHASE 2** - Deferred (start without streaming, add later when ready)
 
-**Why Build This**:
+**Why This Is Valuable** (All reasoning preserved for future implementation):
 - ✅ **Expected in 2025**: ChatGPT normalized this pattern
 - ✅ **Reduces Perceived Wait**: 80-98% improvement in perceived performance
 - ✅ **Modern/Impressive**: Shows technical sophistication
@@ -205,11 +240,14 @@ These are **mentioned in assessment** as ways to showcase skills:
 - Frontend: Server-Sent Events (SSE) or Vercel AI SDK
 - Estimated: 4-6 hours including testing
 
-**Recommendation**: **✅ BUILD THIS** - High ROI, modern UX, impressive to reviewers
+**Original Recommendation**: **✅ BUILD THIS** - High ROI, modern UX, impressive to reviewers
+
+**User Decision**: 🔄 **PHASE 2** - Start with simple loading states, add streaming later. All research and implementation guidance preserved for when ready to implement.
 
 ---
 
 #### Multi-Agent System
+**STATUS**: ✅ **CONFIRMED** - Will implement (exact architecture structure TBD)
 
 **Why Build This**:
 - ✅ **Explicitly Mentioned in Assessment**: "Multi-agent system (e.g., one agent for skill assessment, another for recommendations)"
@@ -239,13 +277,16 @@ These are **mentioned in assessment** as ways to showcase skills:
 - Benefit: Cutting-edge approach, research-backed
 - Estimated: 20+ hours
 
-**Recommendation**: **✅ BUILD OPTION A** - Explicitly in assessment, manageable scope, impressive
+**Original Recommendation**: **✅ BUILD OPTION A** - Explicitly in assessment, manageable scope, impressive
+
+**User Decision**: ✅ **CONFIRMED** - Multi-agent architecture confirmed. Still need to decide: Option A (2-agent), Option B (3-agent), or Option C (adversarial). See "Open Questions" section.
 
 ---
 
 #### Conversational Refinement
+**STATUS**: 🔄 **PHASE 3** - Deferred (multi-turn conversation with history)
 
-**Why Build This**:
+**Why This Is Valuable** (All reasoning preserved for future implementation):
 - ✅ **Very High User Value**: "Show me more like this" is natural, intuitive
 - ✅ **Mentioned in Assessment**: "Conversational interface for refining recommendations"
 - ✅ **Modern Pattern**: Chat-like interactions expected in 2025
@@ -272,11 +313,14 @@ These are **mentioned in assessment** as ways to showcase skills:
 - Conversation history UI
 - Estimated: 16-20 hours
 
-**Recommendation**: **✅ BUILD LEVEL 1** - High value, reasonable effort, natural UX
+**Original Recommendation**: **✅ BUILD LEVEL 1** - High value, reasonable effort, natural UX
+
+**User Decision**: 🔄 **PHASE 3** - Deferred to later phase. Focus on core recommendations first, add conversation history later. All implementation levels preserved for when ready.
 
 ---
 
 #### Rich Explanations with Reasoning
+**STATUS**: ✅ **CONFIRMED** - Build for MVP
 
 **Why Build This**:
 - ✅ **Builds Trust**: Transparency is critical (88% won't return without good UX)
@@ -300,13 +344,16 @@ These are **mentioned in assessment** as ways to showcase skills:
 **Example (Bad)**:
 > "This course matches your interests in python and data."
 
-**Recommendation**: **✅ BUILD THIS** - Low effort, high impact, demonstrates quality
+**Original Recommendation**: **✅ BUILD THIS** - Low effort, high impact, demonstrates quality
+
+**User Decision**: ✅ **CONFIRMED** - Rich explanations with reasoning will be built for MVP.
 
 ---
 
 #### Confidence Scores / Quality Indicators
+**STATUS**: 🔄 **PHASE 2** - Quality indicators deferred to Phase 2
 
-**Why Build This**:
+**Why This Is Valuable** (All reasoning preserved for future implementation):
 - ✅ **Easy to Implement**: Just structured output from LLM
 - ✅ **Transparency**: Helps users trust recommendations
 - ⚠️ **Moderate Value**: Nice-to-have, not essential
@@ -327,11 +374,14 @@ These are **mentioned in assessment** as ways to showcase skills:
 └─────────────────────────────────────────┘
 ```
 
-**Recommendation**: **✅ INCLUDE** - Easy win, adds polish
+**Original Recommendation**: **✅ INCLUDE** - Easy win, adds polish
+
+**User Decision**: 🔄 **PHASE 2** - Confidence scores and quality indicators deferred. Focus on explanations first.
 
 ---
 
 #### Course Comparison View
+**STATUS**: ✅ **CONFIRMED** - User likes this feature, build for MVP
 
 **Why Build This**:
 - ✅ **High User Value**: When AI suggests 3-5 courses, users want to compare
@@ -362,11 +412,14 @@ These are **mentioned in assessment** as ways to showcase skills:
 └──────────────┴──────────────┴──────────────┘
 ```
 
-**Recommendation**: **✅ CONSIDER** - Medium effort, differentiates your submission
+**Original Recommendation**: **✅ CONSIDER** - Medium effort, differentiates your submission
+
+**User Decision**: ✅ **CONFIRMED** - Course comparison view will be built for MVP.
 
 ---
 
 #### Recommendation History
+**STATUS**: ❌ **DEFERRED** - Low priority, backend ready but not building frontend
 
 **Why Defer**:
 - ❌ Backend already implemented (database, API endpoints)
@@ -376,11 +429,14 @@ These are **mentioned in assessment** as ways to showcase skills:
 
 **When to Build**: After MVP validated, or if time permits
 
-**Recommendation**: **⚠️ DEFER** - Backend ready, but low priority for showcase
+**Original Recommendation**: **⚠️ DEFER** - Backend ready, but low priority for showcase
+
+**User Decision**: ❌ **DEFERRED** - Not building recommendation history frontend.
 
 ---
 
 #### Feedback/Rating System
+**STATUS**: ❌ **DEFERRED** - Not a priority for this project
 
 **Why Defer**:
 - ⚠️ Database schema supports it (user_rating, user_feedback_text columns exist)
@@ -390,7 +446,9 @@ These are **mentioned in assessment** as ways to showcase skills:
 
 **When to Build**: After MVP, when you have actual users and can iterate on recommendations
 
-**Recommendation**: **⚠️ DEFER** - Not in assessment, adds complexity
+**Original Recommendation**: **⚠️ DEFER** - Not in assessment, adds complexity
+
+**User Decision**: ❌ **DEFERRED** - Not building feedback/rating system.
 
 ---
 
@@ -401,47 +459,50 @@ These are **mentioned in assessment** as ways to showcase skills:
 Based on market research and UX best practices:
 
 **1. Speed + Transparency = Trust**
-- Fast perceived performance (streaming)
-- Clear progress indicators ("Analyzing your goals...")
-- No black box - explain WHY
+- ~~Fast perceived performance (streaming)~~ 🔄 **PHASE 2** - Will use simple loading initially
+- Clear progress indicators ("Analyzing your goals...") ✅ **KEEP**
+- No black box - explain WHY ✅ **CONFIRMED**
 
-**2. Conversational, Not Transactional**
-- Feel like talking to an advisor
-- Natural language queries, not forms
-- Refinement actions ("more like this")
+**2. Conversational, Not Transactional** ✅ **CONFIRMED - Chat-like interface preferred**
+- Feel like talking to an advisor ✅ **USER PREFERENCE**
+- Natural language queries, not forms ✅ **CONFIRMED**
+- ~~Refinement actions ("more like this")~~ 🔄 **PHASE 3** - Deferred
 
-**3. Actionable, Not Just Informative**
+**3. Actionable, Not Just Informative** ✅ **CONFIRMED**
 - Direct links to course details
 - Clear next steps
-- Easy to compare options
+- Easy to compare options ✅ **COMPARISON VIEW CONFIRMED**
 
-**4. Personalized, Not Generic**
+**4. Personalized, Not Generic** ✅ **CONFIRMED**
 - Reference user's specific goals, interests
 - Adapt to skill level
 - Consider time commitment
 
-**5. Professional + Friendly Tone**
+**5. Professional + Friendly Tone** ✅ **KEEP**
 - Not overly formal or robotic
 - Encouraging, supportive
 - Acknowledge uncertainty when appropriate
 
 ### 3.2 Handling Loading/Waiting (Critical UX Moment)
+**UPDATED BASED ON DECISIONS**: 🔄 Starting with animated loading, streaming deferred to Phase 2
 
 **The Problem**: LLM responses take 3-8 seconds. Users abandon after 3 seconds.
 
-**Solution Hierarchy**:
+**Solution Hierarchy** (Updated priorities):
 
-**Best**: Streaming with Typewriter Effect
-- Start showing response within 500ms
-- Progressive disclosure reduces perceived wait
-- User stays engaged watching text appear
-
-**Good**: Animated Loading with Progress Messages
+**MVP Approach** ✅: Animated Loading with Progress Messages
 - Cycle through messages: "Analyzing your goals..." → "Matching courses..." → "Crafting recommendations..."
 - Animated brain/sparkles icon
 - Set expectation: "Usually takes 3-5 seconds"
+- **This will be built for MVP**
 
-**Acceptable**: Simple Loading Spinner
+**Phase 2 Upgrade** 🔄: Streaming with Typewriter Effect (deferred)
+- Start showing response within 500ms
+- Progressive disclosure reduces perceived wait
+- User stays engaged watching text appear
+- **All research preserved for when ready to implement**
+
+**Acceptable Fallback**: Simple Loading Spinner
 - Clear message: "AI is thinking..."
 - Progress indication if possible
 
@@ -449,29 +510,37 @@ Based on market research and UX best practices:
 - User doesn't know what's happening
 - Feels slow, unresponsive
 
-**Recommendation**: **Build streaming** (best experience) with **animated fallback** (if streaming fails)
+**Original Recommendation**: **Build streaming** (best experience) with **animated fallback** (if streaming fails)
+
+**User Decision**: Start with **animated loading** (good UX, simpler), add **streaming in Phase 2**
 
 ### 3.3 Mobile Considerations
+**UPDATED BASED ON DECISIONS**: ⏸️ Mobile NOT a priority for this project
 
-**Key Challenges**:
+**User Decision**: Mobile-responsive design and mobile-first experience are **NOT priorities** for this showcase project. Focus on desktop experience.
+
+**Key Challenges** (Preserved for reference):
 1. Limited screen space for explanations
 2. Typing queries on mobile is harder
 3. Comparing multiple courses difficult
 
-**Design Strategies**:
+**Design Strategies** (Preserved for future reference):
 
-**Mobile-First Features**:
+**Mobile-First Features** (⏸️ NOT building these):
 - Prominent "Recommend based on my profile" button (no typing needed)
 - Quick actions: "More like this", "Harder", "Easier" (one tap)
 - Swipe between recommended courses (Tinder-style)
 - Collapsible explanations (tap to expand)
 
-**Desktop Enhancements**:
-- Side-by-side course comparison
-- Full-width textarea for detailed queries
-- Show multiple recommendations at once
+**Desktop Focus** ✅ **BUILD THIS**:
+- Side-by-side course comparison ✅ **CONFIRMED**
+- Full-width textarea for detailed queries ✅ **CONFIRMED**
+- Show multiple recommendations at once ✅ **CONFIRMED**
+- Chat-like interface optimized for desktop ✅ **CONFIRMED**
 
-**Recommendation**: **Design mobile-first**, enhance for desktop
+**Original Recommendation**: **Design mobile-first**, enhance for desktop
+
+**User Decision**: ⏸️ **Desktop-first** - Mobile is not a concern for this project
 
 ### 3.4 Presenting Explanations Effectively
 
@@ -529,29 +598,35 @@ Based on market research and UX best practices:
 - ✅ Clear comparison tools (help users decide)
 - ✅ Quality indicators (confidence scores)
 
-### 4.2 Creative Feature Ideas (Optional)
+### 4.2 Creative Feature Ideas (Decision Status Updated)
 
-**"Explain This Recommendation" Button**:
+**"Explain This Recommendation" Deep Dive** ✅ **CONFIRMED**:
 - User can ask AI to elaborate on any recommendation
 - Shows: "Why this course?" → AI gives deeper reasoning
 - Demonstrates conversational capability
+- **User Decision**: Will implement this feature
 
-**"Alternative Suggestions" Mode**:
-- "Show me a completely different approach"
-- AI suggests courses from different angle/topic
-- Shows creativity, not just matching
-
-**"Learning Path Preview"**:
-- AI suggests 2-3 course sequence
+**"Learning Path Preview"** ✅ **CONFIRMED** (2-3 courses):
+- AI suggests **2-3 course** sequence (clearer, more focused)
 - "Start here → then this → finish with that"
 - Shows forward-thinking recommendation
+- **User Decision**: Will implement this feature with 2-3 courses
 
-**Visual Skill Map**:
+**Visual Skill Map** ❓ **MAYBE**:
 - Plot recommended courses on skill/difficulty matrix
 - Visual comparison of where each course fits
 - Unique visualization approach
+- **User Decision**: Interested but not committed - needs more thought
 
-**Recommendation**: Pick **1-2** creative features if time allows. Don't overcommit.
+**"Alternative Suggestions" Mode** (No decision yet):
+- "Show me a completely different approach"
+- AI suggests courses from different angle/topic
+- Shows creativity, not just matching
+- **Not discussed** - available if time permits
+
+**Original Recommendation**: Pick **1-2** creative features if time allows. Don't overcommit.
+
+**User Decision**: Building 2 confirmed creative features: "Explain This" + "Learning Path Preview". Visual Skill Map is maybe.
 
 ### 4.3 Unique Approach Brainstorm
 
@@ -571,115 +646,110 @@ Based on market research and UX best practices:
 
 ---
 
-## 5. Recommended Feature Set
+## 5. Recommended Feature Set (UPDATED WITH DECISIONS)
 
-### 5.1 MVP Feature Set (Must Build)
+### 5.1 MVP Feature Set - Build Now
 
 **Core Functionality** (Required by Assessment):
 1. ✅ LLM integration (OpenAI GPT-5-nano-2025-08-07)
 2. ✅ Dynamic context engineering (build prompt from profile + catalog)
 3. ✅ Query-based recommendations (text input)
 4. ✅ Profile-based recommendations ("recommend based on my profile" button)
-5. ✅ Explanations for each recommendation
+5. ✅ Rich, personalized explanations (not generic) - **CONFIRMED**
 
-**Quality Enhancements** (Make MVP Impressive):
-6. ✅ Streaming responses with typewriter effect
-7. ✅ Rich, personalized explanations (not generic)
-8. ✅ Animated loading states with progress messages
-9. ✅ Confidence scores / quality indicators
-10. ✅ Mobile-responsive design
+**Advanced AI Features** (Showcase Technical Skill):
+6. ✅ Multi-agent system (architecture TBD) - **CONFIRMED**
 
-**Estimated Time**: 20-25 hours
+**UX Differentiators** (Showcase Product Thinking):
+7. ✅ Chat-like conversational interface - **CONFIRMED**
+8. ✅ Course comparison view (side-by-side) - **CONFIRMED**
+9. ✅ Animated loading states with progress messages - **CONFIRMED**
+10. ⏸️ ~~Mobile-responsive design~~ - **NOT A PRIORITY**
 
-### 5.2 Showcase Additions (Recommended)
+**Creative Features** (Showcase Innovation):
+11. ✅ "Explain this recommendation" deep dive - **CONFIRMED**
+12. ✅ Learning path preview (2-3 course sequence) - **CONFIRMED**
+13. ❓ Visual skill map - **MAYBE** (needs more thought)
 
-**Advanced AI Features** (Demonstrate Technical Skill):
-11. ✅ Multi-agent system (2 agents: Analyzer + Recommender)
-12. ✅ Conversational refinement (light version - action buttons)
+**Estimated Time**: TBD (need to clarify multi-agent architecture)
 
-**UX Differentiators** (Demonstrate Product Thinking):
-13. ✅ Course comparison view (side-by-side or tabbed)
-14. ✅ Quick refinement actions ("More like this", "Easier", "Harder")
+### 5.2 Phase 2 Features - Add After MVP
 
-**Estimated Additional Time**: 12-16 hours
+**Performance Enhancements**:
+- 🔄 Streaming responses with typewriter effect
+- 🔄 Response quality indicators (confidence scores, match %)
 
-**Total Estimated Time**: 32-41 hours (4-5 days of focused work)
+**Estimated Time**: 6-10 hours
 
-### 5.3 Optional Polish (If Time Permits)
+### 5.3 Phase 3 Features - Future Enhancement
 
-**Nice-to-Haves**:
-- Recommendation history UI (backend ready, just add frontend)
-- Feedback/rating system (add thumbs up/down)
-- "Explain this recommendation" expanded view
-- Export recommendations as PDF
-- Share recommendation link
+**Conversational Enhancements**:
+- 🔄 Conversational refinement (multi-turn with history)
+- 🔄 Advanced conversational memory
+- 🔄 Quick refinement actions ("More like this", "Easier", "Harder")
 
-**Estimated Time**: 8-12 hours
+**Estimated Time**: 16-20 hours
+
+### 5.4 Deferred Features - Not Building
+
+**Not in Scope**:
+- ❌ Recommendation history UI (backend ready, not building frontend)
+- ❌ Feedback/rating system (adds complexity)
+- ❌ Mobile-first design (desktop focus)
+- ❌ Export recommendations as PDF
+- ❌ Share recommendation link
 
 ---
 
-## 6. Questions for User (Decision Checkboxes)
+## 6. Decisions Log
 
-### 6.1 Core MVP Decisions
+### 6.1 Multi-Agent Architecture Details ✅ CONFIRMED
 
-**Feature Confirmation**:
-- [ ] Agree with MVP feature set (sections 5.1)? Or want to adjust?
-- [ ] Comfortable with 32-41 hour time estimate for MVP + Showcase features?
-- [ ] Want to prioritize shipping fast, or building comprehensively?
+**Decision**: Enhanced 2-Agent System with Profile History
 
-### 6.2 Advanced Feature Decisions
+- [x] **Enhanced 2-Agent** (10-12 hours) ✅ **SELECTED**
+  - Agent 1: **Profile & Context Analyzer** - Analyzes user profile + history, identifies skill gaps, ranks interests
+  - Agent 2: **Course Recommender & Explainer** - Takes Agent 1's analysis + query, recommends courses with rich explanations
+  - Benefit: Sophisticated enough to showcase multi-agent patterns, fast enough for good UX
 
-**Multi-Agent Architecture**:
-- [ ] Build multi-agent system? (Recommended: Yes - it's in assessment)
-  - [ ] Option A: Simple 2-agent (8-10 hours)
-  - [ ] Option B: Complex 3-agent (12-16 hours)
-  - [ ] Skip multi-agent (save time, less impressive)
+- [ ] ~~**Option B: Complex 3-Agent** (12-16 hours)~~ - Not selected (adds latency without proportional quality gain)
 
-**Streaming Implementation**:
-- [ ] Build streaming responses? (Recommended: Yes - modern UX)
-  - [ ] Use Vercel AI SDK (easier, faster)
-  - [ ] Custom SSE implementation (more control, learning)
-  - [ ] Skip streaming (use loading spinner instead)
+- [ ] ~~**Option C: Adversarial Collaboration** (20+ hours)~~ - Not selected (overkill for 48 courses)
 
-**Conversational Features**:
-- [ ] Add conversational refinement? (Recommended: Yes - in assessment)
-  - [ ] Level 1: Simple action buttons (4-6 hours)
-  - [ ] Level 2: Light conversation history (8-10 hours)
-  - [ ] Level 3: Full conversational memory (16-20 hours)
+**See**: `01-TECHNICAL-LANDSCAPE.md` Section 10 for detailed architecture design
 
-**Comparison Tools**:
-- [ ] Build course comparison view? (Recommended: Consider)
-  - [ ] Side-by-side comparison (desktop)
-  - [ ] Tabbed comparison (mobile-friendly)
-  - [ ] Skip comparison (focus on core recommendations)
+### 6.2 Visual Skill Map ❓
 
-### 6.3 Creative Differentiation
+**Current Status**: Maybe - interested but not committed
 
-**Unique Approach**:
-- [ ] Which creative feature most interests you?
-  - [ ] "Explain this recommendation" deep dive
-  - [ ] "Learning path preview" (2-3 course sequence)
-  - [ ] Visual skill map / difficulty matrix
-  - [ ] Alternative suggestions mode
-  - [ ] None - focus on core quality
+**What it would be**:
+- Plot recommended courses on skill/difficulty matrix
+- Visual comparison of where each course fits
+- Unique visualization approach
 
-**UX Philosophy**:
-- [ ] Prefer conversational chat-like interface?
-- [ ] Prefer structured form-based interface?
-- [ ] Prefer hybrid (form + chat refinement)?
+**Question**: Do you want to commit to building the visual skill map, or defer it?
+- [ ] Yes, build it (adds uniqueness, visual appeal)
+- [ ] No, defer it (focus on core features)
+- [ ] Decide later (after core MVP is working)
 
-### 6.4 Scope & Timeline
+### 6.3 All Decided Questions (For Reference)
 
-**Timeline Constraints**:
-- [ ] How much time do you want to spend on recommendations feature?
-  - [ ] 2-3 days (minimal MVP)
-  - [ ] 4-5 days (MVP + showcase features) ← Recommended
-  - [ ] 1+ week (comprehensive + polish)
+**Product Decisions** ✅:
+- ✅ **Rich explanations with reasoning** - YES, build it
+- ✅ **Multi-agent system** - Enhanced 2-agent with profile history
+- ✅ **Course comparison view** - YES, build it
+- ✅ **Chat-like interface** - YES, preferred
+- ✅ **"Explain this recommendation" deep dive** - YES, build it
+- ✅ **Learning path preview** - YES, 2-3 courses
+- 🔄 **Streaming responses** - START WITHOUT, add in Phase 2
+- 🔄 **Conversational refinement** - DEFER to Phase 3
+- ⏸️ **Mobile-responsive design** - NOT A PRIORITY
+- ⏸️ **Mobile-first experience** - NOT A PRIORITY
 
-**Risk Tolerance**:
-- [ ] Prioritize impressive features (higher risk, higher reward)?
-- [ ] Prioritize reliable execution (lower risk, solid submission)?
-- [ ] Balanced approach (some advanced, some safe)?
+**Technical Decisions** ✅:
+- ✅ **Model** - Always GPT-5-nano (user tests mini manually when needed)
+- ✅ **Pre-filtering** - Moderate (48 → ~30 courses)
+- ✅ **Learning path depth** - 2-3 courses (clearer, more focused)
 
 ---
 
@@ -725,34 +795,38 @@ Based on market research and UX best practices:
 
 ---
 
-## 8. Strategic Recommendations
+## 8. Strategic Recommendations (UPDATED)
 
-### 8.1 Recommended Build Order
+### 8.1 Updated Build Order (Based on Decisions)
 
-**Phase 1: Core MVP** (Days 1-2)
-1. Basic recommendation API endpoint (query-based)
-2. Profile-based recommendation (reuse endpoint, build context from profile)
-3. Simple loading state (spinner + message)
-4. Display recommendations with explanations
-5. Mobile-responsive layout
+**Phase 1: Core MVP with Multi-Agent** (Build First)
+1. ✅ Basic recommendation API endpoint (query-based)
+2. ✅ Profile-based recommendation (reuse endpoint, build context from profile)
+3. ✅ Multi-agent system (architecture TBD - see Section 6.1)
+4. ✅ Animated loading states with progress messages (NOT streaming)
+5. ✅ Display recommendations with rich explanations
+6. ✅ Chat-like conversational interface
+7. ⏸️ ~~Mobile-responsive layout~~ - Desktop focus
 
-**Phase 2: Streaming Implementation** (Day 3)
-6. Backend: OpenAI streaming API integration
-7. Frontend: SSE client or Vercel AI SDK
-8. Typewriter effect UI
-9. Animated loading states
+**Phase 2: UX Enhancements** (Build Second)
+8. ✅ Course comparison view (side-by-side)
+9. ✅ "Explain this recommendation" deep dive feature
+10. ✅ Learning path preview (2-3 course sequence)
+11. ❓ Visual skill map (if decided YES)
+12. Polish and testing
 
-**Phase 3: Multi-Agent Architecture** (Day 4)
-10. Refactor to 2-agent system (Analyzer + Recommender)
-11. Show agent reasoning in UI ("Analyzing profile...", "Matching courses...")
-12. Quality indicators (confidence scores)
+**Phase 3: Performance Upgrades** (After MVP Complete - Optional)
+13. 🔄 Add streaming responses with typewriter effect
+14. 🔄 Add quality indicators (confidence scores, match %)
 
-**Phase 4: Conversational Features** (Day 5)
-13. Refinement action buttons ("More like this", etc.)
-14. Comparison view (if time permits)
-15. Polish and testing
+**Phase 4: Conversational Enhancements** (Future - Optional)
+15. 🔄 Conversational refinement (multi-turn with history)
+16. 🔄 Quick refinement actions ("More like this", etc.)
 
-**Total: 4-5 days focused work**
+**Total Estimated Time**:
+- Phase 1 + 2: TBD (depends on multi-agent architecture choice)
+- Phase 3: 6-10 hours
+- Phase 4: 16-20 hours
 
 ### 8.2 Quality Over Quantity
 
@@ -791,39 +865,54 @@ Based on market research and UX best practices:
 
 ---
 
-## 9. Final Recommendation
+## 9. Final Recommendation (UPDATED WITH USER DECISIONS)
 
-### Build This Feature Set
+### Build This Feature Set (Updated Priorities)
 
-**Tier 1: Must Have** (Core MVP)
+**Tier 1: MVP - Build Now** ✅
 1. ✅ LLM integration with dynamic context
 2. ✅ Query-based + profile-based recommendations
-3. ✅ Rich, personalized explanations
-4. ✅ Streaming responses with typewriter effect
-5. ✅ Animated loading states
-6. ✅ Mobile-responsive design
+3. ✅ Rich, personalized explanations - **CONFIRMED**
+4. ✅ Multi-agent system (architecture TBD) - **CONFIRMED**
+5. ✅ Chat-like conversational interface - **CONFIRMED**
+6. ✅ Course comparison view - **CONFIRMED**
+7. ✅ Animated loading states (NOT streaming initially)
+8. ✅ "Explain this recommendation" deep dive - **CONFIRMED**
+9. ✅ Learning path preview - **CONFIRMED**
+10. ⏸️ ~~Mobile-responsive design~~ - **NOT A PRIORITY**
 
-**Tier 2: Should Have** (Showcase)
-7. ✅ Multi-agent system (2 agents)
-8. ✅ Conversational refinement (action buttons)
-9. ✅ Confidence scores / quality indicators
+**Tier 2: Phase 2 - Add Later** 🔄
+11. 🔄 Streaming responses with typewriter effect
+12. 🔄 Confidence scores / quality indicators
 
-**Tier 3: Nice to Have** (If Time Permits)
-10. ⚠️ Course comparison view
-11. ⚠️ "Explain this" expanded reasoning
+**Tier 3: Phase 3 - Future Enhancement** 🔄
+13. 🔄 Conversational refinement (multi-turn with history)
+14. 🔄 Advanced conversational memory
+
+**Tier 4: Maybe** ❓
+15. ❓ Visual skill map (needs decision)
 
 **Defer to Future**:
 - ❌ Recommendation history UI
 - ❌ Feedback/rating system
-- ❌ Full conversational memory
+- ❌ Mobile-first design
 
-### Why This Set?
+### Why This Updated Set?
 
 **Meets Requirements**: All assessment requirements covered ✅
-**Shows Technical Skill**: Multi-agent architecture, streaming responses ✅
-**Shows UX Thinking**: Conversational, transparent, mobile-first ✅
-**Realistic Scope**: 4-5 days focused work ✅
+**Shows Technical Skill**: Multi-agent architecture ✅
+**Shows UX Thinking**: Conversational, transparent, chat-like interface ✅
+**Shows Innovation**: "Explain this" + Learning paths ✅
+**User Alignment**: Builds what user confirmed they want ✅
+**Realistic Scope**: TBD based on multi-agent architecture choice ⏳
 **Impressive**: Advanced features that differentiate from typical submissions ✅
+
+### Key Changes from Original Recommendation:
+- ✅ Confirmed chat-like interface as priority
+- ✅ Elevated comparison view and creative features to Tier 1
+- 🔄 Deferred streaming to Phase 2 (start simpler)
+- 🔄 Deferred conversational refinement to Phase 3
+- ⏸️ De-prioritized mobile completely
 
 ---
 
@@ -862,12 +951,15 @@ Based on market research and UX best practices:
 | Date | Author | Changes |
 |------|--------|---------|
 | 2025-11-27 | Product Manager (Claude) | Initial product strategy document with market research |
+| 2025-11-27 | Product Manager (Claude) | Updated with user decisions - marked confirmed, deferred, and low-priority features |
+| 2025-11-27 | User | Finalized technical decisions: Enhanced 2-agent, moderate pre-filtering, always nano, 2-3 course paths |
 
 ---
 
 **Next Steps**:
-1. Review this document and answer decision checkboxes (Section 6)
-2. Consult `01-TECHNICAL-LANDSCAPE.md` for implementation approach
-3. Consult `04-UI-DESIGN.md` for detailed wireframes and UX specs
-4. Make final feature set decisions
-5. Begin implementation with Phase 1 (Core MVP)
+1. ✅ ~~Review document and make decisions~~ - **COMPLETED**
+2. ✅ ~~Decide multi-agent architecture~~ - **Enhanced 2-agent CONFIRMED**
+3. ❓ **Decide on visual skill map** (Section 6.2) - Yes, no, or decide later?
+4. Consult `01-TECHNICAL-LANDSCAPE.md` for implementation approach ✅ **ALIGNED**
+5. Consult `04-UI-DESIGN.md` for detailed wireframes and UX specs
+6. **Begin implementation** with Phase 1 (Core MVP with enhanced 2-agent)

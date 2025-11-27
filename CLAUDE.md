@@ -4,7 +4,7 @@
 
 AcmeLearn is an AI-driven learning recommendation system built with FastAPI (backend) and React + TypeScript (frontend). Full Docker containerization with PostgreSQL 16, JWT authentication, and feature-based frontend architecture following bulletproof-react patterns.
 
-**Current State**: Backend fully functional with auth, profiles, courses, and admin APIs. Frontend substantially built with auth, courses, profile, and admin features. Tests cover backend API and service layers.
+**Current State**: Backend fully functional with auth, profiles, courses, and admin APIs. Frontend complete with auth, courses, profile, dashboard, and full admin features (dashboard, user management, analytics). Recommendations feature ready for LLM integration. Tests cover backend API and service layers.
 
 ## Quick Navigation
 
@@ -127,6 +127,10 @@ mcp__puppeteer__puppeteer_evaluate with script: "document.querySelector('.error-
 **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS + TanStack Query
 **Testing**: pytest (backend) + httpx (async client)
 **Deployment**: Docker Compose (4 containers)
+
+## OpenAI API Keys
+
+Two OpenAI API keys are available in `.env`: `OPENAI_API_KEY` and `OPENAI_API_KEY2`
 
 ## Key Documentation
 

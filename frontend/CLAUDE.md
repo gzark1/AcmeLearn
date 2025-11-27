@@ -104,22 +104,28 @@ frontend/src/
 - Protected routes with auth context
 - Password change functionality
 
+**Dashboard**:
+- Welcome message with user email
+- Profile completion progress bar (0-100%)
+- Stats cards: Courses Available, Profile Version, Interests Selected
+- Quick Actions: Browse Courses, Edit Profile, Get Recommendations
+
 **Courses**:
-- Course listing with filtering (difficulty, tags)
-- Course detail view
-- Tag-based filtering with expandable tags
-- Course cards with difficulty badges
+- Course catalog with search, filtering (difficulty, tags, duration), sorting
+- Course detail view with skills, tags, and description
+- Responsive course grid (1-4 columns based on screen size)
+- Course cards with difficulty badges and tag pills
 
 **Profile**:
-- Profile management form (learning goal, level, time commitment, interests)
-- Profile view with version history
-- Profile history timeline
+- Profile view with learning goal, experience level, time commitment, interests
+- Profile edit form with tag browser modal
+- Profile version history with "View History" link
 - Interest selector with tag categories
 
 **Admin** (for superusers):
-- User management (list, view, update)
-- Analytics dashboard
-- Admin-only routes and layout
+- **Dashboard**: Stats cards (Total Users, Profiles Complete, Avg Profile Updates, AI Recs Today, Signups This Week, Active Users), Quick Insights panel, Recent Activity feed
+- **User Management**: Search by email, status/profile filters, user table with Level column and profile completeness dots (5-dot visualization), Export CSV, user detail with profile history modal, deactivate user functionality
+- **Analytics**: User Growth chart (30 days), Profile Completion Breakdown (stacked bar), Experience Level distribution, Time Commitment distribution, Popular Tags by Category, Category Interest Distribution, Course Catalog Summary (difficulty distribution, total hours, avg hours)
 
 ## API Integration
 

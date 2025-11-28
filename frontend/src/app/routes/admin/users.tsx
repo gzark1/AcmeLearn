@@ -34,7 +34,7 @@ export const AdminUsersPage = () => {
   const { data, isLoading, error } = useAdminUsers({
     email: email || undefined,
     is_active: status === 'active' ? true : status === 'inactive' ? false : undefined,
-    profile_status: profileStatus || undefined,
+    profile_status: (profileStatus || undefined) as 'complete' | 'partial' | 'empty' | undefined,
     skip,
     limit: ITEMS_PER_PAGE,
   })

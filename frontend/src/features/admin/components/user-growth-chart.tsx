@@ -39,7 +39,6 @@ export const UserGrowthChart = ({ data, periodDays, isLoading }: UserGrowthChart
     const valueRange = maxValue - minValue || 1
 
     // Chart dimensions
-    const width = 100 // percentage
     const height = 220
     const padding = { top: 20, right: 40, bottom: 40, left: 50 }
     const chartWidth = 800 // SVG viewBox width
@@ -70,7 +69,7 @@ export const UserGrowthChart = ({ data, periodDays, isLoading }: UserGrowthChart
     const labelInterval = Math.max(1, Math.floor(data.length / 6))
     const xLabels = data
       .filter((_, i) => i % labelInterval === 0 || i === data.length - 1)
-      .map((d, i, arr) => {
+      .map((d) => {
         const originalIndex = data.indexOf(d)
         return {
           label: formatDate(d.date),

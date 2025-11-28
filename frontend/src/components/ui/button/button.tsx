@@ -5,14 +5,16 @@ import { cn } from '@/utils/cn'
 import { Spinner } from '../spinner'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        primary: 'bg-blue-600 text-white hover:bg-blue-700',
-        secondary: 'border border-blue-600 bg-white text-blue-600 hover:bg-blue-50',
+        primary: 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0',
+        secondary: 'border-2 border-blue-600 bg-white text-blue-600 hover:bg-blue-50 hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0',
+        outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0',
         ghost: 'text-blue-600 hover:bg-blue-50',
-        destructive: 'bg-red-600 text-white hover:bg-red-700',
+        destructive: 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0',
+        default: 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0',
       },
       size: {
         sm: 'h-8 px-3 text-sm',
@@ -44,7 +46,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <Spinner size="sm" variant={variant === 'primary' || variant === 'destructive' ? 'light' : 'primary'} className="mr-2" />
+          <Spinner size="sm" variant={variant === 'primary' || variant === 'destructive' || variant === 'default' ? 'light' : 'primary'} className="mr-2" />
         ) : icon ? (
           <span className="mr-2">{icon}</span>
         ) : null}

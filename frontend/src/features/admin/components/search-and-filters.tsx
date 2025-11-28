@@ -36,7 +36,7 @@ export const SearchAndFilters = ({
       await exportUsers({
         email: searchValue || undefined,
         is_active: statusFilter === 'active' ? true : statusFilter === 'inactive' ? false : undefined,
-        profile_status: profileFilter || undefined,
+        profile_status: (profileFilter || undefined) as 'complete' | 'partial' | 'empty' | undefined,
       })
     } catch (error) {
       console.error('Export failed:', error)

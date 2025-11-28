@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-import type { ProfileSnapshot, DifficultyLevel, TimeCommitment } from '../types'
+import type { ProfileSnapshot } from '../types'
 
 const LEVEL_LABELS: Record<string, string> = {
   beginner: 'Beginner',
@@ -102,7 +102,6 @@ const formatDate = (dateString: string): string => {
 type TimelineItemProps = {
   snapshot: ProfileSnapshot
   previousSnapshot: ProfileSnapshot | null
-  isFirst: boolean
   isLast: boolean
   currentVersion: number
 }
@@ -110,7 +109,6 @@ type TimelineItemProps = {
 const TimelineItem = ({
   snapshot,
   previousSnapshot,
-  isFirst,
   isLast,
   currentVersion,
 }: TimelineItemProps) => {
@@ -266,7 +264,6 @@ export const ProfileHistoryTimeline = ({
               key={snapshot.id}
               snapshot={snapshot}
               previousSnapshot={previousSnapshot}
-              isFirst={index === 0}
               isLast={index === displaySnapshots.length - 1}
               currentVersion={currentVersion}
             />

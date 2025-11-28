@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { api } from '@/lib/api-client'
 
-import type { ProfileBreakdown, LevelDistribution, TimeDistribution, PopularTagsResponse } from '../types'
+import type { ProfileBreakdown, LevelDistribution } from '../types'
 
 // Profile Breakdown
 export type ProfileBreakdownResponse = ProfileBreakdown & { total: number }

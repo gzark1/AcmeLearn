@@ -65,10 +65,10 @@ export const Navbar = ({ user, onLogout }: NavbarProps) => {
                   to={link.to}
                   className={({ isActive }) =>
                     cn(
-                      'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                      'relative px-3 py-2 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-blue-50 text-blue-600'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600'
+                        : 'text-slate-600 hover:text-slate-900'
                     )
                   }
                 >
@@ -80,10 +80,10 @@ export const Navbar = ({ user, onLogout }: NavbarProps) => {
                   to="/admin"
                   className={({ isActive }) =>
                     cn(
-                      'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                      'relative px-3 py-2 text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-blue-50 text-blue-600'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600'
+                        : 'text-slate-600 hover:text-slate-900'
                     )
                   }
                 >

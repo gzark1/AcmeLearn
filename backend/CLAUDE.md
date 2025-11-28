@@ -39,6 +39,9 @@ backend/
 ├── api/                    # API Layer (Presentation)
 │   ├── auth.py             # Registration, login, password reset
 │   ├── users.py            # User management + recommendations endpoints
+│   │                       # POST /me/recommendations - Generate AI recommendations
+│   │                       # GET /me/recommendations - Get recommendation history
+│   │                       # GET /me/recommendation-quota - Get rate limit status
 │   ├── profiles.py         # Profile CRUD (GET/PATCH /profiles/me)
 │   ├── courses.py          # Course browsing, tags, skills
 │   └── admin.py            # Admin endpoints (user management, analytics)
@@ -130,6 +133,8 @@ backend/
 - 2-agent LLM pipeline for course recommendations
 - Rate limiting (10 recommendations per 24 hours)
 - Performance logging with `[PERF]` prefix for timing analysis
+- Recommendation history with course title enrichment (titles fetched from courses table)
+- Stores full recommendation details in JSONB for history retrieval
 
 ## Key Repositories
 
@@ -141,8 +146,10 @@ backend/
 - Data access for users
 - Query methods: get_by_id, get_by_email, list_all (admin)
 
-**RecommendationRepository** (stub):
+**RecommendationRepository**:
 - Data access for recommendations
+- Query methods: create, get_by_user_id, get_user_recommendations (with limit)
+- Stores recommendation_details JSONB with full LLM response
 
 ## Authentication
 

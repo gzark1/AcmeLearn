@@ -15,7 +15,8 @@ tests/
     │   ├── test_auth.py     # Registration, login, token validation
     │   ├── test_courses.py  # Course listing, filtering, tag categories
     │   ├── test_profiles.py # Profile CRUD operations
-    │   └── test_admin.py    # Admin endpoints (user management, analytics)
+    │   ├── test_admin.py    # Admin endpoints (user management, analytics)
+    │   └── test_recommendations.py  # Recommendation generation, quota, history
     │
     └── test_services/       # Service layer tests
         ├── __init__.py
@@ -123,6 +124,7 @@ async def test_update_profile_creates_snapshot(test_db, test_user):
 - test_courses.py: Course listing, filtering by difficulty/tags, tag categories
 - test_profiles.py: Profile CRUD, snapshot creation on updates
 - test_admin.py: Admin user management, analytics endpoints
+- test_recommendations.py: Recommendation generation, quota, history endpoints
 
 **Service Tests** (`test_services/`):
 - test_profile_service.py: ProfileService business logic, snapshot creation

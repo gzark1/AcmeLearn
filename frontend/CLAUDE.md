@@ -46,10 +46,21 @@ frontend/src/
 │   │   ├── components/     # CourseCard, CourseGrid, CourseFilters, DifficultyBadge, etc.
 │   │   └── types/          # Course types
 │   │
-│   └── profile/
-│       ├── api/            # get-profile.ts, update-profile.ts, get-profile-history.ts
-│       ├── components/     # ProfileForm, ProfileView, ProfileHistoryTimeline
-│       └── types/          # Profile types
+│   ├── profile/
+│   │   ├── api/            # get-profile.ts, update-profile.ts, get-profile-history.ts
+│   │   ├── components/     # ProfileForm, ProfileView, ProfileHistoryTimeline
+│   │   └── types/          # Profile types
+│   │
+│   ├── recommendations/
+│   │   ├── api/            # generate-recommendations.ts, get-quota.ts, get-recommendations.ts
+│   │   ├── components/     # RecommendationChat, RecommendationHistory, RecommendationCard, etc.
+│   │   ├── context/        # RecommendationsProvider (session persistence)
+│   │   └── types/          # Recommendation types, ChatMessage, ExpandedState
+│   │
+│   └── admin/
+│       ├── api/            # get-analytics.ts, get-users.ts, etc.
+│       ├── components/     # UserTable, AnalyticsCharts, etc.
+│       └── types/          # Admin types
 │
 ├── components/             # Shared UI components
 │   ├── ui/                 # Base UI components
@@ -121,6 +132,17 @@ frontend/src/
 - Profile edit form with tag browser modal
 - Profile version history with "View History" link
 - Interest selector with tag categories
+
+**Recommendations**:
+- AI-powered course recommendations with natural language queries
+- Profile-based recommendations (no query needed)
+- Collapsible history sidebar showing past recommendations from database
+- Session persistence via React context (chat state survives navigation)
+- Profile analysis summary with skill level and skill gaps
+- Learning path with ordered course sequence
+- Recommendation cards with match scores, explanations, and skill gaps addressed
+- Rate limit indicator (10 recommendations per 24 hours)
+- Loading states with progressive messages (takes 1-2 minutes)
 
 **Admin** (for superusers):
 - **Dashboard**: Stats cards (Total Users, Profiles Complete, Avg Profile Updates, AI Recs Today, Signups This Week, Active Users), Quick Insights panel, Recent Activity feed

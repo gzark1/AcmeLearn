@@ -105,7 +105,7 @@ export const AdminLayout = ({ user, onLogout }: AdminLayoutProps) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 animate-fadeIn">
           <Outlet />
         </main>
       </div>

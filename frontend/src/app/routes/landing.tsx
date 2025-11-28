@@ -137,6 +137,32 @@ export const LandingPage = () => {
             </Card>
           </div>
         </div>
+
+        {/* Course Categories */}
+        <div className="relative mx-auto mt-16 max-w-5xl px-4 pb-16">
+          <h2 className="mb-8 text-center text-2xl font-bold text-slate-900">
+            Explore by Category
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              { name: 'Programming', color: 'bg-blue-100 text-blue-700' },
+              { name: 'Data Science', color: 'bg-purple-100 text-purple-700' },
+              { name: 'Business', color: 'bg-amber-100 text-amber-700' },
+              { name: 'Design', color: 'bg-pink-100 text-pink-700' },
+              { name: 'Leadership', color: 'bg-emerald-100 text-emerald-700' },
+              { name: 'Communication', color: 'bg-cyan-100 text-cyan-700' },
+              { name: 'Project Management', color: 'bg-orange-100 text-orange-700' },
+              { name: 'Cloud Computing', color: 'bg-indigo-100 text-indigo-700' },
+            ].map((category) => (
+              <span
+                key={category.name}
+                className={`rounded-full px-4 py-2 text-sm font-medium ${category.color}`}
+              >
+                {category.name}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

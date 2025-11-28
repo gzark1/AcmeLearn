@@ -17,7 +17,7 @@ export const MainLayout = ({ user, onLogout }: MainLayoutProps) => {
       <Navbar user={user} onLogout={onLogout} />
 
       <main className="flex-1">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 animate-fadeIn">
           <Outlet />
         </div>
       </main>

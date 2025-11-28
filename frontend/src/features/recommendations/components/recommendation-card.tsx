@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { StarIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid'
 
 import { Button } from '@/components/ui/button'
+import { paths } from '@/config/paths'
 import { cn } from '@/utils/cn'
 
 import type { RecommendedCourse } from '../types'
@@ -12,8 +13,10 @@ export type RecommendationCardProps = {
   index: number
   isExpanded: boolean
   onToggleExpand: () => void
-  isSelectedForComparison: boolean
-  onToggleComparison: () => void
+  // Comparison feature - hidden until fully implemented
+  isSelectedForComparison?: boolean
+  onToggleComparison?: () => void
+  showComparison?: boolean
 }
 
 const getMatchScoreColor = (score: number) => {
@@ -27,8 +30,9 @@ export const RecommendationCard = ({
   index,
   isExpanded,
   onToggleExpand,
-  isSelectedForComparison,
+  isSelectedForComparison = false,
   onToggleComparison,
+  showComparison = false,
 }: RecommendationCardProps) => {
   const matchScoreColor = getMatchScoreColor(course.match_score)
 
@@ -45,14 +49,16 @@ export const RecommendationCard = ({
             {Math.round(course.match_score * 100)}% Match
           </p>
         </div>
-        {/* Comparison Checkbox */}
-        <input
-          type="checkbox"
-          checked={isSelectedForComparison}
-          onChange={onToggleComparison}
-          className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-          aria-label={`Select ${course.title} for comparison`}
-        />
+        {/* Comparison Checkbox - hidden until feature is fully implemented */}
+        {showComparison && onToggleComparison && (
+          <input
+            type="checkbox"
+            checked={isSelectedForComparison}
+            onChange={onToggleComparison}
+            className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            aria-label={`Select ${course.title} for comparison`}
+          />
+        )}
       </div>
 
       {/* Explanation */}
@@ -83,7 +89,7 @@ export const RecommendationCard = ({
       {/* Action Buttons */}
       <div className="mt-4 flex gap-3">
         <Link
-          to={`/app/courses/${course.course_id}`}
+          to={paths.app.course.getHref(course.course_id)}
           className="inline-flex h-8 items-center justify-center rounded-lg bg-blue-600 px-3 text-sm font-medium text-white transition-colors hover:bg-blue-700"
         >
           View Course Details

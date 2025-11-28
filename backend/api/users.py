@@ -10,6 +10,7 @@ Provides:
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_users import exceptions
 from fastapi_users.password import PasswordHelper
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
@@ -24,6 +25,7 @@ from schemas.recommendation import (
     ClarificationResponse,
 )
 from models.user import User
+from models.course import Course
 from services.recommendation_service import RecommendationService
 
 
@@ -120,6 +122,25 @@ async def get_my_recommendations(
     service = RecommendationService(db)
     recommendations = await service.get_user_recommendations(user.id, limit=10)
 
+    # Collect all course IDs from recommendations to fetch titles
+    all_course_ids = set()
+    for rec in recommendations:
+        if rec.recommendation_details:
+            details = rec.recommendation_details
+            for r in details.get("recommendations", []):
+                all_course_ids.add(r["course_id"])
+            for step in details.get("learning_path", []):
+                all_course_ids.add(step["course_id"])
+
+    # Fetch course titles from database
+    course_titles = {}
+    if all_course_ids:
+        result = await db.execute(
+            select(Course.id, Course.title).where(Course.id.in_(all_course_ids))
+        )
+        for course_id, title in result.all():
+            course_titles[str(course_id)] = title
+
     # Convert to response format
     items = []
     for rec in recommendations:
@@ -132,9 +153,10 @@ async def get_my_recommendations(
         if rec.recommendation_details:
             details = rec.recommendation_details
             for r in details.get("recommendations", []):
+                course_id = r["course_id"]
                 courses.append({
-                    "course_id": r["course_id"],
-                    "title": r.get("title", "Unknown"),
+                    "course_id": course_id,
+                    "title": course_titles.get(course_id, "Unknown"),
                     "match_score": r["match_score"],
                     "explanation": r["explanation"],
                     "skill_gaps_addressed": r.get("skill_gaps_addressed", []),
@@ -142,10 +164,11 @@ async def get_my_recommendations(
                     "estimated_weeks": r.get("estimated_weeks"),
                 })
             for step in details.get("learning_path", []):
+                course_id = step["course_id"]
                 learning_path.append({
                     "order": step["order"],
-                    "course_id": step["course_id"],
-                    "title": step.get("title", "Unknown"),
+                    "course_id": course_id,
+                    "title": course_titles.get(course_id, "Unknown"),
                     "rationale": step["rationale"],
                 })
             overall_summary = details.get("overall_summary", rec.explanation)

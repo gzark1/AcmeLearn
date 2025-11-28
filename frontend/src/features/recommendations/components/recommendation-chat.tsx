@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from 'react'
 import { SparklesIcon } from '@heroicons/react/24/outline'
 
 import { useQuota, useGenerateRecommendations } from '../api'
-import type { ChatMessage, ExpandedState, RecommendationResponse } from '../types'
+import { useRecommendationsContext } from '../context'
+import type { RecommendationResponse } from '../types'
 import { RateLimitIndicator } from './rate-limit-indicator'
 import { UserMessage } from './user-message'
 import { AIResponse } from './ai-response'
 import { ClarificationMessage } from './clarification-message'
 import { AILoadingState } from './ai-loading-state'
 import { RecommendationInput } from './recommendation-input'
+import { RecommendationHistory } from './recommendation-history'
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -32,15 +34,20 @@ const EmptyState = () => (
 )
 
 export const RecommendationChat = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [inputQuery, setInputQuery] = useState('')
-  const [expanded, setExpanded] = useState<ExpandedState>({
-    explanations: new Set(),
-    learningPath: false,
-    comparison: { isOpen: false, selectedCourseIds: [] },
-  })
-
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const {
+    messages,
+    addUserMessage,
+    addAIRecommendations,
+    addAIClarification,
+    removeLastMessage,
+    viewingHistoryItem,
+    setViewingHistoryItem,
+    expanded,
+    setExpanded,
+  } = useRecommendationsContext()
 
   const { data: quota } = useQuota()
   const generateMutation = useGenerateRecommendations()
@@ -52,22 +59,11 @@ export const RecommendationChat = () => {
 
   const handleResponse = (result: RecommendationResponse) => {
     if ('type' in result && result.type === 'clarification_needed') {
-      setMessages((prev) => [
-        ...prev,
-        { type: 'ai-clarification', data: result, timestamp: new Date() },
-      ])
+      addAIClarification(result)
     } else {
-      setMessages((prev) => [
-        ...prev,
-        { type: 'ai-recommendations', data: result, timestamp: new Date() },
-      ])
+      // Cast is safe because we checked for clarification above
+      addAIRecommendations(result as import('../types').RecommendationRead)
     }
-    // Reset expanded state for new response
-    setExpanded({
-      explanations: new Set(),
-      learningPath: false,
-      comparison: { isOpen: false, selectedCourseIds: [] },
-    })
   }
 
   const handleSubmit = async () => {
@@ -77,14 +73,14 @@ export const RecommendationChat = () => {
     setInputQuery('')
 
     // Optimistic update - add user message
-    setMessages((prev) => [...prev, { type: 'user', query, timestamp: new Date() }])
+    addUserMessage(query)
 
     try {
       const result = await generateMutation.mutateAsync({ query })
       handleResponse(result)
     } catch {
       // Error handled by mutation's onError - remove optimistic message
-      setMessages((prev) => prev.slice(0, -1))
+      removeLastMessage()
     }
   }
 
@@ -92,73 +88,117 @@ export const RecommendationChat = () => {
     if (generateMutation.isPending) return
 
     // Optimistic update - add user message
-    setMessages((prev) => [
-      ...prev,
-      { type: 'user', query: 'Recommend courses based on my profile', timestamp: new Date() },
-    ])
+    addUserMessage('Recommend courses based on my profile')
 
     try {
       const result = await generateMutation.mutateAsync({})
       handleResponse(result)
     } catch {
       // Error handled by mutation's onError - remove optimistic message
-      setMessages((prev) => prev.slice(0, -1))
+      removeLastMessage()
     }
   }
 
   const isDisabled = generateMutation.isPending || quota?.remaining === 0
 
-  return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      {/* Header with quota */}
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">AI Course Recommendations</h1>
-        <RateLimitIndicator quota={quota} />
-      </div>
-
-      {/* Chat area */}
-      <div className="min-h-[600px] rounded-lg border border-slate-200 bg-white shadow-sm">
-        {/* Messages (scrollable) */}
-        <div className="max-h-[600px] overflow-y-auto p-6">
-          {messages.length === 0 && !generateMutation.isPending ? (
-            <EmptyState />
-          ) : (
-            <>
-              {messages.map((msg, idx) => (
-                <div key={idx}>
-                  {msg.type === 'user' && (
-                    <UserMessage query={msg.query} timestamp={msg.timestamp} />
-                  )}
-                  {msg.type === 'ai-recommendations' && (
-                    <AIResponse data={msg.data} expanded={expanded} setExpanded={setExpanded} />
-                  )}
-                  {msg.type === 'ai-clarification' && <ClarificationMessage {...msg.data} />}
-                </div>
-              ))}
-              {generateMutation.isPending && <AILoadingState />}
-              <div ref={messagesEndRef} />
-            </>
+  // When viewing a history item, show it directly without chat interface
+  const renderContent = () => {
+    if (viewingHistoryItem) {
+      return (
+        <div className="p-6">
+          {/* Show the query */}
+          {viewingHistoryItem.query && (
+            <UserMessage
+              query={viewingHistoryItem.query}
+              timestamp={new Date(viewingHistoryItem.created_at)}
+            />
           )}
+          {!viewingHistoryItem.query && (
+            <UserMessage
+              query="Recommend courses based on my profile"
+              timestamp={new Date(viewingHistoryItem.created_at)}
+            />
+          )}
+          {/* Show the recommendation */}
+          <AIResponse data={viewingHistoryItem} expanded={expanded} setExpanded={setExpanded} />
+          {/* Back to chat button */}
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setViewingHistoryItem(null)}
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              ← Back to current chat
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    // Normal chat view
+    if (messages.length === 0 && !generateMutation.isPending) {
+      return (
+        <div className="p-6">
+          <EmptyState />
+        </div>
+      )
+    }
+
+    return (
+      <div className="p-6">
+        {messages.map((msg, idx) => (
+          <div key={idx}>
+            {msg.type === 'user' && <UserMessage query={msg.query} timestamp={msg.timestamp} />}
+            {msg.type === 'ai-recommendations' && (
+              <AIResponse data={msg.data} expanded={expanded} setExpanded={setExpanded} />
+            )}
+            {msg.type === 'ai-clarification' && <ClarificationMessage {...msg.data} />}
+          </div>
+        ))}
+        {generateMutation.isPending && <AILoadingState />}
+        <div ref={messagesEndRef} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex h-[calc(100vh-8rem)] gap-0">
+      {/* History Sidebar */}
+      <RecommendationHistory />
+
+      {/* Main Chat Area */}
+      <div className="flex flex-1 flex-col">
+        {/* Header with quota */}
+        <div className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+          <h1 className="text-xl font-bold text-slate-900">AI Course Recommendations</h1>
+          <RateLimitIndicator quota={quota} />
         </div>
 
-        {/* Input area (sticky bottom) */}
-        <div className="border-t border-slate-200 bg-slate-50 p-4">
-          {quota?.remaining === 0 ? (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center">
-              <p className="font-medium text-red-900">Daily limit reached</p>
-              <p className="mt-1 text-sm text-red-700">
-                You've used all {quota.limit} recommendations for today. Your quota resets at
-                midnight.
-              </p>
+        {/* Chat area */}
+        <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+          {/* Messages (scrollable) */}
+          <div className="flex-1 overflow-y-auto">{renderContent()}</div>
+
+          {/* Input area (sticky bottom) - hide when viewing history */}
+          {!viewingHistoryItem && (
+            <div className="border-t border-slate-200 bg-slate-50 p-4">
+              {quota?.remaining === 0 ? (
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center">
+                  <p className="font-medium text-red-900">Daily limit reached</p>
+                  <p className="mt-1 text-sm text-red-700">
+                    You've used all {quota.limit} recommendations for today. Your quota resets at
+                    midnight.
+                  </p>
+                </div>
+              ) : (
+                <RecommendationInput
+                  value={inputQuery}
+                  onChange={setInputQuery}
+                  onSubmit={handleSubmit}
+                  onProfileBased={handleProfileBased}
+                  disabled={isDisabled}
+                />
+              )}
             </div>
-          ) : (
-            <RecommendationInput
-              value={inputQuery}
-              onChange={setInputQuery}
-              onSubmit={handleSubmit}
-              onProfileBased={handleProfileBased}
-              disabled={isDisabled}
-            />
           )}
         </div>
       </div>

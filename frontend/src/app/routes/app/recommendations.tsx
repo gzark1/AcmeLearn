@@ -1,7 +1,11 @@
-import { RecommendationChat } from '@/features/recommendations'
+import { RecommendationsProvider, RecommendationChat } from '@/features/recommendations'
 
 export const RecommendationsPage = () => {
-  return <RecommendationChat />
+  return (
+    <RecommendationsProvider>
+      <RecommendationChat />
+    </RecommendationsProvider>
+  )
 }
 
 export default RecommendationsPage

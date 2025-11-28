@@ -3,9 +3,10 @@ import { SparklesIcon } from '@heroicons/react/24/outline'
 
 const LOADING_MESSAGES = [
   { time: 0, message: 'Analyzing your learning goals...' },
-  { time: 2000, message: 'Matching courses to your interests...' },
-  { time: 4000, message: 'Crafting personalized recommendations...' },
-  { time: 6000, message: "This is taking longer than usual... we're being extra thorough!" },
+  { time: 15000, message: 'Matching courses to your interests...' },
+  { time: 40000, message: 'Crafting personalized recommendations...' },
+  { time: 70000, message: "Almost there... we're being extra thorough!" },
+  { time: 100000, message: 'Still working on finding the best matches for you...' },
 ]
 
 export const AILoadingState = () => {
@@ -38,7 +39,7 @@ export const AILoadingState = () => {
       >
         {LOADING_MESSAGES[messageIndex].message}
       </p>
-      <p className="mt-6 text-sm italic text-slate-500">Usually takes 3-5 seconds</p>
+      <p className="mt-6 text-sm italic text-slate-500">Usually takes 1-2 minutes</p>
     </div>
   )
 }

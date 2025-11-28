@@ -50,3 +50,6 @@ docker-compose.override.yml
 docs/bulletproof-react-master.zip
 docs/bulletproof-react-master/
 docs/CLAUDE_CODE_BEST_PRACTICES.md
+
+# Project assessment
+assessment.md

@@ -12,6 +12,7 @@ from .user_profile_snapshot import UserProfileSnapshot
 from .recommendation import Recommendation
 from .course import Course, Tag, Skill, CourseTag, CourseSkill
 from .activity_log import ActivityLog, ActivityEventType
+from .llm_metrics import LLMMetrics
 
 __all__ = [
     # Base
@@ -33,4 +34,5 @@ __all__ = [
     "CourseSkill",
     "ActivityLog",
     "ActivityEventType",
+    "LLMMetrics",
 ]

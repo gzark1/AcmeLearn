@@ -96,9 +96,8 @@ class ProfileAnalyzerAgent:
         return ProfileAnalysis(
             skill_level=profile.current_level.value if profile.current_level else "beginner",
             skill_gaps=["Define your learning goals", "Identify areas of interest"],
-            ranked_interests=[],
             time_constraint_hours=self._parse_time_commitment(profile.time_commitment),
-            learning_style_notes="Profile incomplete - please add your learning goal and interests for personalized recommendations.",
+            personalization_note="Profile incomplete - please add your learning goal and interests for personalized recommendations.",
             profile_completeness="minimal",
             confidence=0.2,
         )

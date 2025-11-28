@@ -4,7 +4,6 @@ AcmeLearn FastAPI Application Entry Point
 This is the main entry point for the AcmeLearn backend API.
 """
 
-import subprocess
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -87,11 +86,7 @@ async def lifespan(app: FastAPI):
     setup_logging()
     print("Starting up AcmeLearn API...")
 
-    # Run Alembic migrations
-    print("Running database migrations...")
-    subprocess.run(["alembic", "upgrade", "head"], check=True)
-
-    # Create tables (fallback for any not covered by migrations)
+    # Create tables from models (idempotent - safe to run multiple times)
     await init_db()
 
     # Seed courses (only if empty)

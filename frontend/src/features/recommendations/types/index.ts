@@ -61,3 +61,16 @@ export type RecommendationListResponse = {
   recommendations: RecommendationRead[]
   count: number
 }
+
+// UI state types
+
+export type ChatMessage =
+  | { type: 'user'; query: string; timestamp: Date }
+  | { type: 'ai-recommendations'; data: RecommendationRead; timestamp: Date }
+  | { type: 'ai-clarification'; data: ClarificationResponse; timestamp: Date }
+
+export type ExpandedState = {
+  explanations: Set<string>
+  learningPath: boolean
+  comparison: { isOpen: boolean; selectedCourseIds: string[] }
+}

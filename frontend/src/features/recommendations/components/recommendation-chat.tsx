@@ -1,0 +1,167 @@
+import { useState, useRef, useEffect } from 'react'
+import { SparklesIcon } from '@heroicons/react/24/outline'
+
+import { useQuota, useGenerateRecommendations } from '../api'
+import type { ChatMessage, ExpandedState, RecommendationResponse } from '../types'
+import { RateLimitIndicator } from './rate-limit-indicator'
+import { UserMessage } from './user-message'
+import { AIResponse } from './ai-response'
+import { ClarificationMessage } from './clarification-message'
+import { AILoadingState } from './ai-loading-state'
+import { RecommendationInput } from './recommendation-input'
+
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center py-16 text-center">
+    <SparklesIcon className="h-16 w-16 text-blue-400" />
+    <h2 className="mt-6 text-xl font-semibold text-slate-900">
+      Get Personalized Course Recommendations
+    </h2>
+    <p className="mt-2 max-w-md text-base text-slate-600">
+      Tell me what you'd like to learn, and I'll find the perfect courses for you based on your
+      profile and goals.
+    </p>
+    <div className="mt-6 space-y-2 text-sm text-slate-500">
+      <p className="font-medium">Try asking:</p>
+      <ul className="list-inside list-disc space-y-1 text-left italic">
+        <li>"I want to learn Python for data science"</li>
+        <li>"Help me improve my leadership skills"</li>
+        <li>"Show me beginner courses in web development"</li>
+      </ul>
+    </div>
+  </div>
+)
+
+export const RecommendationChat = () => {
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [inputQuery, setInputQuery] = useState('')
+  const [expanded, setExpanded] = useState<ExpandedState>({
+    explanations: new Set(),
+    learningPath: false,
+    comparison: { isOpen: false, selectedCourseIds: [] },
+  })
+
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const { data: quota } = useQuota()
+  const generateMutation = useGenerateRecommendations()
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, generateMutation.isPending])
+
+  const handleResponse = (result: RecommendationResponse) => {
+    if ('type' in result && result.type === 'clarification_needed') {
+      setMessages((prev) => [
+        ...prev,
+        { type: 'ai-clarification', data: result, timestamp: new Date() },
+      ])
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        { type: 'ai-recommendations', data: result, timestamp: new Date() },
+      ])
+    }
+    // Reset expanded state for new response
+    setExpanded({
+      explanations: new Set(),
+      learningPath: false,
+      comparison: { isOpen: false, selectedCourseIds: [] },
+    })
+  }
+
+  const handleSubmit = async () => {
+    if (!inputQuery.trim() || generateMutation.isPending) return
+
+    const query = inputQuery.trim()
+    setInputQuery('')
+
+    // Optimistic update - add user message
+    setMessages((prev) => [...prev, { type: 'user', query, timestamp: new Date() }])
+
+    try {
+      const result = await generateMutation.mutateAsync({ query })
+      handleResponse(result)
+    } catch {
+      // Error handled by mutation's onError - remove optimistic message
+      setMessages((prev) => prev.slice(0, -1))
+    }
+  }
+
+  const handleProfileBased = async () => {
+    if (generateMutation.isPending) return
+
+    // Optimistic update - add user message
+    setMessages((prev) => [
+      ...prev,
+      { type: 'user', query: 'Recommend courses based on my profile', timestamp: new Date() },
+    ])
+
+    try {
+      const result = await generateMutation.mutateAsync({})
+      handleResponse(result)
+    } catch {
+      // Error handled by mutation's onError - remove optimistic message
+      setMessages((prev) => prev.slice(0, -1))
+    }
+  }
+
+  const isDisabled = generateMutation.isPending || quota?.remaining === 0
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8">
+      {/* Header with quota */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-slate-900">AI Course Recommendations</h1>
+        <RateLimitIndicator quota={quota} />
+      </div>
+
+      {/* Chat area */}
+      <div className="min-h-[600px] rounded-lg border border-slate-200 bg-white shadow-sm">
+        {/* Messages (scrollable) */}
+        <div className="max-h-[600px] overflow-y-auto p-6">
+          {messages.length === 0 && !generateMutation.isPending ? (
+            <EmptyState />
+          ) : (
+            <>
+              {messages.map((msg, idx) => (
+                <div key={idx}>
+                  {msg.type === 'user' && (
+                    <UserMessage query={msg.query} timestamp={msg.timestamp} />
+                  )}
+                  {msg.type === 'ai-recommendations' && (
+                    <AIResponse data={msg.data} expanded={expanded} setExpanded={setExpanded} />
+                  )}
+                  {msg.type === 'ai-clarification' && <ClarificationMessage {...msg.data} />}
+                </div>
+              ))}
+              {generateMutation.isPending && <AILoadingState />}
+              <div ref={messagesEndRef} />
+            </>
+          )}
+        </div>
+
+        {/* Input area (sticky bottom) */}
+        <div className="border-t border-slate-200 bg-slate-50 p-4">
+          {quota?.remaining === 0 ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center">
+              <p className="font-medium text-red-900">Daily limit reached</p>
+              <p className="mt-1 text-sm text-red-700">
+                You've used all {quota.limit} recommendations for today. Your quota resets at
+                midnight.
+              </p>
+            </div>
+          ) : (
+            <RecommendationInput
+              value={inputQuery}
+              onChange={setInputQuery}
+              onSubmit={handleSubmit}
+              onProfileBased={handleProfileBased}
+              disabled={isDisabled}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

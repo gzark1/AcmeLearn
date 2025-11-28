@@ -1,1 +1,153 @@
 # AcmeLearn
+
+An AI-powered learning recommendation system that helps users discover courses from a curated catalog. Users can browse available courses, set their learning preferences, and receive personalized AI recommendations.
+
+## Technology Choices
+
+### Backend
+- **FastAPI** (Python 3.12): Modern async Python framework with automatic OpenAPI docs, type hints, and excellent performance
+- **PostgreSQL 16**: Robust relational database with native UUID support and async driver (asyncpg)
+- **SQLAlchemy 2.0**: Async ORM with type-safe queries
+- **Alembic**: Database migrations with auto-migrate on startup
+- **fastapi-users**: Battle-tested JWT authentication with secure password hashing
+- **LangChain + OpenAI**: Multi-agent LLM pipeline for personalized recommendations
+
+### Frontend
+- **React 19** + **TypeScript**: Type-safe UI with latest React features
+- **Vite**: Fast build tool with hot module replacement
+- **TanStack Query**: Data fetching with caching, background updates, and optimistic mutations
+- **Tailwind CSS 4**: Utility-first styling with design system
+- **React Router 7**: File-based routing with protected routes
+- **Zod**: Runtime schema validation for forms
+
+### Infrastructure
+- **Docker Compose**: 4-container setup (postgres, postgres_test, backend, frontend)
+- **uv**: Fast Python package manager with lockfile
+
+## Setup Instructions
+
+### Prerequisites
+- Docker and Docker Compose
+- OpenAI API key
+
+### Quick Start
+
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd AcmeLearn
+
+# 2. Create environment file
+cp .env.example .env
+
+# 3. Edit .env with your credentials:
+#    - Generate SECRET_KEY: openssl rand -hex 32
+#    - Add your OPENAI_API_KEY
+#    - (Optional) Set SUPERUSER_EMAIL/PASSWORD for admin access
+
+# 4. Start all services
+docker compose up --build
+
+# 5. Access the application
+#    Frontend: http://localhost:5173
+#    Backend API: http://localhost:8000
+#    API Docs: http://localhost:8000/docs
+```
+
+### Demo Users
+
+When `SEED_DEMO_USERS=true` (default), 25 demo users are created on startup:
+- **Emails**: `demo01@example.com` through `demo25@example.com`
+- **Password**: `123123123` (configurable via `DEMO_USER_PASSWORD`)
+- **Variety**: Mix of empty, incomplete, and complete profiles for testing
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `POSTGRES_USER` | Yes | Database username |
+| `POSTGRES_PASSWORD` | Yes | Database password |
+| `POSTGRES_DB` | Yes | Database name |
+| `SECRET_KEY` | Yes | JWT signing key (generate with `openssl rand -hex 32`) |
+| `OPENAI_API_KEY` | Yes | OpenAI API key for recommendations |
+| `OPENAI_MODEL` | No | Model to use (default: `gpt-5-nano`) |
+| `SEED_DEMO_USERS` | No | Create demo users on startup (default: `true`) |
+| `SUPERUSER_EMAIL` | No | Auto-create admin user with this email |
+| `SUPERUSER_PASSWORD` | No | Password for admin user |
+
+## Features
+
+### User Features
+- **Authentication**: Register, login, JWT-based sessions
+- **Course Catalog**: Browse 48 courses with search, filtering (difficulty, tags, duration), and sorting
+- **Profile Management**: Set learning goals, experience level, time commitment, and interests
+- **AI Recommendations**: Get personalized course recommendations with explanations
+  - Natural language queries ("I want to learn machine learning")
+  - Profile-based recommendations
+  - Match scores and reasoning for each suggestion
+  - Learning path with course sequence
+
+### Admin Features
+- **Dashboard**: User stats, recent activity, quick insights
+- **User Management**: Search, filter, view profiles, deactivate users
+- **Analytics**: User growth charts, profile completion, experience distribution
+
+### LLM Architecture
+Two-agent recommendation pipeline:
+1. **Profile Analyzer**: Analyzes user profile, interests, and learning history
+2. **Course Recommender**: Generates ranked recommendations with explanations
+
+Pre-filtering reduces 48 courses to ~20 before LLM processing for token efficiency.
+
+## Trade-offs and Future Improvements
+
+### Current Trade-offs
+
+1. **Token Efficiency vs Context**: Course descriptions are truncated to 150 characters for LLM input. This reduces token usage but limits context for recommendations.
+
+2. **Rate Limiting**: Users are limited to 10 recommendations per 24 hours to manage API costs. Could be made configurable per user tier.
+
+3. **Synchronous LLM Calls**: Recommendations block until complete (~5-10 seconds). Streaming responses would improve UX but add complexity.
+
+4. **Desktop-First**: Frontend optimized for desktop. Mobile experience functional but not prioritized.
+
+### Future Improvements
+
+1. **Recommendation Caching**: Cache similar queries to reduce LLM calls
+2. **Streaming Responses**: Show recommendations as they generate
+3. **Recommendation History**: Let users view and compare past recommendations
+4. **Course Progress Tracking**: Track completion and update recommendations accordingly
+5. **A/B Testing**: Compare recommendation quality across different prompts/models
+6. **Analytics Dashboard**: Track recommendation engagement and success metrics
+
+## Running Tests
+
+```bash
+# Run backend tests inside container
+docker exec acmelearn_backend uv run pytest
+
+# Run with coverage
+docker exec acmelearn_backend uv run pytest --cov=. --cov-report=term-missing
+```
+
+## Project Structure
+
+```
+AcmeLearn/
+├── backend/           # FastAPI application
+│   ├── api/           # Route handlers
+│   ├── models/        # SQLAlchemy models
+│   ├── services/      # Business logic
+│   ├── repositories/  # Data access
+│   ├── llm/           # LLM agents and prompts
+│   └── scripts/       # Seeding scripts
+├── frontend/          # React application
+│   ├── src/
+│   │   ├── app/       # Routes and providers
+│   │   ├── features/  # Feature modules (auth, courses, profile)
+│   │   ├── components/# Shared UI components
+│   │   └── lib/       # API client, auth context
+├── tests/             # Backend tests
+├── docs/              # Architecture documentation
+└── courses.json       # Course catalog data
+```

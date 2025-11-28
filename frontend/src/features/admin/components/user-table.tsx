@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components/ui/empty-state'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import type { AdminUserListItem } from '../types'
@@ -28,8 +29,11 @@ export const UserTable = ({ users, isLoading }: UserTableProps) => {
 
   if (users.length === 0) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-        <p className="text-slate-600">No users found.</p>
+      <div className="rounded-lg border border-slate-200 bg-white">
+        <EmptyState
+          title="No users found"
+          description="Try adjusting your search or filters."
+        />
       </div>
     )
   }

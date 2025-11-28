@@ -1,3 +1,5 @@
+import { EmptyState } from '@/components/ui/empty-state'
+
 import type { Course } from '../types'
 import { CourseCard } from './course-card'
 import { CourseSkeleton } from './course-skeleton'
@@ -25,8 +27,26 @@ export const CourseGrid = ({
 
   if (!courses?.length) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
-        <p className="text-slate-500">{emptyMessage}</p>
+      <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50">
+        <EmptyState
+          icon={
+            <svg
+              className="h-12 w-12 text-slate-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+          }
+          title="No courses found"
+          description={emptyMessage}
+        />
       </div>
     )
   }

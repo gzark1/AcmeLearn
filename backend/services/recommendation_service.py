@@ -2,6 +2,7 @@
 Recommendation service with rate limiting.
 
 Handles AI recommendation generation with rate limits.
+Uses QUERY-FIRST architecture: user's request is primary, profile is enrichment.
 """
 import logging
 import time
@@ -19,6 +20,7 @@ from repositories.llm_metrics_repository import LLMMetricsRepository
 from llm.agents.profile_analyzer import ProfileAnalyzerAgent
 from llm.agents.course_recommender import CourseRecommenderAgent
 from llm.filters import filter_courses
+from llm.intent import QueryIntent, classify_intent, get_intent_message
 from llm.exceptions import (
     LLMEmptyProfileError,
     LLMNoCoursesError,
@@ -147,21 +149,27 @@ class RecommendationService:
         """
         Generate AI-powered course recommendations.
 
+        QUERY-FIRST Architecture:
+        - User's request is PRIMARY driver for recommendations
+        - Profile is used to ENRICH and PERSONALIZE, not redirect
+
         Orchestrates the 2-agent pipeline:
+        0. Classify intent (handle edge cases without LLM)
         1. Check rate limit
         2. Load profile and history
-        3. Pre-filter courses
-        4. Agent 1: Analyze profile
-        5. Agent 2: Generate recommendations
+        3. Pre-filter courses (query-first scoring)
+        4. Agent 1: Analyze profile for personalization
+        5. Agent 2: Generate recommendations matching request
         6. Store and return results
 
         Args:
             user_id: User's UUID
-            query: Optional learning request
+            query: User's learning request (PRIMARY focus)
             num_recommendations: Number of courses (3-10)
 
         Returns:
             Dict with recommendation_id, courses, learning_path, etc.
+            OR Dict with type="clarification_needed" for edge cases.
 
         Raises:
             HTTPException 429: Rate limit exceeded
@@ -171,6 +179,21 @@ class RecommendationService:
         """
         start_time = time.time()
         logger.info(f"[PERF] Starting recommendation for user {user_id}")
+
+        # 0. Classify intent (brief LLM call for nuanced understanding)
+        t0 = time.time()
+        intent = await classify_intent(query)
+        logger.info(f"[PERF] Intent classified: {intent.value} ({time.time() - t0:.2f}s)")
+
+        # Handle IRRELEVANT queries without consuming LLM tokens
+        if intent == QueryIntent.IRRELEVANT:
+            message = get_intent_message(intent)
+            return {
+                "type": "clarification_needed",
+                "intent": intent.value,
+                "message": message,
+                "query": query,
+            }
 
         # 1. Check rate limit
         t1 = time.time()
@@ -182,6 +205,23 @@ class RecommendationService:
         profile = await self.profile_repo.get_profile_by_user_id(user_id)
         if not profile:
             raise HTTPException(status_code=400, detail="Profile not found")
+
+        # Handle VAGUE queries based on profile state
+        profile_has_data = bool(
+            profile.learning_goal or profile.interests or profile.current_level
+        )
+        if intent == QueryIntent.VAGUE:
+            if not profile_has_data:
+                # No profile to fall back on - ask for clarification
+                message = get_intent_message(intent)
+                return {
+                    "type": "clarification_needed",
+                    "intent": intent.value,
+                    "message": message,
+                    "query": query,
+                }
+            # Has profile - proceed with profile-based recommendations
+            logger.info("[PERF] Vague query with profile - using profile-based recommendations")
 
         snapshots = await self.profile_repo.get_snapshots(profile.id, limit=3)
         logger.info(f"[PERF] Profile loaded: {time.time() - t2:.2f}s")
@@ -310,21 +350,23 @@ class RecommendationService:
         course_titles = {str(c.id): c.title for c in all_courses}
 
         return {
+            "type": "recommendations",  # Distinguishes from clarification_needed
             "id": stored.id,
             "query": query,
             "profile_analysis": {
                 "skill_level": profile_analysis.skill_level,
-                "skill_gaps": profile_analysis.skill_gaps,
+                "skill_gaps": profile_analysis.skill_gaps[:3],  # Max 3
                 "confidence": profile_analysis.confidence,
             },
+            # Optional feedback if Agent 1 detected profile issues
+            "profile_feedback": profile_analysis.profile_feedback,
             "courses": [
                 {
                     "course_id": uuid.UUID(r.course_id),
                     "title": course_titles.get(r.course_id, "Unknown"),
                     "match_score": r.match_score,
                     "explanation": r.explanation,
-                    "skill_gaps_addressed": r.skill_gaps_addressed,
-                    "fit_reasons": r.fit_reasons,
+                    "skill_gaps_addressed": r.skill_gaps_addressed[:2],  # Max 2
                     "estimated_weeks": r.estimated_weeks,
                 }
                 for r in recommendation.recommendations

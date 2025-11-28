@@ -5,7 +5,7 @@ Uses LangChain v1.0 `.with_structured_output()` pattern for type-safe responses.
 These models define the exact JSON structure the LLM must return.
 """
 
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -19,22 +19,19 @@ class ProfileAnalysis(BaseModel):
     """
     Agent 1 output: Comprehensive analysis of user's learning profile.
 
-    This structured output guides pre-filtering and Agent 2's recommendations.
+    QUERY-FIRST: This analysis helps personalize recommendations for the user's REQUEST,
+    not redirect them to different topics.
     """
 
     skill_level: str = Field(
-        description="User's detected skill level: 'beginner', 'intermediate', or 'advanced'. "
-        "May differ from their stated level based on goal complexity."
+        description="User's detected skill level FOR THEIR REQUESTED AREA: 'beginner', 'intermediate', or 'advanced'. "
+        "Consider transferable skills from their background."
     )
 
     skill_gaps: List[str] = Field(
-        description="Specific skills the user needs to develop to achieve their learning goal. "
-        "Be concrete: 'REST API design' not 'backend skills'."
-    )
-
-    ranked_interests: List[str] = Field(
-        description="User's interests ranked by relevance to their learning goal and current query. "
-        "Most relevant first."
+        max_length=3,
+        description="Max 3 specific skills the user needs FOR WHAT THEY'RE REQUESTING. "
+        "Short phrases only. Be concrete and relevant to their query."
     )
 
     time_constraint_hours: int = Field(
@@ -44,9 +41,9 @@ class ProfileAnalysis(BaseModel):
         "Derived from time_commitment field.",
     )
 
-    learning_style_notes: str = Field(
-        description="Brief observations about user's learning context, preferences, or journey stage. "
-        "Example: 'Career changer focused on practical skills, time-constrained.'"
+    personalization_note: str = Field(
+        description="1-2 sentences: how user's background connects to their request + learning context. "
+        "Example: 'Your data skills make you ideal for analytics-driven sales. Time-constrained learner.'"
     )
 
     profile_completeness: str = Field(
@@ -57,8 +54,16 @@ class ProfileAnalysis(BaseModel):
     confidence: float = Field(
         ge=0.0,
         le=1.0,
-        description="Confidence in this analysis (0.0-1.0). "
-        "Lower if profile incomplete or data conflicting.",
+        description="Confidence in this personalization (0.0-1.0). "
+        "Lower if profile incomplete or request unclear.",
+    )
+
+    profile_feedback: Optional[str] = Field(
+        default=None,
+        description="Optional suggestion for the user to improve their profile. "
+        "Set this if profile has issues: no interests, vague goal, outdated info, or contradictions. "
+        "Example: 'Adding your current skill level would help us recommend better courses.' "
+        "Leave as null if profile is adequate.",
     )
 
 
@@ -91,15 +96,8 @@ class CourseRecommendation(BaseModel):
 
     skill_gaps_addressed: List[str] = Field(
         default_factory=list,
-        description="Which skill gaps from the profile analysis this course addresses. "
-        "Use exact terms from the skill_gaps list.",
-    )
-
-    fit_reasons: List[str] = Field(
-        min_length=2,
-        max_length=4,
-        description="Key reasons this course fits: e.g., 'Matches goal', 'Right difficulty', "
-        "'Covers skill gap', 'Aligns with interests'.",
+        max_length=2,
+        description="Max 2 skill gaps this course addresses. Use exact terms from skill_gaps list.",
     )
 
     estimated_weeks: int = Field(

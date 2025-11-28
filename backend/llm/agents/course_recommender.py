@@ -92,22 +92,17 @@ class CourseRecommenderAgent:
         num_courses: int,
     ) -> List:
         """Build message list for LLM invocation."""
-        # Format courses for prompt (truncate descriptions to save tokens)
+        # Format courses for prompt (descriptions already truncated by filter)
         courses_formatted = []
         for c in courses:
             courses_formatted.append(
                 {
                     "id": c["id"],
                     "title": c["title"],
-                    "description": (
-                        c["description"][:300] + "..."
-                        if len(c["description"]) > 300
-                        else c["description"]
-                    ),
+                    "description": c["description"],  # Already truncated by filter
                     "difficulty": c["difficulty"],
                     "duration_hours": c["duration"],
-                    "tags": c["tags"][:8],  # Limit tags
-                    "skills": c["skills"][:6],  # Limit skills
+                    "tags": c["tags"][:8],  # Limit tags for token savings
                 }
             )
 
@@ -117,15 +112,10 @@ class CourseRecommenderAgent:
         user_prompt = USER_PROMPT_TEMPLATE.format(
             skill_level=analysis.skill_level,
             skill_gaps=(
-                ", ".join(analysis.skill_gaps) if analysis.skill_gaps else "None identified"
-            ),
-            ranked_interests=(
-                ", ".join(analysis.ranked_interests)
-                if analysis.ranked_interests
-                else "Not specified"
+                ", ".join(analysis.skill_gaps[:3]) if analysis.skill_gaps else "None identified"
             ),
             time_constraint_hours=analysis.time_constraint_hours,
-            learning_style_notes=analysis.learning_style_notes,
+            personalization_note=analysis.personalization_note,
             profile_completeness=analysis.profile_completeness,
             profile_confidence=analysis.confidence,
             courses_json=courses_json,

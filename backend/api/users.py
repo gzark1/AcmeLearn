@@ -21,6 +21,7 @@ from schemas.recommendation import (
     RecommendationQuota,
     RecommendationRequest,
     RecommendationRead,
+    ClarificationResponse,
 )
 from models.user import User
 from services.recommendation_service import RecommendationService
@@ -75,7 +76,7 @@ async def change_password(
     return None
 
 
-@router.post("/me/recommendations", response_model=RecommendationRead)
+@router.post("/me/recommendations")
 async def generate_recommendations(
     request: RecommendationRequest,
     user: User = Depends(current_active_user),
@@ -98,6 +99,11 @@ async def generate_recommendations(
         query=request.query,
         num_recommendations=request.num_recommendations,
     )
+
+    # Handle clarification responses (vague/irrelevant queries)
+    if result.get("type") == "clarification_needed":
+        return ClarificationResponse(**result)
+
     return RecommendationRead(**result)
 
 

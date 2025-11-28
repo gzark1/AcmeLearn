@@ -43,7 +43,6 @@ class RecommendedCourse(BaseModel):
     match_score: float  # 0.0 to 1.0
     explanation: str
     skill_gaps_addressed: List[str] = []
-    fit_reasons: List[str] = []
     estimated_weeks: Optional[int] = None
 
 
@@ -90,3 +89,11 @@ class RecommendationQuota(BaseModel):
     used: int
     limit: int
     remaining: int
+
+
+class ClarificationResponse(BaseModel):
+    """Response when query needs clarification (vague/irrelevant)."""
+    type: str = "clarification_needed"
+    intent: str  # "vague" or "irrelevant"
+    message: str
+    query: Optional[str] = None

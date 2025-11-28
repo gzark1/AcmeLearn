@@ -1,0 +1,12 @@
+// i authorized with admin account in localhost:8000/docs, and made this request, take also into consideration the admin profile preferences:
+
+curl -X 'POST' \
+  'http://localhost:8000/users/me/recommendations' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NWU5MmJiOS1hMDljLTQ1MDQtOWNhOC1kMWM0NTAxZTdhYjEiLCJhdWQiOlsiZmFzdGFwaS11c2VyczphdXRoIl0sImV4cCI6MTc2NDI4MzE0M30._tRrkFxGiV-lEdQLh2WgDgJ_YurYVLtk0uBSdICBtmA' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "query": "I want to learn machine learning for data analysis",
+  "num_recommendations": 5
+}'
+

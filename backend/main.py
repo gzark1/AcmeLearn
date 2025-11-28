@@ -13,6 +13,7 @@ from sqlalchemy import select
 
 from core.database import init_db, async_session_maker
 from core.config import settings
+from core.logging import setup_logging
 from scripts.seed_courses import seed_courses
 from scripts.seed_demo_users import seed_demo_users
 from api import auth, users, profiles, courses, admin
@@ -82,7 +83,8 @@ async def lifespan(app: FastAPI):
     Manages startup and shutdown events using modern context manager pattern.
     Runs once when uvicorn starts (or reloads).
     """
-    # Startup
+    # Startup - configure logging first
+    setup_logging()
     print("Starting up AcmeLearn API...")
 
     # Run Alembic migrations

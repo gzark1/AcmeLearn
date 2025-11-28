@@ -36,6 +36,7 @@ class ProfileAnalyzerAgent:
         profile: UserProfile,
         history: List[UserProfileSnapshot],
         query: Optional[str] = None,
+        callbacks: Optional[List] = None,
     ) -> ProfileAnalysis:
         """
         Analyze user profile and return structured analysis.
@@ -61,8 +62,9 @@ class ProfileAnalyzerAgent:
         messages = self._build_messages(profile, history, query)
 
         try:
-            # Invoke LLM with structured output
-            result = await self.llm.ainvoke(messages)
+            # Invoke LLM with structured output and optional callbacks
+            config = {"callbacks": callbacks} if callbacks else {}
+            result = await self.llm.ainvoke(messages, config=config)
 
             logger.info(
                 f"Profile analysis complete: user={profile.user_id}, "

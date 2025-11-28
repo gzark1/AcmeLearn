@@ -35,6 +35,7 @@ class CourseRecommenderAgent:
         courses: List[Dict],
         query: Optional[str] = None,
         num_courses: int = 5,
+        callbacks: Optional[List] = None,
     ) -> RecommendationOutput:
         """
         Generate course recommendations based on profile analysis.
@@ -60,8 +61,9 @@ class CourseRecommenderAgent:
         messages = self._build_messages(analysis, courses, query, num_courses)
 
         try:
-            # Invoke LLM with structured output
-            result = await self.llm.ainvoke(messages)
+            # Invoke LLM with structured output and optional callbacks
+            config = {"callbacks": callbacks} if callbacks else {}
+            result = await self.llm.ainvoke(messages, config=config)
 
             # Validate course IDs exist in filtered list
             valid_ids = {c["id"] for c in courses}

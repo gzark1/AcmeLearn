@@ -1,0 +1,117 @@
+{
+  "id": "92b00e7d-aa42-41e6-a3c0-6c3330834452",
+  "query": "I want to learn machine learning for data analysis",
+  "profile_analysis": {
+    "skill_level": "intermediate",
+    "skill_gaps": [
+      "Python proficiency for ML workflows (advanced Python concepts, functions, modules)",
+      "NumPy for numerical computing and array operations",
+      "Pandas for data wrangling and preprocessing",
+      "Exploratory Data Analysis (EDA) and visualization (matplotlib/seaborn)",
+      "Statistics and probability foundations for ML (descriptive stats, distributions, hypothesis testing)",
+      "Machine learning fundamentals (supervised learning, regression/classification, clustering)",
+      "Model evaluation and validation (train/test split, cross-validation, metrics like RMSE, MAE, accuracy, AUC)",
+      "Feature engineering and scaling/normalization",
+      "Scikit-Learn pipelines and workflow management",
+      "Data wrangling with SQL basics for analytics (optional but helpful)",
+      "Introduction to ML interpretability and basic model diagnostics (overfitting, bias-variance)",
+      "Project-based ML practice (end-to-end from data cleaning to model deployment basics)"
+    ],
+    "confidence": 0.62
+  },
+  "courses": [
+    {
+      "course_id": "bbf8293d-0ab1-4b0f-950b-924a18b5bb62",
+      "title": "Data Science with Python and Pandas",
+      "match_score": 0.92,
+      "explanation": "This Data Science with Python and Pandas course directly aligns with your pivot to machine learning for data analysis. It covers Pandas and NumPy for data wrangling and numerical work, Exploratory Data Analysis and visualization, and essential ML fundamentals with scikit-learn pipelines, all through hands-on projects. You’ll build end-to-end ML workflows from data cleaning to modeling, which addresses several of your stated gaps in a cohesive path. At 55 hours, it fits your 20 hours/week schedule for a roughly 3-week commitment.",
+      "skill_gaps_addressed": [
+        "Python proficiency for ML workflows (advanced Python concepts, functions, modules)",
+        "NumPy for numerical computing and array operations",
+        "Pandas for data wrangling and preprocessing",
+        "Exploratory Data Analysis (EDA) and visualization (matplotlib/seaborn)",
+        "Machine learning fundamentals (supervised learning, regression/classification, clustering)",
+        "Model evaluation and validation (train/test split, cross-validation, metrics like RMSE, MAE, accuracy, AUC)",
+        "Feature engineering and scaling/normalization",
+        "Scikit-Learn pipelines and workflow management",
+        "Project-based ML practice (end-to-end from data cleaning to model deployment basics)"
+      ],
+      "fit_reasons": [
+        "Directly supports the learner's ML-for-data-analysis goal",
+        "Strong alignment with gaps in Pandas/NumPy/EDA/ML pipelines",
+        "Appropriate intermediate difficulty with hands-on projects",
+        "Fits within a 3-week timeline at 20 hours/week"
+      ],
+      "estimated_weeks": 3
+    },
+    {
+      "course_id": "579ac9db-00af-45ea-a0e9-2c93c1c7aec9",
+      "title": "Data Literacy for Business Professionals",
+      "match_score": 0.72,
+      "explanation": "Data Literacy for Business Professionals builds your data fluency from a business perspective, which complements the technical track and enhances your ability to interpret ML insights for analytics and BI contexts. It covers data fundamentals, analysis techniques, and visualization to help you tell data-driven stories. This course also supports your 20-hour/week cadence with a concise 2-week timeline, reinforcing the statistical thinking needed for ML interpretation.",
+      "skill_gaps_addressed": [
+        "Statistics and probability foundations for ML (descriptive stats, distributions, hypothesis testing)",
+        "Exploratory Data Analysis (EDA) and visualization"
+      ],
+      "fit_reasons": [
+        "Strengthens business-focused data interpretation and storytelling",
+        "Provides foundational statistical thinking to support ML work",
+        "Aligns with your analytics/BI interests and 2-week time frame"
+      ],
+      "estimated_weeks": 2
+    },
+    {
+      "course_id": "6d4d4373-469c-4551-a4ad-5191e6c791bf",
+      "title": "Digital Marketing Strategy and Analytics",
+      "match_score": 0.68,
+      "explanation": "Digital Marketing Strategy and Analytics leverages your analytics/BI interest in practical, business-focused data analysis. While not ML-heavy, it reinforces data-driven decision making, ROI measurement, and analytics practices in a real-world context. This course complements your data analysis trajectory by broadening how ML insights can drive strategic outcomes, and it fits a 2-week pace at 20 hours/week.",
+      "skill_gaps_addressed": [
+        "Statistics and probability foundations for ML (descriptive stats, distributions, hypothesis testing)",
+        "Exploratory Data Analysis (EDA) and visualization"
+      ],
+      "fit_reasons": [
+        "Aligns with your analytics/BI interests and business use cases",
+        "Broadens application of data insights to marketing/BI decisions",
+        "Supports a practical, 2-week sprint within your schedule"
+      ],
+      "estimated_weeks": 2
+    },
+    {
+      "course_id": "73ecfbaf-8023-4806-9ed2-1d9a9dbb8036",
+      "title": "Introduction to Python Programming",
+      "match_score": 0.6,
+      "explanation": "Introduction to Python Programming provides the essential foundation for any ML workflow. It covers Python syntax, control structures, functions, and object-oriented basics, all of which you’ll build upon in the data science track. Although your profile indicates intermediate Python needs, this course positions you to progress more smoothly into the Pandas/ML-focused course, and it aligns with your 20-hour weekly plan over roughly 2 weeks.",
+      "skill_gaps_addressed": [
+        "Python proficiency for ML workflows (advanced Python concepts, functions, modules)"
+      ],
+      "fit_reasons": [
+        "Establishes a solid Python foundation for ML data analysis",
+        "Prepares you for the more advanced Pandas/ML course",
+        "Fits a 2-week segment within your time availability"
+      ],
+      "estimated_weeks": 2
+    }
+  ],
+  "learning_path": [
+    {
+      "order": 1,
+      "course_id": "73ecfbaf-8023-4806-9ed2-1d9a9dbb8036",
+      "title": "Introduction to Python Programming",
+      "rationale": "Start with Python fundamentals to ensure you have a solid programming base for ML workflows, which is essential before tackling data manipulation with Pandas or building models."
+    },
+    {
+      "order": 2,
+      "course_id": "bbf8293d-0ab1-4b0f-950b-924a18b5bb62",
+      "title": "Data Science with Python and Pandas",
+      "rationale": "Move to the core Data Science with Python and Pandas course to address Pandas/NumPy, EDA/visualization, and ML basics in an end-to-end, project-driven way. This builds directly on the Python foundation and sets you up for more advanced modeling and pipelines."
+    },
+    {
+      "order": 3,
+      "course_id": "db408461-8122-481d-ac3e-7634f691c8d5",
+      "title": "Algorithms and Data Structures Mastery",
+      "rationale": "Finish with Algorithms and Data Structures Mastery to deepen problem-solving and algorithmic thinking, which strengthens ML workflow design and optimization as you tackle more complex data-analysis projects."
+    }
+  ],
+  "overall_summary": "I designed a focused 3-course path that starts with foundational Python, escalates to a strong data-science and ML workflow course, and closes with advanced problem-solving skills. The top 5 recommendations balance deep technical ML preparation with business analytics context, aligning with your goals in analytics/BI and your 20-hour weekly capacity.",
+  "created_at": "2025-11-27T21:41:18.068026"
+}

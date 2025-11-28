@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 from repositories.recommendation_repository import RecommendationRepository
 from repositories.user_profile_repository import UserProfileRepository
 from repositories.course_repository import CourseRepository
+from repositories.llm_metrics_repository import LLMMetricsRepository
 from llm.agents.profile_analyzer import ProfileAnalyzerAgent
 from llm.agents.course_recommender import CourseRecommenderAgent
 from llm.filters import filter_courses
@@ -24,6 +25,7 @@ from llm.exceptions import (
     LLMTimeoutError,
     LLMValidationError,
 )
+from llm.callbacks import LLMMetricsCallback
 from core.config import settings
 
 
@@ -204,10 +206,12 @@ class RecommendationService:
         t4 = time.time()
         try:
             analyzer = ProfileAnalyzerAgent()
+            callback1 = LLMMetricsCallback("profile_analysis", str(user_id))
             profile_analysis = await analyzer.analyze(
                 profile=profile,
                 history=snapshots,
                 query=query,
+                callbacks=[callback1],
             )
             logger.info(f"[PERF] Agent 1 (Profile Analysis): {time.time() - t4:.2f}s")
         except LLMEmptyProfileError:
@@ -230,11 +234,13 @@ class RecommendationService:
         t5 = time.time()
         try:
             recommender = CourseRecommenderAgent()
+            callback2 = LLMMetricsCallback("course_recommendation", str(user_id))
             recommendation = await recommender.recommend(
                 analysis=profile_analysis,
                 courses=filtered_courses,
                 query=query,
                 num_courses=num_recommendations,
+                callbacks=[callback2],
             )
             logger.info(f"[PERF] Agent 2 (Course Recommendations): {time.time() - t5:.2f}s")
         except LLMNoCoursesError:
@@ -268,6 +274,34 @@ class RecommendationService:
             recommendation_details=recommendation.model_dump(),
         )
         logger.info(f"[PERF] Database store: {time.time() - t6:.2f}s")
+
+        # 6b. Store LLM metrics
+        metrics_repo = LLMMetricsRepository(self.db)
+        await metrics_repo.create(
+            operation="profile_analysis",
+            duration_ms=callback1.duration_ms,
+            user_id=user_id,
+            recommendation_id=stored.id,
+            model=callback1.model,
+            tokens_input=callback1.tokens_input,
+            tokens_output=callback1.tokens_output,
+            tokens_total=callback1.tokens_total,
+            status="error" if callback1.error else "success",
+            error=callback1.error,
+        )
+        await metrics_repo.create(
+            operation="course_recommendation",
+            duration_ms=callback2.duration_ms,
+            user_id=user_id,
+            recommendation_id=stored.id,
+            model=callback2.model,
+            tokens_input=callback2.tokens_input,
+            tokens_output=callback2.tokens_output,
+            tokens_total=callback2.tokens_total,
+            status="error" if callback2.error else "success",
+            error=callback2.error,
+        )
+        await self.db.commit()
 
         total_time = time.time() - start_time
         logger.info(f"[PERF] Total recommendation time: {total_time:.2f}s")

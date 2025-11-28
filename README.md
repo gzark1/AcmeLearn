@@ -13,7 +13,7 @@ An AI-powered learning recommendation system that helps users discover courses f
 - **LangChain + OpenAI**: Multi-agent LLM pipeline for personalized recommendations
 
 ### Frontend
-- **React 19** + **TypeScript**: Type-safe UI with latest React features
+- **React 18** + **TypeScript**: Type-safe UI with modern React features
 - **Vite**: Fast build tool with hot module replacement
 - **TanStack Query**: Data fetching with caching, background updates, and optimistic mutations
 - **Tailwind CSS 4**: Utility-first styling with design system
@@ -70,7 +70,7 @@ When `SEED_DEMO_USERS=true` (default), 25 demo users are created on startup:
 | `POSTGRES_DB` | Yes | Database name |
 | `SECRET_KEY` | Yes | JWT signing key (generate with `openssl rand -hex 32`) |
 | `OPENAI_API_KEY` | Yes | OpenAI API key for recommendations |
-| `OPENAI_MODEL` | No | Model to use (default: `gpt-5-nano`) |
+| `OPENAI_MODEL` | No | Model to use (default: `gpt-4o-mini`) |
 | `SEED_DEMO_USERS` | No | Create demo users on startup (default: `true`) |
 | `SUPERUSER_EMAIL` | No | Auto-create admin user with this email |
 | `SUPERUSER_PASSWORD` | No | Password for admin user |
@@ -86,6 +86,9 @@ When `SEED_DEMO_USERS=true` (default), 25 demo users are created on startup:
   - Profile-based recommendations
   - Match scores and reasoning for each suggestion
   - Learning path with course sequence
+  - Recommendation history sidebar (view past recommendations)
+  - Session persistence (chat state survives navigation)
+  - Note: Recommendations take 1-2 minutes due to LLM processing
 
 ### Admin Features
 - **Dashboard**: User stats, recent activity, quick insights
@@ -107,7 +110,7 @@ Pre-filtering reduces 48 courses to ~20 before LLM processing for token efficien
 
 2. **Rate Limiting**: Users are limited to 10 recommendations per 24 hours to manage API costs. Could be made configurable per user tier.
 
-3. **Synchronous LLM Calls**: Recommendations block until complete (~5-10 seconds). Streaming responses would improve UX but add complexity.
+3. **Synchronous LLM Calls**: Recommendations block until complete (~1-2 minutes). Streaming responses would improve UX but add complexity.
 
 4. **Desktop-First**: Frontend optimized for desktop. Mobile experience functional but not prioritized.
 
@@ -115,19 +118,25 @@ Pre-filtering reduces 48 courses to ~20 before LLM processing for token efficien
 
 1. **Recommendation Caching**: Cache similar queries to reduce LLM calls
 2. **Streaming Responses**: Show recommendations as they generate
-3. **Recommendation History**: Let users view and compare past recommendations
-4. **Course Progress Tracking**: Track completion and update recommendations accordingly
+3. **Course Progress Tracking**: Track completion and update recommendations accordingly
+4. **Course Comparison**: Side-by-side course comparison feature
 5. **A/B Testing**: Compare recommendation quality across different prompts/models
 6. **Analytics Dashboard**: Track recommendation engagement and success metrics
 
 ## Running Tests
 
 ```bash
-# Run backend tests inside container
-docker exec acmelearn_backend uv run pytest
+# Run all backend tests
+docker compose exec -e PYTHONPATH=/app backend sh -c \
+  'cd /tests/backend && /app/.venv/bin/pytest . -v --asyncio-mode=auto'
 
-# Run with coverage
-docker exec acmelearn_backend uv run pytest --cov=. --cov-report=term-missing
+# Run specific test file
+docker compose exec -e PYTHONPATH=/app backend sh -c \
+  'cd /tests/backend && /app/.venv/bin/pytest test_api/test_auth.py -v --asyncio-mode=auto'
+
+# Run with verbose output
+docker compose exec -e PYTHONPATH=/app backend sh -c \
+  'cd /tests/backend && /app/.venv/bin/pytest . -vv -s --asyncio-mode=auto'
 ```
 
 ## Project Structure
@@ -144,7 +153,7 @@ AcmeLearn/
 ├── frontend/          # React application
 │   ├── src/
 │   │   ├── app/       # Routes and providers
-│   │   ├── features/  # Feature modules (auth, courses, profile)
+│   │   ├── features/  # Feature modules (auth, courses, profile, recommendations, admin)
 │   │   ├── components/# Shared UI components
 │   │   └── lib/       # API client, auth context
 ├── tests/             # Backend tests

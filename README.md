@@ -5,24 +5,53 @@ An AI-powered learning recommendation system that helps users discover courses f
 ## Technology Choices
 
 ### Backend
-- **FastAPI** (Python 3.12): Modern async Python framework with automatic OpenAPI docs, type hints, and excellent performance
-- **PostgreSQL 16**: Robust relational database with native UUID support and async driver (asyncpg)
-- **SQLAlchemy 2.0**: Async ORM with type-safe queries
-- **Alembic**: Database migrations with auto-migrate on startup
-- **fastapi-users**: Battle-tested JWT authentication with secure password hashing
-- **LangChain + OpenAI**: Multi-agent LLM pipeline for personalized recommendations
+
+- **FastAPI** (Python 3.12): Async-first framework with automatic OpenAPI documentation, Pydantic type validation, and built-in dependency injection. Chosen over Flask/Django for native async support and modern Python patterns.
+
+- **PostgreSQL 16**: Selected for native UUID type (50% storage reduction vs VARCHAR), JSONB for flexible LLM output storage, and robust indexing. JSONB enables storing full recommendation details without schema changes.
+
+- **SQLAlchemy 2.0 Async**: Non-blocking database I/O with asyncpg driver. Uses `selectinload()` to prevent N+1 query problems when loading course tags and skills.
+
+- **fastapi-users**: Battle-tested JWT authentication with registration hooks. The `on_after_register` hook auto-creates an empty user profile, ensuring every user has a profile record from registration.
+
+- **Layered Architecture**: Clear separation of concerns:
+  - API layer: HTTP concerns only (routes, status codes, request parsing)
+  - Service layer: Business logic and orchestration
+  - Repository layer: Database queries (no business logic)
+  - Models: SQLAlchemy ORM entities
 
 ### Frontend
-- **React 18** + **TypeScript**: Type-safe UI with modern React features
-- **Vite**: Fast build tool with hot module replacement
-- **TanStack Query**: Data fetching with caching, background updates, and optimistic mutations
-- **Tailwind CSS 4**: Utility-first styling with design system
-- **React Router 7**: File-based routing with protected routes
-- **Zod**: Runtime schema validation for forms
+
+- **Vite** (not Next.js): Pure SPA architecture - no server-side rendering needed. Vite provides faster dev startup (100-200ms) and simpler deployment to any static host. No Next.js runtime overhead.
+
+- **React 18 + TypeScript**: Strict mode enabled for type safety across the entire codebase.
+
+- **Feature-based Architecture**: Following bulletproof-react patterns with unidirectional imports. Each feature (auth, courses, profile, recommendations, admin) is self-contained with its own components, API hooks, and types. Features cannot import from each other.
+
+- **TanStack Query**: Manages server state (90% of app state) with built-in caching, background refetch, and stale-time management. Dramatically less boilerplate than Redux for data fetching.
+
+- **Zustand**: Simple store for client-only state (toast notifications, UI preferences) - the remaining 10% that isn't server state.
+
+- **Tailwind CSS 4**: Utility-first styling with class-variance-authority for type-safe component variants.
+
+### Database Design
+
+The schema is designed for analytics and user journey tracking, not just storing data:
+
+- **Separate `user_profiles` table**: Enables analytics about what KIND of users are in the system (skill levels, time commitments, interests). Powers the admin dashboard with profile completion rates and distribution charts.
+
+- **Profile snapshots**: Insert-only audit trail (`user_profile_snapshots`) captures every profile change. Enables tracking user evolution over time - admins can see how users progress from beginner to intermediate, how learning goals evolve.
+
+- **Normalized tags with categories**: 169 tags organized into 11 categories (Programming, Data Science, DevOps, etc.). Junction tables enable tag popularity analytics and category distribution charts.
+
+- **Recommendations with full context**: Stores `profile_version` to link recommendations to profile state at that moment. JSONB fields store complete LLM output (`profile_analysis_data`, `recommendation_details`) for debugging and quality analysis. The `llm_model` field enables A/B testing across different models.
+
+- **LLM metrics table**: Tracks token usage, duration, and errors per LLM call for cost monitoring and performance analysis.
 
 ### Infrastructure
-- **Docker Compose**: 4-container setup (postgres, postgres_test, backend, frontend)
-- **uv**: Fast Python package manager with lockfile
+
+- **Docker Compose**: 4-container setup (postgres, postgres_test, backend, frontend) with health checks and volume mounts for hot reload.
+- **uv**: Fast Python package manager (10-100x faster than pip) with lockfile for reproducibility.
 
 ## Setup Instructions
 
@@ -78,50 +107,90 @@ When `SEED_DEMO_USERS=true` (default), 25 demo users are created on startup:
 ## Features
 
 ### User Features
-- **Authentication**: Register, login, JWT-based sessions
+
+- **Authentication**: Register, login, JWT-based sessions with secure password hashing
 - **Course Catalog**: Browse 48 courses with search, filtering (difficulty, tags, duration), and sorting
-- **Profile Management**: Set learning goals, experience level, time commitment, and interests
-- **AI Recommendations**: Get personalized course recommendations with explanations
+- **Profile Management**: Set learning goals, experience level, time commitment, and interests. View profile version history to track your own evolution.
+- **AI Recommendations**: Get personalized course recommendations with detailed explanations
   - Natural language queries ("I want to learn machine learning")
-  - Profile-based recommendations
-  - Match scores and reasoning for each suggestion
-  - Learning path with course sequence
-  - Recommendation history sidebar (view past recommendations)
+  - Profile-based recommendations when no query provided
+  - Match scores (0-100%) and reasoning for each suggestion
+  - Learning path with recommended course sequence
+  - Recommendation history sidebar
   - Session persistence (chat state survives navigation)
-  - Note: Recommendations take 1-2 minutes due to LLM processing
 
 ### Admin Features
-- **Dashboard**: User stats, recent activity, quick insights
-- **User Management**: Search, filter, view profiles, deactivate users
-- **Analytics**: User growth charts, profile completion, experience distribution
+
+The admin dashboard provides comprehensive platform analytics, powered by the database design:
+
+- **Dashboard Overview**:
+  - Total users, active users, profile completion rate
+  - Recent activity feed (registrations, profile updates, deactivations)
+  - Quick insight cards with actionable metrics
+
+- **User Management**:
+  - Search and filter users by email, status, profile completion
+  - View detailed user profiles with recommendation history
+  - Profile history modal showing version timeline
+  - Deactivate users (soft delete)
+  - Export user list to CSV
+
+- **Analytics** (11 dedicated endpoints):
+  - User growth chart (daily registrations over 30-90 days)
+  - Profile completion breakdown (complete/partial/empty)
+  - Experience level distribution (beginner/intermediate/advanced)
+  - Time commitment distribution
+  - Popular tags by category
+  - Category interest distribution
+  - Course catalog summary by difficulty
 
 ### LLM Architecture
-Two-agent recommendation pipeline:
-1. **Profile Analyzer**: Analyzes user profile, interests, and learning history
-2. **Course Recommender**: Generates ranked recommendations with explanations
 
-Pre-filtering reduces 48 courses to ~20 before LLM processing for token efficiency.
+Two-agent recommendation pipeline with full observability:
+
+1. **Intent Classification**: Brief LLM call classifies query as SPECIFIC, VAGUE, or IRRELEVANT. Catches off-topic queries before full pipeline, saving tokens.
+
+2. **Profile Analyzer** (Agent 1): Analyzes user profile, interests, and profile history (last 3 snapshots). Outputs skill level assessment, skill gaps, and learning style notes.
+
+3. **Course Recommender** (Agent 2): Takes profile analysis and pre-filtered courses. Generates ranked recommendations with match scores, explanations, and a learning path.
+
+**Token Optimization**:
+- QUERY-FIRST pre-filtering scores courses by query relevance + profile fit
+- Reduces 48 courses to ~20 before LLM processing (~40% token savings)
+- Course descriptions truncated to 150 characters
+
+**Observability**:
+- `[PERF]` logging shows timing breakdown for each pipeline stage
+- `llm_metrics` table tracks tokens, duration, and errors per call
+- Full LLM output stored in JSONB for debugging
 
 ## Trade-offs and Future Improvements
 
 ### Current Trade-offs
 
-1. **Token Efficiency vs Context**: Course descriptions are truncated to 150 characters for LLM input. This reduces token usage but limits context for recommendations.
+1. **Token Efficiency vs Context**: Course descriptions truncated to 150 characters for LLM input. Reduces token usage but limits context.
 
-2. **Rate Limiting**: Users are limited to 10 recommendations per 24 hours to manage API costs. Could be made configurable per user tier.
+2. **Synchronous LLM Calls**: Recommendations block for 8-10 seconds while both agents complete. No streaming to show partial results.
 
-3. **Synchronous LLM Calls**: Recommendations block until complete (~1-2 minutes). Streaming responses would improve UX but add complexity.
+3. **Desktop-First**: Frontend optimized for desktop. Mobile experience functional but not prioritized.
 
-4. **Desktop-First**: Frontend optimized for desktop. Mobile experience functional but not prioritized.
+4. **Testing Coverage**: 50 backend tests cover API and service layers. No frontend tests, no E2E tests, tests don't auto-run on container startup.
+
+5. **Basic Error Messages**: API returns proper HTTP status codes (400, 401, 403, 404, 429, 500) with error details, but could have more structured error types.
 
 ### Future Improvements
 
-1. **Recommendation Caching**: Cache similar queries to reduce LLM calls
-2. **Streaming Responses**: Show recommendations as they generate
-3. **Course Progress Tracking**: Track completion and update recommendations accordingly
-4. **Course Comparison**: Side-by-side course comparison feature
-5. **A/B Testing**: Compare recommendation quality across different prompts/models
-6. **Analytics Dashboard**: Track recommendation engagement and success metrics
+1. **Streaming Responses**: Show recommendations as they generate for better UX during the 8-10 second wait.
+
+2. **AI-Generated Course Summaries**: Pre-summarize course descriptions once with AI, store as a new field. Would provide richer context without token overhead per request.
+
+3. **Faster Pre-filtering**: Leverage existing tag categories (11 categories) for initial filtering before scoring.
+
+4. **A/B Testing Framework**: Schema already stores `llm_model` per recommendation. Add comparison dashboards to evaluate different prompts/models.
+
+5. **Comprehensive Testing**: Add frontend component tests, E2E tests with Playwright, auto-run tests on container startup.
+
+6. **Response Caching**: Cache recommendations for similar queries to reduce LLM calls and costs.
 
 ## Running Tests
 

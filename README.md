@@ -70,7 +70,7 @@ When `SEED_DEMO_USERS=true` (default), 25 demo users are created on startup:
 | `POSTGRES_DB` | Yes | Database name |
 | `SECRET_KEY` | Yes | JWT signing key (generate with `openssl rand -hex 32`) |
 | `OPENAI_API_KEY` | Yes | OpenAI API key for recommendations |
-| `OPENAI_MODEL` | No | Model to use (default: `gpt-4o-mini`) |
+| `OPENAI_MODEL` | No | Model to use (default: `gpt-5-nano`) |
 | `SEED_DEMO_USERS` | No | Create demo users on startup (default: `true`) |
 | `SUPERUSER_EMAIL` | No | Auto-create admin user with this email |
 | `SUPERUSER_PASSWORD` | No | Password for admin user |
@@ -125,6 +125,14 @@ Pre-filtering reduces 48 courses to ~20 before LLM processing for token efficien
 
 ## Running Tests
 
+**Note**: Tests are optional and not required to use the application. The steps below are for developers who want to run the test suite.
+
+If you get "pytest not found", first install test dependencies:
+```bash
+docker compose exec backend uv sync --extra test
+```
+
+Then run tests:
 ```bash
 # Run all backend tests
 docker compose exec -e PYTHONPATH=/app backend sh -c \
@@ -145,17 +153,25 @@ docker compose exec -e PYTHONPATH=/app backend sh -c \
 AcmeLearn/
 ├── backend/           # FastAPI application
 │   ├── api/           # Route handlers
+│   ├── config/        # Configuration settings
+│   ├── core/          # Core utilities (auth, database)
 │   ├── models/        # SQLAlchemy models
+│   ├── schemas/       # Pydantic request/response schemas
 │   ├── services/      # Business logic
-│   ├── repositories/  # Data access
+│   ├── repositories/  # Data access layer
 │   ├── llm/           # LLM agents and prompts
 │   └── scripts/       # Seeding scripts
 ├── frontend/          # React application
-│   ├── src/
-│   │   ├── app/       # Routes and providers
-│   │   ├── features/  # Feature modules (auth, courses, profile, recommendations, admin)
-│   │   ├── components/# Shared UI components
-│   │   └── lib/       # API client, auth context
+│   └── src/
+│       ├── app/       # Routes and providers
+│       ├── features/  # Feature modules (auth, courses, profile, recommendations, admin)
+│       ├── components/# Shared UI components
+│       ├── layouts/   # Page layouts (main, auth, admin)
+│       ├── lib/       # API client, auth context
+│       ├── hooks/     # Custom React hooks
+│       ├── stores/    # State management
+│       ├── types/     # TypeScript type definitions
+│       └── utils/     # Utility functions
 ├── tests/             # Backend tests
 ├── docs/              # Architecture documentation
 └── courses.json       # Course catalog data

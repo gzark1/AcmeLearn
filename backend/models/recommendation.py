@@ -27,7 +27,7 @@ class Recommendation(Base):
     - Recommendation history viewing
     - Rate limiting (10 per 24h)
     - Quality analytics (which profiles get better recs?)
-    - A/B testing (GPT-4 vs Claude performance)
+    - A/B testing (GPT-5-nano vs Claude performance)
     """
 
     __tablename__ = "recommendations"
@@ -52,7 +52,7 @@ class Recommendation(Base):
     explanation: Mapped[str] = mapped_column(Text, nullable=False)  # AI reasoning
     llm_model: Mapped[Optional[str]] = mapped_column(
         Text, nullable=True
-    )  # "gpt-4", "claude-3-sonnet"
+    )  # "gpt-5-nano", "claude-3-sonnet"
 
     # Structured data storage (JSONB) for analytics and debugging
     profile_analysis_data: Mapped[Optional[dict]] = mapped_column(

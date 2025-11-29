@@ -35,7 +35,7 @@ This document captures the product-thinking and data strategy behind AcmeLearn's
 **Recommendation Quality**:
 - Which profile states produce highest-rated recommendations?
 - Do users update profiles after bad recommendations?
-- A/B testing different LLM models (GPT-4 vs Claude)
+- A/B testing different LLM models (GPT-5-nano vs Claude)
 - Course popularity and recommendation frequency
 
 **Churn Prediction Signals**:
@@ -273,7 +273,7 @@ class Recommendation(Base):
     # LLM output
     recommended_course_ids = Column(JSON().with_variant(JSONB, "postgresql"), nullable=False)
     explanation = Column(Text, nullable=False)
-    llm_model = Column(String, nullable=True)  # "gpt-4", "claude-3-sonnet"
+    llm_model = Column(String, nullable=True)  # "gpt-5-nano", "claude-3-sonnet"
 
     # User feedback (optional)
     user_rating = Column(Integer, nullable=True)  # 1-5 stars
@@ -304,7 +304,7 @@ class Recommendation(Base):
 
 **llm_model** - A/B Testing:
 - Tracks which LLM generated recommendations
-- Enables comparison: "Does GPT-4 get higher ratings than Claude?"
+- Enables comparison: "Does GPT-5-nano get higher ratings than Claude?"
 - Example analysis: Performance by user skill level × LLM model
 
 **Feedback Fields** - Quality Measurement:
@@ -650,11 +650,11 @@ ORDER BY avg_rating DESC;
 **Output**:
 ```
 llm_model          avg_rating  total_recs  rated_count  feedback_rate
-gpt-4              4.3         1250        487          0.39
+gpt-5-nano         4.3         1250        487          0.39
 claude-3-sonnet    4.1         980         412          0.42
 ```
 
-**Insight**: GPT-4 higher rated, Claude gets more feedback (better explanations?).
+**Insight**: GPT-5-nano higher rated, Claude gets more feedback (better explanations?).
 
 ---
 

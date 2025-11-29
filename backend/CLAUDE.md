@@ -236,7 +236,7 @@ The `llm/` module contains a 2-agent recommendation pipeline:
 **Environment variables**:
 ```bash
 OPENAI_API_KEY=sk-...
-OPENAI_MODEL=gpt-4o-mini  # or gpt-4o
+OPENAI_MODEL=gpt-5-nano
 OPENAI_TEMPERATURE=0.3
 OPENAI_TIMEOUT_SECONDS=30
 LLM_DEBUG_MODE=false

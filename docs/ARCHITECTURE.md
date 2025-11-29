@@ -577,7 +577,7 @@ profile_version: Integer (which profile version generated recommendation)
 query: Text (user's query/request)
 recommended_course_ids: JSONB (array of UUIDs)
 explanation: Text (LLM-generated explanation)
-llm_model: String (e.g., "gpt-4", "claude-3-sonnet")
+llm_model: String (e.g., "gpt-5-nano", "claude-3-sonnet")
 created_at: DateTime
 ```
 
@@ -650,7 +650,7 @@ def build_context(user_profile, courses, query):
 ### LLM Provider Decision
 
 **Options**:
-- **OpenAI** (GPT-4 / GPT-3.5-turbo): Industry standard, reliable
+- **OpenAI** (GPT-5-nano): Industry standard, reliable
 - **Claude** (Anthropic): Better for structured outputs
 - **LangChain**: Abstraction layer for prompt templates, chains
 

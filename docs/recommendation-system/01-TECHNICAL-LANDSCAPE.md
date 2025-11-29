@@ -424,7 +424,7 @@ RUN pip install langchain langchain-openai tenacity
 
 **Cost Estimates (approximate):**
 - Request size: 20K input tokens + 500 output tokens
-- GPT-5-nano cost: ~$0.0001 per request (assuming similar to GPT-4o)
+- GPT-5-nano cost: ~$0.0001 per request
 - 1000 requests/day = $0.10/day = $3/month
 - Negligible for demo/MVP
 

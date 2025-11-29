@@ -61,7 +61,7 @@ Total:     ~15-25 seconds (for typical request)
 9. Evaluate parallel execution for independent operations
 10. Implement response streaming for better UX
 11. Add A/B testing framework for prompt optimization
-12. Consider GPT-4o-mini for cost optimization vs quality tradeoff
+12. Monitor GPT-5-nano cost optimization vs quality tradeoff
 
 ---
 
